@@ -1,8 +1,10 @@
 package com.uikit.tokens
 
 import kotlin.js.JsExport
+import kotlinx.serialization.Serializable
 
 @JsExport
+@Serializable
 data class ColorTokens(
     val primary: String,
     val primaryHover: String,

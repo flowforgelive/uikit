@@ -2,9 +2,14 @@
 kotlin = "2.3.20"
 compose-multiplatform = "1.10.3"
 node-gradle = "7.1.0"
+kotlinx-serialization = "1.8.1"
+
+[libraries]
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 node-gradle = { id = "com.github.node-gradle.node", version.ref = "node-gradle" }

@@ -9,7 +9,7 @@ export { TextBlockView } from './components/atoms/text/TextBlockView';
 // Theme
 export { useDesignTokens, DesignTokensProvider } from './theme/useDesignTokens';
 
-// Re-exports from shared KMP module
+// Re-exports from KMP module (ESM flat exports)
 export {
   DesignTokens,
   ButtonConfig,
@@ -20,10 +20,4 @@ export {
   Visibility,
   ButtonStyleResolver,
   TextBlockStyleResolver,
-} from './shared';
-
-export type {
-  DesignTokensType,
-  ButtonConfigType,
-  TextBlockConfigType,
-} from './shared';
+} from 'uikit-common';

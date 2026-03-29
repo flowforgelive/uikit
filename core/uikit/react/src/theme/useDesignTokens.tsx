@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, type ReactNode } from 'react';
-import { DesignTokens, type DesignTokensType } from '../shared';
+import { DesignTokens, type DesignTokens as DesignTokensType } from 'uikit-common';
 
 const defaultTokens = DesignTokens.Companion.Default;
 

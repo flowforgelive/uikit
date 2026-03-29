@@ -1,8 +1,10 @@
 package com.uikit.tokens
 
 import kotlin.js.JsExport
+import kotlinx.serialization.Serializable
 
 @JsExport
+@Serializable
 data class TypographyTokens(
     val h1Size: Int,
     val h1Weight: Int,

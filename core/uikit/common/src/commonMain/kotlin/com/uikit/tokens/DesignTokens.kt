@@ -1,8 +1,10 @@
 package com.uikit.tokens
 
 import kotlin.js.JsExport
+import kotlinx.serialization.Serializable
 
 @JsExport
+@Serializable
 data class DesignTokens(
     val color: ColorTokens,
     val spacing: SpacingTokens,

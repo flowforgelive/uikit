@@ -5,34 +5,37 @@ import { useDesignTokens } from '../../../theme/useDesignTokens';
 import {
   ButtonStyleResolver,
   Visibility,
-  type ButtonConfigType,
-} from '../../../shared';
+  type ButtonConfig,
+  type DesignTokens,
+} from 'uikit-common';
 
 interface ButtonViewProps {
-  config: ButtonConfigType;
+  config: ButtonConfig;
   onAction?: (route: string) => void;
+  onClick?: () => void;
+  tokens?: DesignTokens;
   className?: string;
 }
 
 export const ButtonView: React.FC<ButtonViewProps> = React.memo(
-  ({ config, onAction, className }) => {
+  ({ config, onAction, onClick, tokens: tokensProp, className }) => {
     if (config.visibility === Visibility.Gone) return null;
 
-    const tokens = useDesignTokens();
+    const contextTokens = useDesignTokens();
+    const tokens = tokensProp ?? contextTokens;
     const style = useMemo(
-      () => ButtonStyleResolver.resolve(config, tokens),
+      () => ButtonStyleResolver.getInstance().resolve(config, tokens),
       [config, tokens],
     );
 
     const handleClick = useCallback(() => {
       if (config.isInteractive) {
+        onClick?.();
         if (config.actionRoute) {
           onAction?.(config.actionRoute!);
-        } else {
-          onAction?.('');
         }
       }
-    }, [config.isInteractive, config.actionRoute, onAction]);
+    }, [config.isInteractive, config.actionRoute, onAction, onClick]);
 
     return (
       <button

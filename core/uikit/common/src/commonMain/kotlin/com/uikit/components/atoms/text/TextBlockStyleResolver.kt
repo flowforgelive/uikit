@@ -2,8 +2,10 @@ package com.uikit.components.atoms.text
 
 import com.uikit.tokens.DesignTokens
 import kotlin.js.JsExport
+import kotlinx.serialization.Serializable
 
 @JsExport
+@Serializable
 data class ResolvedTextBlockStyle(
     val color: String,
     val fontSize: Int,

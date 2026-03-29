@@ -7,7 +7,7 @@ import {
   ButtonVariant,
   ButtonSize,
   Visibility,
-} from '../../../shared';
+} from 'uikit-common';
 
 const VARIANT_MAP = {
   primary: ButtonVariant.Primary,
@@ -62,7 +62,7 @@ export const Button: React.FC<ButtonProps> = React.memo(
     return (
       <ButtonView
         config={config}
-        onAction={onClick}
+        onClick={onClick}
         className={className}
       />
     );

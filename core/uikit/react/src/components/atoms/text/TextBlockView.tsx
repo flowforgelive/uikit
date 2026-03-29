@@ -6,21 +6,24 @@ import {
   TextBlockStyleResolver,
   TextBlockVariant,
   Visibility,
-  type TextBlockConfigType,
-} from '../../../shared';
+  type TextBlockConfig,
+  type DesignTokens,
+} from 'uikit-common';
 
 interface TextBlockViewProps {
-  config: TextBlockConfigType;
+  config: TextBlockConfig;
+  tokens?: DesignTokens;
   className?: string;
 }
 
 export const TextBlockView: React.FC<TextBlockViewProps> = React.memo(
-  ({ config, className }) => {
+  ({ config, tokens: tokensProp, className }) => {
     if (config.visibility === Visibility.Gone) return null;
 
-    const tokens = useDesignTokens();
+    const contextTokens = useDesignTokens();
+    const tokens = tokensProp ?? contextTokens;
     const style = useMemo(
-      () => TextBlockStyleResolver.resolve(config, tokens),
+      () => TextBlockStyleResolver.getInstance().resolve(config, tokens),
       [config, tokens],
     );
 

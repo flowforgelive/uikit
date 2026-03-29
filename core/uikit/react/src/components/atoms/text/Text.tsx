@@ -6,7 +6,7 @@ import {
   TextBlockConfig,
   TextBlockVariant,
   Visibility,
-} from '../../../shared';
+} from 'uikit-common';
 
 const VARIANT_MAP = {
   h1: TextBlockVariant.H1,

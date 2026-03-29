@@ -2,8 +2,10 @@ package com.uikit.components.atoms.button
 
 import com.uikit.tokens.DesignTokens
 import kotlin.js.JsExport
+import kotlinx.serialization.Serializable
 
 @JsExport
+@Serializable
 data class ColorSet(
     val bg: String,
     val text: String,
@@ -11,6 +13,7 @@ data class ColorSet(
 )
 
 @JsExport
+@Serializable
 data class SizeSet(
     val height: Int,
     val paddingH: Int,
@@ -19,6 +22,7 @@ data class SizeSet(
 )
 
 @JsExport
+@Serializable
 data class ResolvedButtonStyle(
     val colors: ColorSet,
     val sizes: SizeSet,

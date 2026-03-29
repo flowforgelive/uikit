@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -7,9 +8,19 @@ kotlin {
 
     js {
         outputModuleName.set("uikit-common")
+        useEsModules()
         browser()
         binaries.library()
         generateTypeScriptDefinitions()
+        compilerOptions {
+            moduleKind.set(org.jetbrains.kotlin.gradle.dsl.JsModuleKind.MODULE_ES)
+        }
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.kotlinx.serialization.json)
+        }
     }
 
     sourceSets.all {
