@@ -1,0 +1,10 @@
+[versions]
+kotlin = "2.3.20"
+compose-multiplatform = "1.10.3"
+node-gradle = "7.1.0"
+
+[plugins]
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
+node-gradle = { id = "com.github.node-gradle.node", version.ref = "node-gradle" }

@@ -1,0 +1,71 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* UIKit Button */
+.uikit-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  border: 1px solid var(--btn-border);
+  height: var(--btn-height);
+  padding-inline: var(--btn-padding-h);
+  font-size: var(--btn-font-size);
+  border-radius: var(--btn-radius);
+  cursor: pointer;
+  font-weight: 500;
+  transition: opacity 0.15s ease, filter 0.15s ease;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.uikit-button:hover:not(:disabled) {
+  filter: brightness(0.92);
+}
+
+.uikit-button:active:not(:disabled) {
+  filter: brightness(0.85);
+}
+
+.uikit-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.uikit-button:focus-visible {
+  outline: 2px solid var(--btn-text);
+  outline-offset: 2px;
+}
+
+.uikit-button__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: uikit-spin 0.6s linear infinite;
+}
+
+@keyframes uikit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* UIKit TextBlock */
+.uikit-text-block {
+  /* styles applied via inline style from resolver */
+}

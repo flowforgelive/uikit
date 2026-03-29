@@ -1,13 +1,14 @@
 # ========================
-# Gradle
+# Gradle / Kotlin
 # ========================
 .gradle/
 build/
 .kotlin/
 local.properties
+kotlin-js-store/
 
 # ========================
-# Kotlin / JVM
+# JVM artifacts
 # ========================
 *.class
 *.jar
@@ -16,12 +17,13 @@ local.properties
 *.nar
 *.ear
 out/
-kotlin-js-store/
+*.hprof
 
 # ========================
 # Node.js / npm / yarn / pnpm / bun
 # ========================
 node_modules/
+.node/
 .pnp/
 .pnp.js
 .yarn/install-state.gz
@@ -33,24 +35,13 @@ bun.lockb
 .bun/
 
 # ========================
-# Next.js
+# Next.js / TypeScript
 # ========================
 .next/
-out/
 next-env.d.ts
+*.tsbuildinfo
 .vercel/
 .turbo/
-
-# ========================
-# Generated code (codegen from tokens/*.json)
-# ========================
-reactApp/src/generated/
-shared/src/commonMain/kotlin/com/uikit/tokens/generated/
-
-# ========================
-# Kotlin/JS distribution (rebuild from source)
-# ========================
-shared/build/
 
 # ========================
 # IDE
@@ -92,7 +83,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-*.hprof
 
 # ========================
 # Archives (don't commit binaries)
@@ -101,11 +91,6 @@ pnpm-debug.log*
 *.tar.gz
 *.rar
 *.7z
-
-# ========================
-# React library build output
-# ========================
-react/dist/
 
 # ========================
 # Test / Coverage
