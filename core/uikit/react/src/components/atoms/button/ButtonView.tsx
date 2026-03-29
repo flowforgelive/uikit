@@ -25,8 +25,12 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
     );
 
     const handleClick = useCallback(() => {
-      if (config.isInteractive && config.actionRoute) {
-        onAction?.(config.actionRoute!);
+      if (config.isInteractive) {
+        if (config.actionRoute) {
+          onAction?.(config.actionRoute!);
+        } else {
+          onAction?.('');
+        }
       }
     }, [config.isInteractive, config.actionRoute, onAction]);
 

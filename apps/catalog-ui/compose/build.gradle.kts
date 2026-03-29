@@ -8,13 +8,15 @@ kotlin {
     jvm()
 
     sourceSets {
-        jvmMain.dependencies {
+        commonMain.dependencies {
             implementation(project(":core:uikit:common"))
             implementation(project(":core:uikit:compose"))
-            implementation(compose.desktop.currentOs)
             implementation(compose.material3)
             implementation(compose.foundation)
             implementation(compose.runtime)
+        }
+        jvmMain.dependencies {
+            implementation(compose.desktop.currentOs)
         }
     }
 }

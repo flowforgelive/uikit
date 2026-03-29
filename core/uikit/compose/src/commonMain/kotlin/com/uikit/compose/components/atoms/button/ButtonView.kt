@@ -21,7 +21,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uikit.components.atoms.button.ButtonConfig
+import com.uikit.components.atoms.button.ButtonSize
 import com.uikit.components.atoms.button.ButtonStyleResolver
+import com.uikit.components.atoms.button.ButtonVariant
 import com.uikit.foundation.Visibility
 import com.uikit.compose.theme.LocalDesignTokens
 
@@ -35,6 +37,7 @@ private fun parseColor(hex: String): Color {
 fun ButtonView(
     config: ButtonConfig,
     onAction: (String) -> Unit = {},
+    onClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
 ) {
     if (config.visibility == Visibility.Gone) return
@@ -43,7 +46,10 @@ fun ButtonView(
     val style = remember(config, tokens) { ButtonStyleResolver.resolve(config, tokens) }
 
     Button(
-        onClick = { config.actionRoute?.let(onAction) },
+        onClick = {
+            onClick?.invoke()
+            config.actionRoute?.let(onAction)
+        },
         enabled = config.isInteractive,
         colors = ButtonDefaults.buttonColors(
             containerColor = parseColor(style.colors.bg),
@@ -72,4 +78,31 @@ fun ButtonView(
             )
         }
     }
+}
+
+@Composable
+fun ButtonView(
+    text: String,
+    onClick: () -> Unit = {},
+    variant: ButtonVariant = ButtonVariant.Primary,
+    size: ButtonSize = ButtonSize.Md,
+    disabled: Boolean = false,
+    loading: Boolean = false,
+    modifier: Modifier = Modifier,
+) {
+    ButtonView(
+        config = ButtonConfig(
+            id = "",
+            text = text,
+            variant = variant,
+            size = size,
+            disabled = disabled,
+            loading = loading,
+            actionRoute = null,
+            testTag = null,
+            visibility = Visibility.Visible,
+        ),
+        onClick = onClick,
+        modifier = modifier,
+    )
 }

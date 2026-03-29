@@ -8,7 +8,7 @@ kotlin {
     jvm()
 
     sourceSets {
-        jvmMain.dependencies {
+        commonMain.dependencies {
             api(project(":core:uikit:common"))
             implementation(compose.material3)
             implementation(compose.foundation)
