@@ -1,4 +1,4 @@
-import { DesignTokensProvider } from '@uikit/react';
+import { CatalogThemeProvider } from './theme/CatalogThemeProvider';
 import type { Metadata } from 'next';
 import './globals.css';
 
@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body>
-        <DesignTokensProvider>{children}</DesignTokensProvider>
+        <CatalogThemeProvider>{children}</CatalogThemeProvider>
       </body>
     </html>
   );

@@ -69,3 +69,52 @@ body {
 .uikit-text-block {
   /* styles applied via inline style from resolver */
 }
+
+/* UIKit SegmentedControl */
+.uikit-segmented-control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  background: var(--sc-track-bg);
+  height: var(--sc-height);
+  border-radius: var(--sc-radius);
+  padding: var(--sc-track-padding);
+  overflow: hidden;
+}
+
+.uikit-segmented-control__thumb {
+  position: absolute;
+  top: var(--sc-track-padding);
+  bottom: var(--sc-track-padding);
+  left: var(--sc-track-padding);
+  width: var(--sc-thumb-width);
+  transform: translateX(var(--sc-thumb-offset));
+  background: var(--sc-thumb-bg);
+  border-radius: var(--sc-thumb-radius);
+  transition: transform 0.2s ease;
+  pointer-events: none;
+}
+
+.uikit-segmented-control__option {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--sc-font-size);
+  color: var(--sc-text-inactive);
+  padding: 0 12px;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+  font-weight: 500;
+  line-height: 1;
+  height: 100%;
+}
+
+.uikit-segmented-control__option--active {
+  color: var(--sc-text-active);
+}
