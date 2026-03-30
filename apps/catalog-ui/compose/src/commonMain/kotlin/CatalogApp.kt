@@ -28,84 +28,87 @@ import com.uikit.tokens.DesignTokens
 
 @Composable
 fun CatalogApp() {
-    var currentScreen by remember { mutableStateOf("first") }
-    var themeMode by remember { mutableStateOf(ThemeMode.Dark) }
+	var currentScreen by remember { mutableStateOf("first") }
+	var themeMode by remember { mutableStateOf(ThemeMode.Dark) }
 
-    val tokens = when (themeMode) {
-        ThemeMode.Dark -> DesignTokens.DefaultDark
-        ThemeMode.Light -> DesignTokens.DefaultLight
-    }
+	val tokens =
+		when (themeMode) {
+			ThemeMode.Dark -> DesignTokens.DefaultDark
+			ThemeMode.Light -> DesignTokens.DefaultLight
+		}
 
-    val onAction: (String) -> Unit = { route ->
-        currentScreen = route.removePrefix("/")
-    }
+	val onAction: (String) -> Unit = { route ->
+		currentScreen = route.removePrefix("/")
+	}
 
-    UIKitTheme(tokens = tokens) {
-        val currentTokens = LocalDesignTokens.current
+	UIKitTheme(tokens = tokens) {
+		val currentTokens = LocalDesignTokens.current
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(parseColor(currentTokens.color.surface)),
-        ) {
-            // Theme switcher — top right
-            Box(
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(16.dp),
-            ) {
-                SegmentedControlView(
-                    options = listOf("dark" to "Тёмная", "light" to "Светлая"),
-                    selectedId = if (themeMode == ThemeMode.Dark) "dark" else "light",
-                    onSelectionChange = { id ->
-                        themeMode = if (id == "dark") ThemeMode.Dark else ThemeMode.Light
-                    },
-                    modifier = Modifier.width(180.dp),
-                )
-            }
+		Box(
+			modifier =
+				Modifier
+					.fillMaxSize()
+					.background(parseColor(currentTokens.color.surface)),
+		) {
+			// Theme switcher — top right
+			Box(
+				modifier =
+					Modifier
+						.align(Alignment.TopEnd)
+						.padding(16.dp),
+			) {
+				SegmentedControlView(
+					options = listOf("dark" to "Тёмная", "light" to "Светлая"),
+					selectedId = if (themeMode == ThemeMode.Dark) "dark" else "light",
+					onSelectionChange = { id ->
+						themeMode = if (id == "dark") ThemeMode.Dark else ThemeMode.Light
+					},
+					modifier = Modifier.width(180.dp),
+				)
+			}
 
-            // Content
-            Column(
-                modifier = Modifier.fillMaxSize().padding(32.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                when (currentScreen) {
-                    "first" -> FirstScreen(onAction)
-                    "second" -> SecondScreen(onAction)
-                }
-            }
-        }
-    }
+			// Content
+			Column(
+				modifier = Modifier.fillMaxSize().padding(32.dp),
+				verticalArrangement = Arrangement.Center,
+				horizontalAlignment = Alignment.CenterHorizontally,
+			) {
+				when (currentScreen) {
+					"first" -> FirstScreen(onAction)
+					"second" -> SecondScreen(onAction)
+				}
+			}
+		}
+	}
 }
 
 @Composable
 private fun FirstScreen(onAction: (String) -> Unit) {
-    TextBlockView(
-        text = "Первая страница",
-        variant = TextBlockVariant.H1,
-    )
+	TextBlockView(
+		text = "Первая страница",
+		variant = TextBlockVariant.H1,
+	)
 
-    Spacer(Modifier.height(24.dp))
+	Spacer(Modifier.height(24.dp))
 
-    ButtonView(
-        text = "Перейти на вторую страницу",
-        onClick = { onAction("/second") },
-    )
+	ButtonView(
+		text = "Перейти на вторую страницу",
+		onClick = { onAction("/second") },
+	)
 }
 
 @Composable
 private fun SecondScreen(onAction: (String) -> Unit) {
-    TextBlockView(
-        text = "Вторая страница",
-        variant = TextBlockVariant.H1,
-    )
+	TextBlockView(
+		text = "Вторая страница",
+		variant = TextBlockVariant.H1,
+	)
 
-    Spacer(Modifier.height(24.dp))
+	Spacer(Modifier.height(24.dp))
 
-    ButtonView(
-        text = "Вернуться назад",
-        variant = ButtonVariant.Secondary,
-        onClick = { onAction("/first") },
-    )
+	ButtonView(
+		text = "Вернуться назад",
+		variant = ButtonVariant.Secondary,
+		onClick = { onAction("/first") },
+	)
 }

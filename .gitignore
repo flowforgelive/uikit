@@ -99,3 +99,14 @@ coverage/
 .nyc_output/
 *.lcov
 reports/
+
+# ========================
+# Binary artifacts
+# ========================
+*.apk
+*.aab
+*.exe
+*.dmg
+*.so
+*.dylib
+*.dll

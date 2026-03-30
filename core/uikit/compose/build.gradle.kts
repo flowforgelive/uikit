@@ -1,18 +1,18 @@
 plugins {
-    alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.compose.multiplatform)
-    alias(libs.plugins.kotlin.compose)
+	alias(libs.plugins.kotlin.multiplatform)
+	alias(libs.plugins.compose.multiplatform)
+	alias(libs.plugins.kotlin.compose)
 }
 
 kotlin {
-    jvm()
+	jvm()
 
-    sourceSets {
-        commonMain.dependencies {
-            api(project(":core:uikit:common"))
-            implementation(compose.material3)
-            implementation(compose.foundation)
-            implementation(compose.runtime)
-        }
-    }
+	sourceSets {
+		commonMain.dependencies {
+			api(project(":core:uikit:common"))
+			implementation(compose.material3)
+			implementation(compose.foundation)
+			implementation(compose.runtime)
+		}
+	}
 }

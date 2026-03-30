@@ -1,29 +1,29 @@
 plugins {
-    alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.kotlin.serialization)
+	alias(libs.plugins.kotlin.multiplatform)
+	alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
-    jvm()
+	jvm()
 
-    js {
-        outputModuleName.set("uikit-common")
-        useEsModules()
-        browser()
-        binaries.library()
-        generateTypeScriptDefinitions()
-        compilerOptions {
-            moduleKind.set(org.jetbrains.kotlin.gradle.dsl.JsModuleKind.MODULE_ES)
-        }
-    }
+	js {
+		outputModuleName.set("uikit-common")
+		useEsModules()
+		browser()
+		binaries.library()
+		generateTypeScriptDefinitions()
+		compilerOptions {
+			moduleKind.set(org.jetbrains.kotlin.gradle.dsl.JsModuleKind.MODULE_ES)
+		}
+	}
 
-    sourceSets {
-        commonMain.dependencies {
-            implementation(libs.kotlinx.serialization.json)
-        }
-    }
+	sourceSets {
+		commonMain.dependencies {
+			implementation(libs.kotlinx.serialization.json)
+		}
+	}
 
-    sourceSets.all {
-        languageSettings.optIn("kotlin.js.ExperimentalJsExport")
-    }
+	sourceSets.all {
+		languageSettings.optIn("kotlin.js.ExperimentalJsExport")
+	}
 }

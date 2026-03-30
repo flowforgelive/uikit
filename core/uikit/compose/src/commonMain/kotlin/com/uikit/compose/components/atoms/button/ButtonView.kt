@@ -19,80 +19,87 @@ import com.uikit.components.atoms.button.ButtonConfig
 import com.uikit.components.atoms.button.ButtonSize
 import com.uikit.components.atoms.button.ButtonStyleResolver
 import com.uikit.components.atoms.button.ButtonVariant
-import com.uikit.foundation.Visibility
 import com.uikit.compose.theme.LocalDesignTokens
 import com.uikit.compose.theme.parseColor
+import com.uikit.foundation.Visibility
 
 @Composable
 fun ButtonView(
-    config: ButtonConfig,
-    onAction: (String) -> Unit = {},
-    onClick: (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
+	config: ButtonConfig,
+	onAction: (String) -> Unit = {},
+	onClick: (() -> Unit)? = null,
+	modifier: Modifier = Modifier,
 ) {
-    if (config.visibility == Visibility.Gone) return
+	if (config.visibility == Visibility.Gone) return
 
-    val tokens = LocalDesignTokens.current
-    val style = remember(config, tokens) { ButtonStyleResolver.resolve(config, tokens) }
+	val tokens = LocalDesignTokens.current
+	val style = remember(config, tokens) { ButtonStyleResolver.resolve(config, tokens) }
 
-    Button(
-        onClick = {
-            onClick?.invoke()
-            config.actionRoute?.let(onAction)
-        },
-        enabled = config.isInteractive,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = parseColor(style.colors.bg),
-            contentColor = parseColor(style.colors.text),
-            disabledContainerColor = parseColor(style.colors.bg),
-            disabledContentColor = parseColor(style.colors.text),
-        ),
-        border = if (style.colors.border != "transparent")
-            BorderStroke(1.dp, parseColor(style.colors.border)) else null,
-        shape = RoundedCornerShape(style.radius.dp),
-        modifier = modifier
-            .height(style.sizes.height.dp)
-            .then(if (config.visibility == Visibility.Invisible) Modifier.alpha(0f) else Modifier)
-            .testTag(config.testTag ?: config.id),
-    ) {
-        if (config.loading) {
-            CircularProgressIndicator(
-                modifier = Modifier.size(style.sizes.iconSize.dp),
-                color = parseColor(style.colors.text),
-                strokeWidth = 2.dp,
-            )
-        } else {
-            Text(
-                text = config.text,
-                fontSize = style.sizes.fontSize.sp,
-            )
-        }
-    }
+	Button(
+		onClick = {
+			onClick?.invoke()
+			config.actionRoute?.let(onAction)
+		},
+		enabled = config.isInteractive,
+		colors =
+			ButtonDefaults.buttonColors(
+				containerColor = parseColor(style.colors.bg),
+				contentColor = parseColor(style.colors.text),
+				disabledContainerColor = parseColor(style.colors.bg),
+				disabledContentColor = parseColor(style.colors.text),
+			),
+		border =
+			if (style.colors.border != "transparent") {
+				BorderStroke(1.dp, parseColor(style.colors.border))
+			} else {
+				null
+			},
+		shape = RoundedCornerShape(style.radius.dp),
+		modifier =
+			modifier
+				.height(style.sizes.height.dp)
+				.then(if (config.visibility == Visibility.Invisible) Modifier.alpha(0f) else Modifier)
+				.testTag(config.testTag ?: config.id),
+	) {
+		if (config.loading) {
+			CircularProgressIndicator(
+				modifier = Modifier.size(style.sizes.iconSize.dp),
+				color = parseColor(style.colors.text),
+				strokeWidth = 2.dp,
+			)
+		} else {
+			Text(
+				text = config.text,
+				fontSize = style.sizes.fontSize.sp,
+			)
+		}
+	}
 }
 
 @Composable
 fun ButtonView(
-    text: String,
-    onClick: () -> Unit = {},
-    variant: ButtonVariant = ButtonVariant.Primary,
-    size: ButtonSize = ButtonSize.Md,
-    disabled: Boolean = false,
-    loading: Boolean = false,
-    modifier: Modifier = Modifier,
+	text: String,
+	onClick: () -> Unit = {},
+	variant: ButtonVariant = ButtonVariant.Primary,
+	size: ButtonSize = ButtonSize.Md,
+	disabled: Boolean = false,
+	loading: Boolean = false,
+	modifier: Modifier = Modifier,
 ) {
-    ButtonView(
-        config = ButtonConfig(
-            id = "",
-            text = text,
-            variant = variant,
-            size = size,
-            disabled = disabled,
-            loading = loading,
-            actionRoute = null,
-            testTag = null,
-            visibility = Visibility.Visible,
-        ),
-        onClick = onClick,
-        modifier = modifier,
-    )
+	ButtonView(
+		config =
+			ButtonConfig(
+				id = "",
+				text = text,
+				variant = variant,
+				size = size,
+				disabled = disabled,
+				loading = loading,
+				actionRoute = null,
+				testTag = null,
+				visibility = Visibility.Visible,
+			),
+		onClick = onClick,
+		modifier = modifier,
+	)
 }

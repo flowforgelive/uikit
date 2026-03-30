@@ -9,10 +9,10 @@ val LocalDesignTokens = staticCompositionLocalOf { DesignTokens.Default }
 
 @Composable
 fun UIKitTheme(
-    tokens: DesignTokens = DesignTokens.Default,
-    content: @Composable () -> Unit,
+	tokens: DesignTokens = DesignTokens.Default,
+	content: @Composable () -> Unit,
 ) {
-    CompositionLocalProvider(LocalDesignTokens provides tokens) {
-        content()
-    }
+	CompositionLocalProvider(LocalDesignTokens provides tokens) {
+		content()
+	}
 }
