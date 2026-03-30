@@ -1,3 +1,6 @@
+// UIKit styles — must be imported by consuming app
+import "./styles.css";
+
 // Convenience API (primary)
 export { Button } from "./components/atoms/button/Button";
 export { Text } from "./components/atoms/text/Text";
@@ -10,6 +13,8 @@ export { SegmentedControlView } from "./components/atoms/segmented-control/Segme
 
 // Theme
 export { useDesignTokens, DesignTokensProvider } from "./theme/useDesignTokens";
+export { UIKitThemeProvider, useUIKitTheme } from "./theme/UIKitThemeProvider";
+export { UIKitThemeScript } from "./theme/UIKitThemeScript";
 
 // Re-exports from KMP module (ESM flat exports)
 export {

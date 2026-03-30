@@ -1,11 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Button, Text } from "@uikit/react";
+import { Button, Text, useUIKitTheme } from "@uikit/react";
 import { ThemeSwitcher } from "./components/theme-switcher/ThemeSwitcher";
 
 export default function FirstPage() {
 	const router = useRouter();
+	const { tokens } = useUIKitTheme();
 
 	return (
 		<main
@@ -17,6 +18,9 @@ export default function FirstPage() {
 				justifyContent: "center",
 				minHeight: "100vh",
 				gap: "24px",
+				backgroundColor: tokens.color.surface,
+				color: tokens.color.textPrimary,
+				transition: "background-color 0.2s ease, color 0.2s ease",
 			}}
 		>
 			<div style={{ position: "absolute", top: "16px", right: "16px" }}>

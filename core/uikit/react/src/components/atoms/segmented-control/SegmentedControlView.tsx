@@ -49,7 +49,7 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 						"--sc-radius": `${style.sizes.radius}px`,
 						"--sc-thumb-radius": `${style.sizes.thumbRadius}px`,
 						"--sc-track-padding": `${style.sizes.trackPadding}px`,
-						"--sc-thumb-offset": `${selectedIndex * segmentPercent}%`,
+						"--sc-thumb-offset": `${selectedIndex * 100}%`,
 						"--sc-thumb-width": `${segmentPercent}%`,
 						visibility:
 							config.visibility === Visibility.Invisible ? "hidden" : undefined,

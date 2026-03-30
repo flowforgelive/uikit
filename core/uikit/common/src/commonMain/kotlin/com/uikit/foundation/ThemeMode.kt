@@ -8,4 +8,5 @@ import kotlin.js.JsExport
 enum class ThemeMode {
 	Light,
 	Dark,
+	System,
 }

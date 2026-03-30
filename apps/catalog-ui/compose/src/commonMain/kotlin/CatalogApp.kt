@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,26 +25,25 @@ import com.uikit.compose.components.atoms.text.TextBlockView
 import com.uikit.compose.theme.LocalDesignTokens
 import com.uikit.compose.theme.UIKitTheme
 import com.uikit.compose.theme.parseColor
+import com.uikit.foundation.InMemoryThemeProvider
 import com.uikit.foundation.ThemeMode
-import com.uikit.tokens.DesignTokens
+import kotlinx.coroutines.launch
 
 @Composable
 fun CatalogApp() {
 	var currentScreen by remember { mutableStateOf("first") }
-	var themeMode by remember { mutableStateOf(ThemeMode.Dark) }
-
-	val tokens =
-		when (themeMode) {
-			ThemeMode.Dark -> DesignTokens.DefaultDark
-			ThemeMode.Light -> DesignTokens.DefaultLight
-		}
+	val themeProvider = remember { InMemoryThemeProvider(ThemeMode.System) }
+	val scope = rememberCoroutineScope()
 
 	val onAction: (String) -> Unit = { route ->
 		currentScreen = route.removePrefix("/")
 	}
 
-	UIKitTheme(tokens = tokens) {
+	UIKitTheme(themeProvider = themeProvider) {
 		val currentTokens = LocalDesignTokens.current
+		val currentMode by themeProvider
+			.observeThemeMode()
+			.collectAsState(initial = ThemeMode.System)
 
 		Box(
 			modifier =
@@ -58,12 +59,25 @@ fun CatalogApp() {
 						.padding(16.dp),
 			) {
 				SegmentedControlView(
-					options = listOf("dark" to "Тёмная", "light" to "Светлая"),
-					selectedId = if (themeMode == ThemeMode.Dark) "dark" else "light",
+					options = listOf("dark" to "Тёмная", "light" to "Светлая", "system" to "Система"),
+					selectedId =
+						when (currentMode) {
+							ThemeMode.Dark -> "dark"
+							ThemeMode.Light -> "light"
+							ThemeMode.System -> "system"
+						},
 					onSelectionChange = { id ->
-						themeMode = if (id == "dark") ThemeMode.Dark else ThemeMode.Light
+						scope.launch {
+							themeProvider.setTheme(
+								when (id) {
+									"dark" -> ThemeMode.Dark
+									"light" -> ThemeMode.Light
+									else -> ThemeMode.System
+								},
+							)
+						}
 					},
-					modifier = Modifier.width(180.dp),
+					modifier = Modifier.width(240.dp),
 				)
 			}
 
