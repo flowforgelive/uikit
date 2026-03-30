@@ -18,7 +18,7 @@ export default function SecondPage() {
 				gap: "24px",
 				backgroundColor: tokens.color.surface,
 				color: tokens.color.textPrimary,
-				transition: "background-color 0.2s ease, color 0.2s ease",
+				transition: `background-color ${tokens.motion.durationNormal}ms ${tokens.motion.easingStandard}, color ${tokens.motion.durationNormal}ms ${tokens.motion.easingStandard}`,
 			}}
 		>
 			<Text text="Вторая страница" variant="h1" />

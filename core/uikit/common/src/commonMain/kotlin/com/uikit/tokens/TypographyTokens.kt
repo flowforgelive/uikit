@@ -6,14 +6,15 @@ import kotlin.js.JsExport
 @JsExport
 @Serializable
 data class TypographyTokens(
-	val h1Size: Int,
-	val h1Weight: Int,
-	val h2Size: Int,
-	val h2Weight: Int,
-	val h3Size: Int,
-	val h3Weight: Int,
-	val bodySize: Int,
-	val bodyWeight: Int,
-	val captionSize: Int,
-	val captionWeight: Int,
+	val largeTitle: TextStyle,
+	val title1: TextStyle,
+	val title2: TextStyle,
+	val title3: TextStyle,
+	val headline: TextStyle,
+	val body: TextStyle,
+	val callout: TextStyle,
+	val subhead: TextStyle,
+	val footnote: TextStyle,
+	val caption1: TextStyle,
+	val caption2: TextStyle,
 )

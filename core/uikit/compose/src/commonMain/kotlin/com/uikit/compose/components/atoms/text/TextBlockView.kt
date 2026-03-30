@@ -30,6 +30,7 @@ fun TextBlockView(
 		fontSize = style.fontSize.sp,
 		fontWeight = FontWeight(style.fontWeight),
 		lineHeight = style.lineHeight.sp,
+		letterSpacing = style.letterSpacing.sp,
 		modifier =
 			modifier
 				.then(if (config.visibility == Visibility.Invisible) Modifier.alpha(0f) else Modifier)

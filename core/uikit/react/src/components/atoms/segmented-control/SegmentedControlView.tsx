@@ -2,6 +2,7 @@
 
 import React, { useMemo, useCallback } from "react";
 import { useDesignTokens } from "../../../theme/useDesignTokens";
+import { toRem } from "../../../utils/units";
 import {
 	SegmentedControlStyleResolver,
 	Visibility,
@@ -45,13 +46,15 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 						"--sc-thumb-bg": style.colors.thumbBg,
 						"--sc-text-active": style.colors.textActive,
 						"--sc-text-inactive": style.colors.textInactive,
-						"--sc-height": `${style.sizes.height}px`,
-						"--sc-font-size": `${style.sizes.fontSize}px`,
-						"--sc-radius": `${style.sizes.radius}px`,
-						"--sc-thumb-radius": `${style.sizes.thumbRadius}px`,
-						"--sc-track-padding": `${style.sizes.trackPadding}px`,
+						"--sc-height": toRem(style.sizes.height),
+						"--sc-font-size": toRem(style.sizes.fontSize),
+						"--sc-radius": toRem(style.sizes.radius),
+						"--sc-thumb-radius": toRem(style.sizes.thumbRadius),
+						"--sc-track-padding": toRem(style.sizes.trackPadding),
 						"--sc-thumb-offset": `${selectedIndex * 100}%`,
 						"--sc-thumb-width": `${segmentPercent}%`,
+						"--sc-duration": `${tokens.motion.durationNormal}ms`,
+						"--sc-easing": tokens.motion.easingStandard,
 						visibility:
 							config.visibility === Visibility.Invisible ? "hidden" : undefined,
 					} as React.CSSProperties

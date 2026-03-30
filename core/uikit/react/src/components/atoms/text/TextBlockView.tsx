@@ -2,6 +2,7 @@
 
 import React, { useMemo } from "react";
 import { useDesignTokens } from "../../../theme/useDesignTokens";
+import { toRem } from "../../../utils/units";
 import {
 	TextBlockStyleResolver,
 	TextBlockVariant,
@@ -42,9 +43,10 @@ export const TextBlockView: React.FC<TextBlockViewProps> = React.memo(
 				className={`uikit-text-block ${className ?? ""}`}
 				style={{
 					color: style.color,
-					fontSize: `${style.fontSize}px`,
+					fontSize: toRem(style.fontSize),
 					fontWeight: style.fontWeight,
-					lineHeight: `${style.lineHeight}px`,
+					lineHeight: toRem(style.lineHeight),
+					letterSpacing: toRem(style.letterSpacing),
 					margin: 0,
 					visibility:
 						config.visibility === Visibility.Invisible ? "hidden" : undefined,

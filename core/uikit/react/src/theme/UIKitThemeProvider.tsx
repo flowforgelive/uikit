@@ -19,6 +19,7 @@ import { DesignTokensContext } from "./useDesignTokens";
 // ─── Types ──────────────────────────────────────────────
 
 type ThemeModeValue = "light" | "dark" | "system";
+type LayoutDirectionValue = "ltr" | "rtl";
 
 interface UIKitThemeContextValue {
 	/** Текущий режим темы (light | dark | system) */
@@ -27,8 +28,12 @@ interface UIKitThemeContextValue {
 	resolvedMode: "light" | "dark";
 	/** Токены дизайн-системы для текущей темы */
 	tokens: DesignTokensType;
+	/** Направление текста (ltr | rtl) */
+	dir: LayoutDirectionValue;
 	/** Установить режим темы */
 	setMode: (mode: ThemeModeValue) => void;
+	/** Установить направление текста */
+	setDir: (dir: LayoutDirectionValue) => void;
 }
 
 const UIKitThemeContext = createContext<UIKitThemeContextValue | null>(null);
@@ -105,11 +110,14 @@ interface UIKitThemeProviderProps {
 	 * If not provided, defaults to "system".
 	 */
 	initialTheme?: ThemeModeValue;
+	/** Layout direction (ltr/rtl). Defaults to "ltr". */
+	initialDir?: LayoutDirectionValue;
 	children: ReactNode;
 }
 
 export function UIKitThemeProvider({
 	initialTheme,
+	initialDir = "ltr",
 	children,
 }: UIKitThemeProviderProps) {
 	const [mode, setModeState] = useState<ThemeModeValue>(() => {
@@ -117,6 +125,8 @@ export function UIKitThemeProvider({
 		if (initialTheme) return initialTheme;
 		return parseMode(getCookie(COOKIE_NAME));
 	});
+
+	const [dir, setDir] = useState<LayoutDirectionValue>(initialDir);
 
 	const systemDark = useSystemDark();
 
@@ -139,14 +149,18 @@ export function UIKitThemeProvider({
 		}
 	}, []);
 
-	// Sync data-theme attribute on <html> for CSS consumers
+	// Sync data-theme and dir attributes on <html>
 	useEffect(() => {
 		document.documentElement.setAttribute("data-theme", resolvedMode);
 	}, [resolvedMode]);
 
+	useEffect(() => {
+		document.documentElement.setAttribute("dir", dir);
+	}, [dir]);
+
 	const value = useMemo(
-		() => ({ mode, resolvedMode, tokens, setMode }),
-		[mode, resolvedMode, tokens, setMode],
+		() => ({ mode, resolvedMode, tokens, dir, setMode, setDir }),
+		[mode, resolvedMode, tokens, dir, setMode, setDir],
 	);
 
 	return (

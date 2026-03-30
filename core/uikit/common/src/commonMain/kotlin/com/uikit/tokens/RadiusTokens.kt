@@ -6,7 +6,10 @@ import kotlin.js.JsExport
 @JsExport
 @Serializable
 data class RadiusTokens(
-	val sm: Int,
-	val md: Int,
-	val lg: Int,
+	val xs: Double,
+	val sm: Double,
+	val md: Double,
+	val lg: Double,
+	val xl: Double,
+	val full: Double,
 )

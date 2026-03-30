@@ -2,6 +2,7 @@
 
 import React, { useMemo, useCallback } from "react";
 import { useDesignTokens } from "../../../theme/useDesignTokens";
+import { toRem } from "../../../utils/units";
 import {
 	ButtonStyleResolver,
 	Visibility,
@@ -49,10 +50,14 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 						"--btn-bg": style.colors.bg,
 						"--btn-text": style.colors.text,
 						"--btn-border": style.colors.border,
-						"--btn-height": `${style.sizes.height}px`,
-						"--btn-padding-h": `${style.sizes.paddingH}px`,
-						"--btn-font-size": `${style.sizes.fontSize}px`,
-						"--btn-radius": `${style.radius}px`,
+						"--btn-height": toRem(style.sizes.height),
+						"--btn-padding-h": toRem(style.sizes.paddingH),
+						"--btn-font-size": toRem(style.sizes.fontSize),
+						"--btn-radius": toRem(style.radius),
+						"--btn-letter-spacing": toRem(style.sizes.letterSpacing),
+						"--btn-duration": `${tokens.motion.durationFast}ms`,
+						"--btn-easing": tokens.motion.easingStandard,
+						"--btn-spinner-duration": `${tokens.motion.durationSlower * 1.5}ms`,
 						visibility:
 							config.visibility === Visibility.Invisible ? "hidden" : undefined,
 					} as React.CSSProperties

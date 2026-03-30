@@ -13,6 +13,9 @@ export { useDesignTokens, DesignTokensProvider } from "./theme/useDesignTokens";
 export { UIKitThemeProvider, useUIKitTheme } from "./theme/UIKitThemeProvider";
 export { UIKitThemeScript } from "./theme/UIKitThemeScript";
 
+// Utils
+export { toRem } from "./utils/units";
+
 // Re-exports from KMP module (ESM flat exports)
 export {
 	DesignTokens,

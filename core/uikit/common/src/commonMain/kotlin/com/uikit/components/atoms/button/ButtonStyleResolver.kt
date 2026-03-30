@@ -15,10 +15,11 @@ data class ColorSet(
 @JsExport
 @Serializable
 data class SizeSet(
-	val height: Int,
-	val paddingH: Int,
-	val fontSize: Int,
-	val iconSize: Int,
+	val height: Double,
+	val paddingH: Double,
+	val fontSize: Double,
+	val iconSize: Double,
+	val letterSpacing: Double,
 )
 
 @JsExport
@@ -26,7 +27,7 @@ data class SizeSet(
 data class ResolvedButtonStyle(
 	val colors: ColorSet,
 	val sizes: SizeSet,
-	val radius: Int,
+	val radius: Double,
 )
 
 @JsExport
@@ -92,26 +93,29 @@ object ButtonStyleResolver {
 					SizeSet(
 						height = tokens.sizing.buttonSm,
 						paddingH = tokens.spacing.sm,
-						fontSize = tokens.typography.captionSize,
+						fontSize = tokens.typography.caption1.fontSize,
 						iconSize = tokens.sizing.iconSm,
+						letterSpacing = tokens.typography.caption1.letterSpacing,
 					)
 				}
 
 				ButtonSize.Md -> {
 					SizeSet(
 						height = tokens.sizing.buttonMd,
-						paddingH = tokens.spacing.md,
-						fontSize = tokens.typography.bodySize,
+						paddingH = tokens.spacing.lg,
+						fontSize = tokens.typography.body.fontSize,
 						iconSize = tokens.sizing.iconMd,
+						letterSpacing = tokens.typography.body.letterSpacing,
 					)
 				}
 
 				ButtonSize.Lg -> {
 					SizeSet(
 						height = tokens.sizing.buttonLg,
-						paddingH = tokens.spacing.lg,
-						fontSize = tokens.typography.bodySize,
+						paddingH = tokens.spacing.xl,
+						fontSize = tokens.typography.body.fontSize,
 						iconSize = tokens.sizing.iconLg,
+						letterSpacing = tokens.typography.body.letterSpacing,
 					)
 				}
 			}

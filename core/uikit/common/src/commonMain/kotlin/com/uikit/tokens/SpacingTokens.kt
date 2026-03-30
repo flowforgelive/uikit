@@ -6,9 +6,13 @@ import kotlin.js.JsExport
 @JsExport
 @Serializable
 data class SpacingTokens(
-	val xs: Int,
-	val sm: Int,
-	val md: Int,
-	val lg: Int,
-	val xl: Int,
+	val xxs: Double,
+	val xs: Double,
+	val sm: Double,
+	val md: Double,
+	val lg: Double,
+	val xl: Double,
+	val xxl: Double,
+	val xxxl: Double,
+	val xxxxl: Double,
 )

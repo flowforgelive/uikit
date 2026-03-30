@@ -6,10 +6,15 @@ import kotlin.js.JsExport
 @JsExport
 @Serializable
 data class SizingTokens(
-	val buttonSm: Int,
-	val buttonMd: Int,
-	val buttonLg: Int,
-	val iconSm: Int,
-	val iconMd: Int,
-	val iconLg: Int,
+	val buttonXs: Double,
+	val buttonSm: Double,
+	val buttonMd: Double,
+	val buttonLg: Double,
+	val buttonXl: Double,
+	val iconXs: Double,
+	val iconSm: Double,
+	val iconMd: Double,
+	val iconLg: Double,
+	val iconXl: Double,
+	val minTouchTarget: Double,
 )

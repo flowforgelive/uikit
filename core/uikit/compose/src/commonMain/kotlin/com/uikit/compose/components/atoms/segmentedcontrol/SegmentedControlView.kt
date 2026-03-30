@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -49,7 +50,7 @@ fun SegmentedControlView(
 
 	val animatedFraction by animateFloatAsState(
 		targetValue = if (optionCount > 0) selectedIndex.toFloat() / optionCount else 0f,
-		animationSpec = tween(durationMillis = 200),
+		animationSpec = tween(durationMillis = tokens.motion.durationNormal),
 	)
 
 	val thumbColor = parseColor(style.colors.thumbBg)
@@ -58,7 +59,7 @@ fun SegmentedControlView(
 	Box(
 		modifier =
 			modifier
-				.height(style.sizes.height.dp)
+				.defaultMinSize(minHeight = style.sizes.height.dp)
 				.clip(RoundedCornerShape(style.sizes.radius.dp))
 				.background(parseColor(style.colors.trackBg))
 				.padding(style.sizes.trackPadding.dp)

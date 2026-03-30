@@ -1,6 +1,7 @@
 package com.uikit.components.atoms.text
 
 import com.uikit.tokens.DesignTokens
+import com.uikit.tokens.TextStyle
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
 
@@ -8,61 +9,35 @@ import kotlin.js.JsExport
 @Serializable
 data class ResolvedTextBlockStyle(
 	val color: String,
-	val fontSize: Int,
+	val fontSize: Double,
 	val fontWeight: Int,
-	val lineHeight: Int,
+	val lineHeight: Double,
+	val letterSpacing: Double,
 )
 
 @JsExport
 object TextBlockStyleResolver {
+	private fun fromTextStyle(
+		style: TextStyle,
+		color: String,
+	): ResolvedTextBlockStyle =
+		ResolvedTextBlockStyle(
+			color = color,
+			fontSize = style.fontSize,
+			fontWeight = style.fontWeight,
+			lineHeight = style.lineHeight,
+			letterSpacing = style.letterSpacing,
+		)
+
 	fun resolve(
 		config: TextBlockConfig,
 		tokens: DesignTokens,
 	): ResolvedTextBlockStyle =
 		when (config.variant) {
-			TextBlockVariant.H1 -> {
-				ResolvedTextBlockStyle(
-					color = tokens.color.textPrimary,
-					fontSize = tokens.typography.h1Size,
-					fontWeight = tokens.typography.h1Weight,
-					lineHeight = (tokens.typography.h1Size * 1.2).toInt(),
-				)
-			}
-
-			TextBlockVariant.H2 -> {
-				ResolvedTextBlockStyle(
-					color = tokens.color.textPrimary,
-					fontSize = tokens.typography.h2Size,
-					fontWeight = tokens.typography.h2Weight,
-					lineHeight = (tokens.typography.h2Size * 1.2).toInt(),
-				)
-			}
-
-			TextBlockVariant.H3 -> {
-				ResolvedTextBlockStyle(
-					color = tokens.color.textPrimary,
-					fontSize = tokens.typography.h3Size,
-					fontWeight = tokens.typography.h3Weight,
-					lineHeight = (tokens.typography.h3Size * 1.2).toInt(),
-				)
-			}
-
-			TextBlockVariant.Body -> {
-				ResolvedTextBlockStyle(
-					color = tokens.color.textPrimary,
-					fontSize = tokens.typography.bodySize,
-					fontWeight = tokens.typography.bodyWeight,
-					lineHeight = (tokens.typography.bodySize * 1.5).toInt(),
-				)
-			}
-
-			TextBlockVariant.Caption -> {
-				ResolvedTextBlockStyle(
-					color = tokens.color.secondary,
-					fontSize = tokens.typography.captionSize,
-					fontWeight = tokens.typography.captionWeight,
-					lineHeight = (tokens.typography.captionSize * 1.5).toInt(),
-				)
-			}
+			TextBlockVariant.H1 -> fromTextStyle(tokens.typography.title1, tokens.color.textPrimary)
+			TextBlockVariant.H2 -> fromTextStyle(tokens.typography.title2, tokens.color.textPrimary)
+			TextBlockVariant.H3 -> fromTextStyle(tokens.typography.title3, tokens.color.textPrimary)
+			TextBlockVariant.Body -> fromTextStyle(tokens.typography.body, tokens.color.textPrimary)
+			TextBlockVariant.Caption -> fromTextStyle(tokens.typography.caption1, tokens.color.secondary)
 		}
 }

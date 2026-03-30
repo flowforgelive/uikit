@@ -13,12 +13,12 @@
 	position: absolute;
 	top: var(--sc-track-padding);
 	bottom: var(--sc-track-padding);
-	left: var(--sc-track-padding);
+	inset-inline-start: var(--sc-track-padding);
 	width: var(--sc-thumb-width);
 	transform: translateX(var(--sc-thumb-offset));
 	background: var(--sc-thumb-bg);
 	border-radius: var(--sc-thumb-radius);
-	transition: transform 0.2s ease;
+	transition: transform var(--sc-duration) var(--sc-easing);
 	pointer-events: none;
 }
 
@@ -34,9 +34,9 @@
 	cursor: pointer;
 	font-size: var(--sc-font-size);
 	color: var(--sc-text-inactive);
-	padding: 0 12px;
+	padding-inline: 12px;
 	white-space: nowrap;
-	transition: color 0.2s ease;
+	transition: color var(--sc-duration) var(--sc-easing);
 	font-weight: 500;
 	line-height: 1;
 	height: 100%;

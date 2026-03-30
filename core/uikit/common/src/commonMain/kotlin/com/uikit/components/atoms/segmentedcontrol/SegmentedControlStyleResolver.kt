@@ -17,12 +17,12 @@ data class SegmentedControlColors(
 @JsExport
 @Serializable
 data class SegmentedControlSizes(
-	val height: Int,
-	val paddingH: Int,
-	val fontSize: Int,
-	val radius: Int,
-	val thumbRadius: Int,
-	val trackPadding: Int,
+	val height: Double,
+	val paddingH: Double,
+	val fontSize: Double,
+	val radius: Double,
+	val thumbRadius: Double,
+	val trackPadding: Double,
 )
 
 @JsExport
@@ -48,10 +48,10 @@ object SegmentedControlStyleResolver {
 				SegmentedControlSizes(
 					height = tokens.sizing.buttonSm,
 					paddingH = tokens.spacing.sm,
-					fontSize = tokens.typography.captionSize,
+					fontSize = tokens.typography.caption1.fontSize,
 					radius = tokens.radius.md,
-					thumbRadius = tokens.radius.sm + 2,
-					trackPadding = 2,
+					thumbRadius = tokens.radius.sm + 2.0,
+					trackPadding = 2.0,
 				),
 		)
 }

@@ -1,7 +1,7 @@
 package com.uikit.compose.components.atoms.button
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -55,7 +55,7 @@ fun ButtonView(
 		shape = RoundedCornerShape(style.radius.dp),
 		modifier =
 			modifier
-				.height(style.sizes.height.dp)
+				.defaultMinSize(minHeight = style.sizes.height.dp)
 				.then(if (config.visibility == Visibility.Invisible) Modifier.alpha(0f) else Modifier)
 				.testTag(config.testTag ?: config.id),
 	) {
@@ -69,6 +69,7 @@ fun ButtonView(
 			Text(
 				text = config.text,
 				fontSize = style.sizes.fontSize.sp,
+				letterSpacing = style.sizes.letterSpacing.sp,
 			)
 		}
 	}
