@@ -14,9 +14,9 @@ data class SegmentedControlOption(
 @JsExport
 @Serializable
 data class SegmentedControlConfig(
-	val id: String,
 	val options: Array<SegmentedControlOption>,
 	val selectedId: String,
+	val id: String = "",
 	val testTag: String? = null,
 	val visibility: Visibility = Visibility.Visible,
 ) {

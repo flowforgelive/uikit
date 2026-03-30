@@ -8,6 +8,7 @@ import {
 	type SegmentedControlConfig,
 	type DesignTokens,
 } from "uikit-common";
+import css from "./SegmentedControlView.module.css";
 
 interface SegmentedControlViewProps {
 	config: SegmentedControlConfig;
@@ -37,7 +38,7 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 		return (
 			<div
 				data-testid={config.testTag ?? config.id}
-				className={`uikit-segmented-control ${className ?? ""}`}
+				className={`${css.track} ${className ?? ""}`}
 				style={
 					{
 						"--sc-track-bg": style.colors.trackBg,
@@ -56,14 +57,14 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 					} as React.CSSProperties
 				}
 			>
-				<div className="uikit-segmented-control__thumb" />
+				<div className={css.thumb} />
 				{Array.from(options).map((option: any) => (
 					<button
 						key={option.id}
 						type="button"
-						className={`uikit-segmented-control__option ${
+						className={`${css.option} ${
 							option.id === config.selectedId
-								? "uikit-segmented-control__option--active"
+								? css.optionActive
 								: ""
 						}`}
 						onClick={() => onSelectionChange?.(option.id)}

@@ -16,9 +16,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uikit.components.atoms.button.ButtonConfig
-import com.uikit.components.atoms.button.ButtonSize
 import com.uikit.components.atoms.button.ButtonStyleResolver
-import com.uikit.components.atoms.button.ButtonVariant
 import com.uikit.compose.theme.LocalDesignTokens
 import com.uikit.compose.theme.parseColor
 import com.uikit.foundation.Visibility
@@ -74,32 +72,4 @@ fun ButtonView(
 			)
 		}
 	}
-}
-
-@Composable
-fun ButtonView(
-	text: String,
-	onClick: () -> Unit = {},
-	variant: ButtonVariant = ButtonVariant.Primary,
-	size: ButtonSize = ButtonSize.Md,
-	disabled: Boolean = false,
-	loading: Boolean = false,
-	modifier: Modifier = Modifier,
-) {
-	ButtonView(
-		config =
-			ButtonConfig(
-				id = "",
-				text = text,
-				variant = variant,
-				size = size,
-				disabled = disabled,
-				loading = loading,
-				actionRoute = null,
-				testTag = null,
-				visibility = Visibility.Visible,
-			),
-		onClick = onClick,
-		modifier = modifier,
-	)
 }

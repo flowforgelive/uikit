@@ -5,7 +5,6 @@ import { SegmentedControlView } from "./SegmentedControlView";
 import {
 	SegmentedControlConfig,
 	SegmentedControlOption,
-	Visibility,
 } from "uikit-common";
 
 interface SegmentedControlProps {
@@ -20,11 +19,8 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = React.memo(
 		const config = useMemo(
 			() =>
 				new SegmentedControlConfig(
-					"",
 					options.map((o) => new SegmentedControlOption(o.id, o.label)),
 					selectedId,
-					null,
-					Visibility.Visible,
 				),
 			[options, selectedId],
 		);

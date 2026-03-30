@@ -10,7 +10,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.uikit.components.atoms.text.TextBlockConfig
 import com.uikit.components.atoms.text.TextBlockStyleResolver
-import com.uikit.components.atoms.text.TextBlockVariant
 import com.uikit.compose.theme.LocalDesignTokens
 import com.uikit.compose.theme.parseColor
 import com.uikit.foundation.Visibility
@@ -35,24 +34,5 @@ fun TextBlockView(
 			modifier
 				.then(if (config.visibility == Visibility.Invisible) Modifier.alpha(0f) else Modifier)
 				.testTag(config.testTag ?: config.id),
-	)
-}
-
-@Composable
-fun TextBlockView(
-	text: String,
-	variant: TextBlockVariant = TextBlockVariant.Body,
-	modifier: Modifier = Modifier,
-) {
-	TextBlockView(
-		config =
-			TextBlockConfig(
-				id = "",
-				text = text,
-				variant = variant,
-				testTag = null,
-				visibility = Visibility.Visible,
-			),
-		modifier = modifier,
 	)
 }

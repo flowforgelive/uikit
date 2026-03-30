@@ -1,6 +1,3 @@
-// UIKit styles — must be imported by consuming app
-import "./styles.css";
-
 // Convenience API (primary)
 export { Button } from "./components/atoms/button/Button";
 export { Text } from "./components/atoms/text/Text";

@@ -6,7 +6,6 @@ import {
 	ButtonConfig,
 	ButtonVariant,
 	ButtonSize,
-	Visibility,
 } from "uikit-common";
 
 const VARIANT_MAP = {
@@ -46,15 +45,11 @@ export const Button: React.FC<ButtonProps> = React.memo(
 		const config = useMemo(
 			() =>
 				new ButtonConfig(
-					"",
 					text,
 					VARIANT_MAP[variant],
 					SIZE_MAP[size],
 					disabled,
 					loading,
-					null,
-					null,
-					Visibility.Visible,
 				),
 			[text, variant, size, disabled, loading],
 		);

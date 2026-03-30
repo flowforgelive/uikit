@@ -104,27 +104,3 @@ fun SegmentedControlView(
 		}
 	}
 }
-
-@Composable
-fun SegmentedControlView(
-	options: List<Pair<String, String>>,
-	selectedId: String,
-	onSelectionChange: (String) -> Unit = {},
-	modifier: Modifier = Modifier,
-) {
-	SegmentedControlView(
-		config =
-			SegmentedControlConfig(
-				id = "",
-				options =
-					options
-						.map {
-							com.uikit.components.atoms.segmentedcontrol
-								.SegmentedControlOption(it.first, it.second)
-						}.toTypedArray(),
-				selectedId = selectedId,
-			),
-		onSelectionChange = onSelectionChange,
-		modifier = modifier,
-	)
-}

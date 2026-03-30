@@ -8,6 +8,7 @@ import {
 	type ButtonConfig,
 	type DesignTokens,
 } from "uikit-common";
+import css from "./ButtonView.module.css";
 
 interface ButtonViewProps {
 	config: ButtonConfig;
@@ -42,7 +43,7 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 				onClick={handleClick}
 				disabled={!config.isInteractive}
 				data-testid={config.testTag ?? config.id}
-				className={`uikit-button ${className ?? ""}`}
+				className={`${css.button} ${className ?? ""}`}
 				style={
 					{
 						"--btn-bg": style.colors.bg,
@@ -58,7 +59,7 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 				}
 			>
 				{config.loading ? (
-					<span className="uikit-button__spinner" />
+					<span className={css.spinner} />
 				) : (
 					config.text
 				)}

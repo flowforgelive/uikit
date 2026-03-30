@@ -25,15 +25,15 @@ enum class ButtonSize {
 @JsExport
 @Serializable
 data class ButtonConfig(
-	val id: String,
 	val text: String,
-	val variant: ButtonVariant,
-	val size: ButtonSize,
-	val disabled: Boolean,
-	val loading: Boolean,
-	val actionRoute: String?,
-	val testTag: String?,
-	val visibility: Visibility,
+	val variant: ButtonVariant = ButtonVariant.Primary,
+	val size: ButtonSize = ButtonSize.Md,
+	val disabled: Boolean = false,
+	val loading: Boolean = false,
+	val id: String = "",
+	val actionRoute: String? = null,
+	val testTag: String? = null,
+	val visibility: Visibility = Visibility.Visible,
 ) {
 	val isInteractive: Boolean get() = !disabled && !loading
 }

@@ -2,7 +2,7 @@
 
 import React, { useMemo } from "react";
 import { TextBlockView } from "./TextBlockView";
-import { TextBlockConfig, TextBlockVariant, Visibility } from "uikit-common";
+import { TextBlockConfig, TextBlockVariant } from "uikit-common";
 
 const VARIANT_MAP = {
 	h1: TextBlockVariant.H1,
@@ -21,14 +21,7 @@ interface TextProps {
 export const Text: React.FC<TextProps> = React.memo(
 	({ text, variant = "body", className }) => {
 		const config = useMemo(
-			() =>
-				new TextBlockConfig(
-					"",
-					text,
-					VARIANT_MAP[variant],
-					null,
-					Visibility.Visible,
-				),
+			() => new TextBlockConfig(text, VARIANT_MAP[variant]),
 			[text, variant],
 		);
 

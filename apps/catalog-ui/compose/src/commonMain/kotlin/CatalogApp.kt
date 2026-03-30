@@ -19,9 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.uikit.components.atoms.button.ButtonVariant
 import com.uikit.components.atoms.text.TextBlockVariant
-import com.uikit.compose.components.atoms.button.ButtonView
-import com.uikit.compose.components.atoms.segmentedcontrol.SegmentedControlView
-import com.uikit.compose.components.atoms.text.TextBlockView
+import com.uikit.compose.components.atoms.button.Button
+import com.uikit.compose.components.atoms.segmentedcontrol.SegmentedControl
+import com.uikit.compose.components.atoms.text.TextBlock
 import com.uikit.compose.theme.LocalDesignTokens
 import com.uikit.compose.theme.UIKitTheme
 import com.uikit.compose.theme.parseColor
@@ -58,7 +58,7 @@ fun CatalogApp() {
 						.align(Alignment.TopEnd)
 						.padding(16.dp),
 			) {
-				SegmentedControlView(
+				SegmentedControl(
 					options = listOf("dark" to "Тёмная", "light" to "Светлая", "system" to "Система"),
 					selectedId =
 						when (currentMode) {
@@ -98,14 +98,14 @@ fun CatalogApp() {
 
 @Composable
 private fun FirstScreen(onAction: (String) -> Unit) {
-	TextBlockView(
+	TextBlock(
 		text = "Первая страница",
 		variant = TextBlockVariant.H1,
 	)
 
 	Spacer(Modifier.height(24.dp))
 
-	ButtonView(
+	Button(
 		text = "Перейти на вторую страницу",
 		onClick = { onAction("/second") },
 	)
@@ -113,14 +113,14 @@ private fun FirstScreen(onAction: (String) -> Unit) {
 
 @Composable
 private fun SecondScreen(onAction: (String) -> Unit) {
-	TextBlockView(
+	TextBlock(
 		text = "Вторая страница",
 		variant = TextBlockVariant.H1,
 	)
 
 	Spacer(Modifier.height(24.dp))
 
-	ButtonView(
+	Button(
 		text = "Вернуться назад",
 		variant = ButtonVariant.Secondary,
 		onClick = { onAction("/first") },

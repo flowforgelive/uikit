@@ -4,6 +4,13 @@
 	"private": true,
 	"main": "src/index.ts",
 	"types": "src/index.ts",
+	"sideEffects": ["*.css"],
+	"exports": {
+		".": "./src/index.ts",
+		"./button": "./src/components/atoms/button/Button.tsx",
+		"./segmented-control": "./src/components/atoms/segmented-control/SegmentedControl.tsx",
+		"./theme": "./src/theme/UIKitThemeProvider.tsx"
+	},
 	"dependencies": {
 		"uikit-common": "file:../common/build/dist/js/productionLibrary"
 	},

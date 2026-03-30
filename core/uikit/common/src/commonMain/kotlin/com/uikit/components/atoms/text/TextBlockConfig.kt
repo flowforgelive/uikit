@@ -17,9 +17,9 @@ enum class TextBlockVariant {
 @JsExport
 @Serializable
 data class TextBlockConfig(
-	val id: String,
 	val text: String,
-	val variant: TextBlockVariant,
-	val testTag: String?,
-	val visibility: Visibility,
+	val variant: TextBlockVariant = TextBlockVariant.Body,
+	val id: String = "",
+	val testTag: String? = null,
+	val visibility: Visibility = Visibility.Visible,
 )
