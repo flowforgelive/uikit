@@ -1,20 +1,13 @@
 "use client";
 
 import React, { createContext, useContext, type ReactNode } from "react";
+import { SurfaceContext } from "uikit-common";
 
-export interface SurfaceContextValue {
-	level: number;
-	backgroundColor: string;
-}
+const defaultSurfaceContext = new SurfaceContext(0, "transparent");
 
-const defaultSurfaceContext: SurfaceContextValue = {
-	level: 0,
-	backgroundColor: "#FFFFFF",
-};
+const SurfaceContextReact = createContext<SurfaceContext>(defaultSurfaceContext);
 
-const SurfaceContextReact = createContext<SurfaceContextValue>(defaultSurfaceContext);
-
-export function useSurfaceContext(): SurfaceContextValue {
+export function useSurfaceContext(): SurfaceContext {
 	return useContext(SurfaceContextReact);
 }
 
@@ -22,7 +15,7 @@ export function SurfaceContextProvider({
 	value,
 	children,
 }: {
-	value: SurfaceContextValue;
+	value: SurfaceContext;
 	children: ReactNode;
 }) {
 	return (

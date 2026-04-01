@@ -2,6 +2,7 @@
 
 import React, { useMemo } from "react";
 import { TextBlockView } from "./TextBlockView";
+import { useDesignTokens } from "../../../theme/useDesignTokens";
 import { TextBlockConfig, TextBlockVariant } from "uikit-common";
 
 const VARIANT_MAP = {
@@ -20,12 +21,13 @@ interface TextProps {
 
 export const Text: React.FC<TextProps> = React.memo(
 	({ text, variant = "body", className }) => {
+		const tokens = useDesignTokens();
 		const config = useMemo(
 			() => new TextBlockConfig(text, VARIANT_MAP[variant]),
 			[text, variant],
 		);
 
-		return <TextBlockView config={config} className={className} />;
+		return <TextBlockView config={config} tokens={tokens} className={className} />;
 	},
 );
 

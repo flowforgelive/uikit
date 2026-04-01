@@ -5,6 +5,7 @@ import { useDesignTokens } from "../../../theme/useDesignTokens";
 import { SurfaceContextProvider } from "../../../theme/SurfaceContext";
 import { toRem } from "../../../utils/units";
 import {
+	SurfaceContext,
 	SurfaceStyleResolver,
 	Visibility,
 	type SurfaceConfig,
@@ -22,8 +23,6 @@ interface SurfaceViewProps {
 
 export const SurfaceView: React.FC<SurfaceViewProps> = React.memo(
 	({ config, onClick, tokens: tokensProp, className, children }) => {
-		if (config.visibility === Visibility.Gone) return null;
-
 		const contextTokens = useDesignTokens();
 		const tokens = tokensProp ?? contextTokens;
 		const style = useMemo(
@@ -50,9 +49,11 @@ export const SurfaceView: React.FC<SurfaceViewProps> = React.memo(
 		);
 
 		const surfaceContext = useMemo(
-			() => ({ level: config.level.ordinal, backgroundColor: style.bg }),
+			() => new SurfaceContext(config.level.ordinal, style.bg),
 			[config.level, style.bg],
 		);
+
+		if (config.visibility === Visibility.Gone) return null;
 
 		const Tag = config.clickable ? "button" : "div";
 

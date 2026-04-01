@@ -6,7 +6,6 @@ import { useSurfaceContext } from "../../../theme/SurfaceContext";
 import { toRem } from "../../../utils/units";
 import {
 	ButtonStyleResolver,
-	SurfaceContext,
 	Visibility,
 	type ButtonConfig,
 	type DesignTokens,
@@ -23,16 +22,11 @@ interface ButtonViewProps {
 
 export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 	({ config, onAction, onClick, tokens: tokensProp, className }) => {
-		if (config.visibility === Visibility.Gone) return null;
-
 		const contextTokens = useDesignTokens();
 		const tokens = tokensProp ?? contextTokens;
 		const surface = useSurfaceContext();
 		const style = useMemo(
-			() => {
-				const sc = new SurfaceContext(surface.level, surface.backgroundColor);
-				return ButtonStyleResolver.getInstance().resolve(config, tokens, sc);
-			},
+			() => ButtonStyleResolver.getInstance().resolve(config, tokens, surface),
 			[config, tokens, surface],
 		);
 
@@ -44,6 +38,8 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 				}
 			}
 		}, [config.isInteractive, config.actionRoute, onAction, onClick]);
+
+		if (config.visibility === Visibility.Gone) return null;
 
 		return (
 			<button

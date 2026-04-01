@@ -12,9 +12,11 @@ import React, {
 import {
 	DesignTokens,
 	ThemeMode,
+	SurfaceContext,
 	type DesignTokens as DesignTokensType,
 } from "uikit-common";
 import { DesignTokensContext } from "./useDesignTokens";
+import { SurfaceContextProvider } from "./SurfaceContext";
 
 // ─── Types ──────────────────────────────────────────────
 
@@ -74,9 +76,11 @@ function deleteCookie(name: string): void {
 
 // ─── System theme detection ─────────────────────────────
 
-function useSystemDark(): boolean {
+function useSystemDark(initialResolved?: "light" | "dark"): boolean {
 	const [isDark, setIsDark] = useState(() => {
-		if (typeof window === "undefined") return true; // SSR default
+		if (typeof window === "undefined") {
+			return initialResolved ? initialResolved === "dark" : true;
+		}
 		return window.matchMedia("(prefers-color-scheme: dark)").matches;
 	});
 
@@ -111,6 +115,11 @@ interface UIKitThemeProviderProps {
 	 * If not provided, defaults to "system".
 	 */
 	initialTheme?: ThemeModeValue;
+	/**
+	 * Resolved theme hint from server (read from "uikit-resolved-theme" cookie).
+	 * Used to avoid hydration mismatch when mode is "system".
+	 */
+	initialResolved?: "light" | "dark";
 	/** Layout direction (ltr/rtl). Defaults to "ltr". */
 	initialDir?: LayoutDirectionValue;
 	children: ReactNode;
@@ -118,6 +127,7 @@ interface UIKitThemeProviderProps {
 
 export function UIKitThemeProvider({
 	initialTheme,
+	initialResolved,
 	initialDir = "ltr",
 	children,
 }: UIKitThemeProviderProps) {
@@ -143,7 +153,7 @@ export function UIKitThemeProvider({
 		}
 	}, []);
 
-	const systemDark = useSystemDark();
+	const systemDark = useSystemDark(initialResolved);
 
 	const resolvedMode: "light" | "dark" = useMemo(() => {
 		if (mode === "system") return systemDark ? "dark" : "light";
@@ -178,10 +188,17 @@ export function UIKitThemeProvider({
 		[mode, resolvedMode, tokens, dir, setMode, setDir],
 	);
 
+	const surfaceContext = useMemo(
+		() => new SurfaceContext(0, tokens.color.surface),
+		[tokens.color.surface],
+	);
+
 	return (
 		<UIKitThemeContext.Provider value={value}>
 			<DesignTokensContext.Provider value={tokens}>
-				{children}
+				<SurfaceContextProvider value={surfaceContext}>
+					{children}
+				</SurfaceContextProvider>
 			</DesignTokensContext.Provider>
 		</UIKitThemeContext.Provider>
 	);

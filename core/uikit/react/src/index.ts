@@ -15,7 +15,6 @@ export { useDesignTokens, DesignTokensProvider } from "./theme/useDesignTokens";
 export { UIKitThemeProvider, useUIKitTheme } from "./theme/UIKitThemeProvider";
 export { UIKitThemeScript } from "./theme/UIKitThemeScript";
 export { useSurfaceContext, SurfaceContextProvider } from "./theme/SurfaceContext";
-export type { SurfaceContextValue } from "./theme/SurfaceContext";
 
 // Utils
 export { toRem } from "./utils/units";

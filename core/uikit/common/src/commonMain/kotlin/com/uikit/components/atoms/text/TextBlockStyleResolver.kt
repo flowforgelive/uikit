@@ -15,6 +15,11 @@ data class ResolvedTextBlockStyle(
 	val letterSpacing: Double,
 )
 
+/**
+ * SSR SAFETY: This object is a stateless singleton cached in Node.js.
+ * All methods must be pure functions: (config, tokens) → style.
+ * Do NOT add mutable state, side effects, or platform-specific code.
+ */
 @JsExport
 object TextBlockStyleResolver {
 	private fun fromTextStyle(

@@ -20,8 +20,6 @@ interface SegmentedControlViewProps {
 
 export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 	React.memo(({ config, onSelectionChange, tokens: tokensProp, className }) => {
-		if (config.visibility === Visibility.Gone) return null;
-
 		const contextTokens = useDesignTokens();
 		const tokens = tokensProp ?? contextTokens;
 		const style = useMemo(
@@ -71,6 +69,8 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 			},
 			[options, onSelectionChange],
 		);
+
+		if (config.visibility === Visibility.Gone) return null;
 
 		return (
 			<div

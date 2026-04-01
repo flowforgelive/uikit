@@ -15,4 +15,4 @@ data class SurfaceContext(
 )
 
 @JsExport
-val DefaultSurfaceContext = SurfaceContext(level = 0, backgroundColor = "#FFFFFF")
+val DefaultSurfaceContext = SurfaceContext(level = 0, backgroundColor = "transparent")

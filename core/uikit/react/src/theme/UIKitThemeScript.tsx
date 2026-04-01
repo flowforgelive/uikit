@@ -10,7 +10,7 @@ import React from "react";
  * 3. Ставит data-theme на <html> до hydration
  */
 export function UIKitThemeScript() {
-	const script = `(function(){var d=document.documentElement;var c=(document.cookie.match(/(?:^|;\\s*)uikit-theme=([^;]*)/)||[])[1];var t=(c==='light'||c==='dark')?c:matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';d.setAttribute('data-theme',t)})()`;
+	const script = `(function(){var d=document.documentElement;var c=(document.cookie.match(/(?:^|;\\s*)uikit-theme=([^;]*)/)||[])[1];var t=(c==='light'||c==='dark')?c:matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';d.setAttribute('data-theme',t);document.cookie='uikit-resolved-theme='+t+';path=/;max-age=31536000;SameSite=Lax'})()`;
 
 	return (
 		<script

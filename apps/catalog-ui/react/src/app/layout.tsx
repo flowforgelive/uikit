@@ -16,10 +16,16 @@ export default async function RootLayout({
 	const cookieStore = await cookies();
 	const themeCookie = cookieStore.get("uikit-theme")?.value;
 	const dirCookie = cookieStore.get("uikit-dir")?.value;
+	const resolvedCookie = cookieStore.get("uikit-resolved-theme")?.value;
 	const initialTheme = (
 		themeCookie === "light" || themeCookie === "dark" ? themeCookie : "system"
 	) as "light" | "dark" | "system";
 	const initialDir = (dirCookie === "rtl" ? "rtl" : "ltr") as "ltr" | "rtl";
+	const initialResolved = (
+		resolvedCookie === "light" || resolvedCookie === "dark"
+			? resolvedCookie
+			: undefined
+	) as "light" | "dark" | undefined;
 
 	return (
 		<html lang="ru" suppressHydrationWarning>
@@ -27,7 +33,11 @@ export default async function RootLayout({
 				<UIKitThemeScript />
 			</head>
 			<body>
-				<UIKitThemeProvider initialTheme={initialTheme} initialDir={initialDir}>
+				<UIKitThemeProvider
+					initialTheme={initialTheme}
+					initialResolved={initialResolved}
+					initialDir={initialDir}
+				>
 					{children}
 				</UIKitThemeProvider>
 			</body>
