@@ -38,6 +38,6 @@ object TextBlockStyleResolver {
 			TextBlockVariant.H2 -> fromTextStyle(tokens.typography.title2, tokens.color.textPrimary)
 			TextBlockVariant.H3 -> fromTextStyle(tokens.typography.title3, tokens.color.textPrimary)
 			TextBlockVariant.Body -> fromTextStyle(tokens.typography.body, tokens.color.textPrimary)
-			TextBlockVariant.Caption -> fromTextStyle(tokens.typography.caption1, tokens.color.secondary)
+			TextBlockVariant.Caption -> fromTextStyle(tokens.typography.caption1, tokens.color.textMuted)
 		}
 }

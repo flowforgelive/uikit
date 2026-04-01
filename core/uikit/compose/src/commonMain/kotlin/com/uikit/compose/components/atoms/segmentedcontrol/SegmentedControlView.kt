@@ -3,13 +3,15 @@ package com.uikit.compose.components.atoms.segmentedcontrol
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -21,16 +23,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uikit.components.atoms.segmentedcontrol.SegmentedControlConfig
 import com.uikit.components.atoms.segmentedcontrol.SegmentedControlStyleResolver
 import com.uikit.compose.theme.LocalDesignTokens
+import com.uikit.compose.theme.LocalKeyboardNavigationMode
 import com.uikit.compose.theme.parseColor
 import com.uikit.foundation.Visibility
 
@@ -44,6 +55,7 @@ fun SegmentedControlView(
 
 	val tokens = LocalDesignTokens.current
 	val style = remember(tokens) { SegmentedControlStyleResolver.resolve(tokens) }
+	val keyboardMode = LocalKeyboardNavigationMode.current
 
 	val selectedIndex = config.options.indexOfFirst { it.id == config.selectedId }.coerceAtLeast(0)
 	val optionCount = config.options.size
@@ -53,14 +65,20 @@ fun SegmentedControlView(
 		animationSpec = tween(durationMillis = tokens.motion.durationNormal),
 	)
 
+	val focusRequesters = remember(optionCount) { List(optionCount) { FocusRequester() } }
+
 	val thumbColor = parseColor(style.colors.thumbBg)
 	val thumbRadiusPx = style.sizes.thumbRadius.toFloat()
+	val layoutDirection = androidx.compose.ui.platform.LocalLayoutDirection.current
+	val shape = RoundedCornerShape(style.sizes.radius.dp)
+	val thumbShape = RoundedCornerShape(style.sizes.thumbRadius.dp)
 
 	Box(
 		modifier =
 			modifier
+				.fillMaxWidth()
 				.defaultMinSize(minHeight = style.sizes.height.dp)
-				.clip(RoundedCornerShape(style.sizes.radius.dp))
+				.clip(shape)
 				.background(parseColor(style.colors.trackBg))
 				.padding(style.sizes.trackPadding.dp)
 				.then(if (config.visibility == Visibility.Invisible) Modifier.alpha(0f) else Modifier)
@@ -68,9 +86,15 @@ fun SegmentedControlView(
 				.drawBehind {
 					if (optionCount > 0) {
 						val segmentWidth = size.width / optionCount
+						val thumbX =
+							if (layoutDirection == LayoutDirection.Rtl) {
+								size.width - animatedFraction * size.width - segmentWidth
+							} else {
+								animatedFraction * size.width
+							}
 						drawRoundRect(
 							color = thumbColor,
-							topLeft = Offset(x = animatedFraction * size.width, y = 0f),
+							topLeft = Offset(x = thumbX, y = 0f),
 							size = Size(width = segmentWidth, height = size.height),
 							cornerRadius = CornerRadius(thumbRadiusPx * density, thumbRadiusPx * density),
 						)
@@ -78,15 +102,56 @@ fun SegmentedControlView(
 				},
 	) {
 		Row(modifier = Modifier.matchParentSize()) {
-			config.options.forEach { option ->
+			config.options.forEachIndexed { index, option ->
 				val isActive = option.id == config.selectedId
+				val optionInteractionSource = remember { MutableInteractionSource() }
+				val isOptionFocused by optionInteractionSource.collectIsFocusedAsState()
+				val showOptionFocusRing = isOptionFocused && keyboardMode.value
+
 				Box(
 					modifier =
 						Modifier
 							.weight(1f)
 							.fillMaxHeight()
+							.then(
+								if (showOptionFocusRing) {
+									Modifier.border(tokens.focusRingWidth.dp, parseColor(tokens.color.focusRing), thumbShape)
+								} else {
+									Modifier
+								},
+							)
+							.focusRequester(focusRequesters[index])
+							.onPreviewKeyEvent { event ->
+								if (event.type == KeyEventType.KeyDown) {
+									when (event.key) {
+										Key.DirectionLeft -> {
+											val prev = (index - 1).coerceAtLeast(0)
+											if (prev != index) {
+												onSelectionChange(config.options[prev].id)
+												focusRequesters[prev].requestFocus()
+											}
+											true
+										}
+										Key.DirectionRight -> {
+											val next = (index + 1).coerceAtMost(optionCount - 1)
+											if (next != index) {
+												onSelectionChange(config.options[next].id)
+												focusRequesters[next].requestFocus()
+											}
+											true
+										}
+										Key.Enter, Key.Spacebar -> {
+											onSelectionChange(config.options[index].id)
+											true
+										}
+										else -> false
+									}
+								} else {
+									false
+								}
+							}
 							.clickable(
-								interactionSource = remember { MutableInteractionSource() },
+								interactionSource = optionInteractionSource,
 								indication = null,
 							) { onSelectionChange(option.id) },
 					contentAlignment = Alignment.Center,

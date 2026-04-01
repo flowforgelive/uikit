@@ -42,21 +42,25 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 		return (
 			<button
 				onClick={handleClick}
-				disabled={!config.isInteractive}
+				aria-disabled={!config.isInteractive || undefined}
 				data-testid={config.testTag ?? config.id}
 				className={`${css.button} ${className ?? ""}`}
 				style={
 					{
 						"--btn-bg": style.colors.bg,
-						"--btn-text": style.colors.text,
-						"--btn-border": style.colors.border,
+						"--btn-bg-hover": style.colors.bgHover,
+						"--btn-text": style.colors.text,					"--btn-text-hover": style.colors.textHover,						"--btn-border": style.colors.border,
+						"--btn-border-hover": style.colors.borderHover,
 						"--btn-height": toRem(style.sizes.height),
 						"--btn-padding-h": toRem(style.sizes.paddingH),
-						"--btn-font-size": toRem(style.sizes.fontSize),
-						"--btn-radius": toRem(style.radius),
+						"--btn-font-size": toRem(style.sizes.fontSize),					"--btn-font-weight": style.sizes.fontWeight,
+					"--btn-icon-size": toRem(style.sizes.iconSize),						"--btn-radius": toRem(style.radius),
 						"--btn-letter-spacing": toRem(style.sizes.letterSpacing),
 						"--btn-duration": `${tokens.motion.durationFast}ms`,
 						"--btn-easing": tokens.motion.easingStandard,
+						"--btn-focus-ring": tokens.color.focusRing,
+						"--btn-border-width": `${tokens.borderWidth}px`,
+						"--btn-focus-ring-width": `${tokens.focusRingWidth}px`,
 						"--btn-spinner-duration": `${tokens.motion.durationSlower * 1.5}ms`,
 						visibility:
 							config.visibility === Visibility.Invisible ? "hidden" : undefined,

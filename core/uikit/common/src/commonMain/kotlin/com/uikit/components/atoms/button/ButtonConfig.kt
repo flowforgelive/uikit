@@ -1,18 +1,10 @@
 package com.uikit.components.atoms.button
 
+import com.uikit.foundation.ColorIntent
 import com.uikit.foundation.Visibility
+import com.uikit.foundation.VisualVariant
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
-
-@JsExport
-@Serializable
-enum class ButtonVariant {
-	Primary,
-	Secondary,
-	Ghost,
-	Danger,
-	Link,
-}
 
 @JsExport
 @Serializable
@@ -26,7 +18,8 @@ enum class ButtonSize {
 @Serializable
 data class ButtonConfig(
 	val text: String,
-	val variant: ButtonVariant = ButtonVariant.Primary,
+	val variant: VisualVariant = VisualVariant.Solid,
+	val intent: ColorIntent = ColorIntent.Primary,
 	val size: ButtonSize = ButtonSize.Md,
 	val disabled: Boolean = false,
 	val loading: Boolean = false,

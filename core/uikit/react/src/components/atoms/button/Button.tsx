@@ -4,16 +4,22 @@ import React, { useMemo } from "react";
 import { ButtonView } from "./ButtonView";
 import {
 	ButtonConfig,
-	ButtonVariant,
 	ButtonSize,
+	ColorIntent,
+	VisualVariant,
 } from "uikit-common";
 
 const VARIANT_MAP = {
-	primary: ButtonVariant.Primary,
-	secondary: ButtonVariant.Secondary,
-	ghost: ButtonVariant.Ghost,
-	danger: ButtonVariant.Danger,
-	link: ButtonVariant.Link,
+	solid: VisualVariant.Solid,
+	soft: VisualVariant.Soft,
+	outline: VisualVariant.Outline,
+	ghost: VisualVariant.Ghost,
+} as const;
+
+const INTENT_MAP = {
+	primary: ColorIntent.Primary,
+	neutral: ColorIntent.Neutral,
+	danger: ColorIntent.Danger,
 } as const;
 
 const SIZE_MAP = {
@@ -26,6 +32,7 @@ interface ButtonProps {
 	text: string;
 	onClick?: () => void;
 	variant?: keyof typeof VARIANT_MAP;
+	intent?: keyof typeof INTENT_MAP;
 	size?: keyof typeof SIZE_MAP;
 	disabled?: boolean;
 	loading?: boolean;
@@ -36,7 +43,8 @@ export const Button: React.FC<ButtonProps> = React.memo(
 	({
 		text,
 		onClick,
-		variant = "primary",
+		variant = "solid",
+		intent = "primary",
 		size = "md",
 		disabled = false,
 		loading = false,
@@ -47,11 +55,12 @@ export const Button: React.FC<ButtonProps> = React.memo(
 				new ButtonConfig(
 					text,
 					VARIANT_MAP[variant],
+					INTENT_MAP[intent],
 					SIZE_MAP[size],
 					disabled,
 					loading,
 				),
-			[text, variant, size, disabled, loading],
+			[text, variant, intent, size, disabled, loading],
 		);
 
 		return (

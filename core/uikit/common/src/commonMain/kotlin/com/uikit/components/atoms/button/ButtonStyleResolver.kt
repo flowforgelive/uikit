@@ -1,5 +1,7 @@
 package com.uikit.components.atoms.button
 
+import com.uikit.foundation.ColorIntent
+import com.uikit.foundation.VisualVariant
 import com.uikit.tokens.DesignTokens
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
@@ -8,8 +10,11 @@ import kotlin.js.JsExport
 @Serializable
 data class ColorSet(
 	val bg: String,
+	val bgHover: String,
 	val text: String,
+	val textHover: String,
 	val border: String,
+	val borderHover: String,
 )
 
 @JsExport
@@ -18,6 +23,7 @@ data class SizeSet(
 	val height: Double,
 	val paddingH: Double,
 	val fontSize: Double,
+	val fontWeight: Int,
 	val iconSize: Double,
 	val letterSpacing: Double,
 )
@@ -40,51 +46,14 @@ object ButtonStyleResolver {
 			if (config.disabled) {
 				ColorSet(
 					bg = tokens.color.surfaceDisabled,
+					bgHover = tokens.color.surfaceDisabled,
 					text = tokens.color.textDisabled,
+					textHover = tokens.color.textDisabled,
 					border = tokens.color.borderDisabled,
+					borderHover = tokens.color.borderDisabled,
 				)
 			} else {
-				when (config.variant) {
-					ButtonVariant.Primary -> {
-						ColorSet(
-							bg = tokens.color.primary,
-							text = tokens.color.textOnPrimary,
-							border = "transparent",
-						)
-					}
-
-					ButtonVariant.Secondary -> {
-						ColorSet(
-							bg = tokens.color.surface,
-							text = tokens.color.primary,
-							border = tokens.color.primary,
-						)
-					}
-
-					ButtonVariant.Ghost -> {
-						ColorSet(
-							bg = "transparent",
-							text = tokens.color.primary,
-							border = "transparent",
-						)
-					}
-
-					ButtonVariant.Danger -> {
-						ColorSet(
-							bg = tokens.color.danger,
-							text = tokens.color.textOnDanger,
-							border = "transparent",
-						)
-					}
-
-					ButtonVariant.Link -> {
-						ColorSet(
-							bg = "transparent",
-							text = tokens.color.primary,
-							border = "transparent",
-						)
-					}
-				}
+				resolveColors(config.variant, config.intent, tokens)
 			}
 
 		val sizes =
@@ -94,6 +63,7 @@ object ButtonStyleResolver {
 						height = tokens.sizing.buttonSm,
 						paddingH = tokens.spacing.sm,
 						fontSize = tokens.typography.caption1.fontSize,
+						fontWeight = tokens.typography.headline.fontWeight,
 						iconSize = tokens.sizing.iconSm,
 						letterSpacing = tokens.typography.caption1.letterSpacing,
 					)
@@ -104,6 +74,7 @@ object ButtonStyleResolver {
 						height = tokens.sizing.buttonMd,
 						paddingH = tokens.spacing.lg,
 						fontSize = tokens.typography.body.fontSize,
+						fontWeight = tokens.typography.headline.fontWeight,
 						iconSize = tokens.sizing.iconMd,
 						letterSpacing = tokens.typography.body.letterSpacing,
 					)
@@ -114,6 +85,7 @@ object ButtonStyleResolver {
 						height = tokens.sizing.buttonLg,
 						paddingH = tokens.spacing.xl,
 						fontSize = tokens.typography.body.fontSize,
+						fontWeight = tokens.typography.headline.fontWeight,
 						iconSize = tokens.sizing.iconLg,
 						letterSpacing = tokens.typography.body.letterSpacing,
 					)
@@ -126,4 +98,136 @@ object ButtonStyleResolver {
 			radius = tokens.radius.md,
 		)
 	}
+
+	private fun resolveColors(
+		variant: VisualVariant,
+		intent: ColorIntent,
+		tokens: DesignTokens,
+	): ColorSet =
+		when (variant) {
+			VisualVariant.Solid -> solidColors(intent, tokens)
+			VisualVariant.Soft -> softColors(intent, tokens)
+			VisualVariant.Outline -> outlineColors(intent, tokens)
+			VisualVariant.Ghost -> ghostColors(intent, tokens)
+		}
+
+	private fun solidColors(intent: ColorIntent, tokens: DesignTokens): ColorSet =
+		when (intent) {
+			ColorIntent.Primary -> ColorSet(
+				bg = tokens.color.primary,
+				bgHover = tokens.color.primaryHover,
+				text = tokens.color.textOnPrimary,
+				textHover = tokens.color.textOnPrimary,
+				border = "transparent",
+				borderHover = "transparent",
+			)
+
+			ColorIntent.Neutral -> ColorSet(
+				bg = tokens.color.surfaceContainerHighest,
+				bgHover = tokens.color.surfaceHover,
+				text = tokens.color.textPrimary,
+				textHover = tokens.color.textPrimary,
+				border = "transparent",
+				borderHover = "transparent",
+			)
+
+			ColorIntent.Danger -> ColorSet(
+				bg = tokens.color.danger,
+				bgHover = tokens.color.dangerHover,
+				text = tokens.color.textOnDanger,
+				textHover = tokens.color.textOnDanger,
+				border = "transparent",
+				borderHover = "transparent",
+			)
+		}
+
+	private fun softColors(intent: ColorIntent, tokens: DesignTokens): ColorSet =
+		when (intent) {
+			ColorIntent.Primary -> ColorSet(
+				bg = tokens.color.surfaceContainerHigh,
+				bgHover = tokens.color.surfaceHover,
+				text = tokens.color.textPrimary,
+				textHover = tokens.color.textPrimary,
+				border = "transparent",
+				borderHover = "transparent",
+			)
+
+			ColorIntent.Neutral -> ColorSet(
+				bg = tokens.color.surfaceContainerLow,
+				bgHover = tokens.color.surfaceContainer,
+				text = tokens.color.textSecondary,
+				textHover = tokens.color.textPrimary,
+				border = "transparent",
+				borderHover = "transparent",
+			)
+
+			ColorIntent.Danger -> ColorSet(
+				bg = tokens.color.dangerSoft,
+				bgHover = tokens.color.dangerSoftHover,
+				text = tokens.color.danger,
+				textHover = tokens.color.danger,
+				border = "transparent",
+				borderHover = "transparent",
+			)
+		}
+
+	private fun outlineColors(intent: ColorIntent, tokens: DesignTokens): ColorSet =
+		when (intent) {
+			ColorIntent.Primary -> ColorSet(
+				bg = "transparent",
+				bgHover = tokens.color.surfaceContainerLow,
+				text = tokens.color.textPrimary,
+				textHover = tokens.color.primary,
+				border = tokens.color.outline,
+				borderHover = tokens.color.primary,
+			)
+
+			ColorIntent.Neutral -> ColorSet(
+				bg = "transparent",
+				bgHover = tokens.color.surfaceContainerLowest,
+				text = tokens.color.textSecondary,
+				textHover = tokens.color.textPrimary,
+				border = tokens.color.outlineVariant,
+				borderHover = tokens.color.outline,
+			)
+
+			ColorIntent.Danger -> ColorSet(
+				bg = "transparent",
+				bgHover = tokens.color.dangerSoft,
+				text = tokens.color.danger,
+				textHover = tokens.color.dangerHover,
+				border = tokens.color.danger,
+				borderHover = tokens.color.dangerHover,
+			)
+		}
+
+	private fun ghostColors(intent: ColorIntent, tokens: DesignTokens): ColorSet =
+		when (intent) {
+			ColorIntent.Primary -> ColorSet(
+				bg = "transparent",
+				bgHover = tokens.color.surfaceContainerLow,
+				text = tokens.color.textPrimary,
+				textHover = tokens.color.textPrimary,
+				border = "transparent",
+				borderHover = "transparent",
+			)
+
+			ColorIntent.Neutral -> ColorSet(
+				bg = "transparent",
+				bgHover = tokens.color.surfaceContainerLow,
+				text = tokens.color.textSecondary,
+				textHover = tokens.color.textPrimary,
+				border = "transparent",
+				borderHover = "transparent",
+			)
+
+			ColorIntent.Danger -> ColorSet(
+				bg = "transparent",
+				bgHover = tokens.color.dangerSoft,
+				text = tokens.color.danger,
+				textHover = tokens.color.danger,
+				border = "transparent",
+				borderHover = "transparent",
+			)
+		}
 }

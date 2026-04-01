@@ -51,6 +51,7 @@ export function useUIKitTheme(): UIKitThemeContextValue {
 // ─── Cookie helpers (SSR-compatible) ────────────────────
 
 const COOKIE_NAME = "uikit-theme";
+const DIR_COOKIE_NAME = "uikit-dir";
 const COOKIE_MAX_AGE = 365 * 24 * 60 * 60; // 1 year in seconds
 
 function getCookie(name: string): string | null {
@@ -126,7 +127,21 @@ export function UIKitThemeProvider({
 		return parseMode(getCookie(COOKIE_NAME));
 	});
 
-	const [dir, setDir] = useState<LayoutDirectionValue>(initialDir);
+	const [dir, setDirState] = useState<LayoutDirectionValue>(() => {
+		if (initialDir !== "ltr") return initialDir;
+		const cookieDir = getCookie(DIR_COOKIE_NAME);
+		if (cookieDir === "rtl") return "rtl";
+		return "ltr";
+	});
+
+	const setDir = useCallback((newDir: LayoutDirectionValue) => {
+		setDirState(newDir);
+		if (newDir === "ltr") {
+			deleteCookie(DIR_COOKIE_NAME);
+		} else {
+			setCookie(DIR_COOKIE_NAME, newDir);
+		}
+	}, []);
 
 	const systemDark = useSystemDark();
 

@@ -2,11 +2,13 @@
 export { Button } from "./components/atoms/button/Button";
 export { Text } from "./components/atoms/text/Text";
 export { SegmentedControl } from "./components/atoms/segmented-control/SegmentedControl";
+export { Surface } from "./components/atoms/surface/Surface";
 
 // Config-based API (advanced / SDUI)
 export { ButtonView } from "./components/atoms/button/ButtonView";
 export { TextBlockView } from "./components/atoms/text/TextBlockView";
 export { SegmentedControlView } from "./components/atoms/segmented-control/SegmentedControlView";
+export { SurfaceView } from "./components/atoms/surface/SurfaceView";
 
 // Theme
 export { useDesignTokens, DesignTokensProvider } from "./theme/useDesignTokens";
@@ -20,8 +22,9 @@ export { toRem } from "./utils/units";
 export {
 	DesignTokens,
 	ButtonConfig,
-	ButtonVariant,
 	ButtonSize,
+	ColorIntent,
+	VisualVariant,
 	TextBlockConfig,
 	TextBlockVariant,
 	SegmentedControlConfig,
@@ -31,4 +34,8 @@ export {
 	Visibility,
 	ButtonStyleResolver,
 	TextBlockStyleResolver,
+	SurfaceConfig,
+	SurfaceLevel,
+	SurfaceShape,
+	SurfaceStyleResolver,
 } from "uikit-common";

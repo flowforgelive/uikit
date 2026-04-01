@@ -1,12 +1,17 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Button, Text, useUIKitTheme } from "@uikit/react";
+import { Button, Text, SegmentedControl, useUIKitTheme } from "@uikit/react";
 import { ThemeSwitcher } from "./components/theme-switcher/ThemeSwitcher";
+
+const DIR_OPTIONS = [
+	{ id: "ltr", label: "LTR" },
+	{ id: "rtl", label: "RTL" },
+];
 
 export default function FirstPage() {
 	const router = useRouter();
-	const { tokens } = useUIKitTheme();
+	const { tokens, dir, setDir } = useUIKitTheme();
 
 	return (
 		<main
@@ -23,8 +28,26 @@ export default function FirstPage() {
 				transition: `background-color ${tokens.motion.durationNormal}ms ${tokens.motion.easingStandard}, color ${tokens.motion.durationNormal}ms ${tokens.motion.easingStandard}`,
 			}}
 		>
-			<div style={{ position: "absolute", top: "16px", right: "16px" }}>
-				<ThemeSwitcher />
+			<div
+				style={{
+					position: "absolute",
+					top: "16px",
+					insetInlineEnd: "16px",
+					display: "flex",
+					gap: "8px",
+					alignItems: "center",
+				}}
+			>
+				<div style={{ width: "7.5rem" }}>
+					<SegmentedControl
+						options={DIR_OPTIONS}
+						selectedId={dir}
+						onSelectionChange={(id) => setDir(id as "ltr" | "rtl")}
+					/>
+				</div>
+				<div style={{ width: "15rem" }}>
+					<ThemeSwitcher />
+				</div>
 			</div>
 			<Text text="Первая страница" variant="h1" />
 			<Button

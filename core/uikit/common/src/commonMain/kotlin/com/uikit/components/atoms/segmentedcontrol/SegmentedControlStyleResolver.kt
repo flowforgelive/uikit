@@ -41,7 +41,7 @@ object SegmentedControlStyleResolver {
 					trackBg = tokens.color.surfaceHover,
 					thumbBg = tokens.color.surface,
 					textActive = tokens.color.textPrimary,
-					textInactive = tokens.color.secondary,
+					textInactive = tokens.color.textSecondary,
 					border = tokens.color.border,
 				),
 			sizes =
