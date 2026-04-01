@@ -236,6 +236,7 @@ private fun SecondScreen(
 			Modifier
 				.fillMaxSize()
 				.verticalScroll(rememberScrollState()),
+		horizontalAlignment = Alignment.CenterHorizontally,
 	) {
 		// Top bar
 		Row(
@@ -273,7 +274,6 @@ private fun SecondScreen(
 			modifier =
 				Modifier
 					.widthIn(max = 960.dp)
-					.align(Alignment.CenterHorizontally)
 					.padding(horizontal = tokens.spacing.xl.dp)
 					.padding(bottom = tokens.spacing.xxxxl.dp),
 			verticalArrangement = Arrangement.spacedBy(tokens.spacing.xxxl.dp),
@@ -518,11 +518,11 @@ private fun SpacingShowcase(tokens: DesignTokens) {
 private fun SizingShowcase(tokens: DesignTokens) {
 	val btnSizes =
 		listOf(
-			Triple("XS", tokens.sizing.buttonXs, tokens.sizing.buttonXs * 2),
-			Triple("SM", tokens.sizing.buttonSm, tokens.sizing.buttonSm * 2),
-			Triple("MD", tokens.sizing.buttonMd, tokens.sizing.buttonMd * 2),
-			Triple("LG", tokens.sizing.buttonLg, tokens.sizing.buttonLg * 2),
-			Triple("XL", tokens.sizing.buttonXl, tokens.sizing.buttonXl * 2),
+			Triple("XS", tokens.sizing.controlXs, tokens.sizing.controlXs * 2),
+			Triple("SM", tokens.sizing.controlSm, tokens.sizing.controlSm * 2),
+			Triple("MD", tokens.sizing.controlMd, tokens.sizing.controlMd * 2),
+			Triple("LG", tokens.sizing.controlLg, tokens.sizing.controlLg * 2),
+			Triple("XL", tokens.sizing.controlXl, tokens.sizing.controlXl * 2),
 		)
 	val iconSizes =
 		listOf(

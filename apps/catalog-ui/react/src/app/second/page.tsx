@@ -230,11 +230,11 @@ function SpacingShowcase({ tokens }: { tokens: any }) {
 
 function SizingShowcase({ tokens }: { tokens: any }) {
 	const btnSizes = [
-		["buttonXs", "XS", tokens.sizing.buttonXs],
-		["buttonSm", "SM", tokens.sizing.buttonSm],
-		["buttonMd", "MD", tokens.sizing.buttonMd],
-		["buttonLg", "LG", tokens.sizing.buttonLg],
-		["buttonXl", "XL", tokens.sizing.buttonXl],
+		["controlXs", "XS", tokens.sizing.controlXs],
+		["controlSm", "SM", tokens.sizing.controlSm],
+		["controlMd", "MD", tokens.sizing.controlMd],
+		["controlLg", "LG", tokens.sizing.controlLg],
+		["controlXl", "XL", tokens.sizing.controlXl],
 	] as const;
 
 	const iconSizes = [
@@ -415,7 +415,7 @@ function MotionShowcase({ tokens }: { tokens: any }) {
 
 const BUTTON_VARIANTS = ["solid", "soft", "outline", "ghost"] as const;
 const BUTTON_INTENTS = ["primary", "neutral", "danger"] as const;
-const BUTTON_SIZES = ["sm", "md", "lg"] as const;
+const BUTTON_SIZES = ["xs", "sm", "md", "lg", "xl"] as const;
 
 function ButtonShowcase({ tokens }: { tokens: any }) {
 	return (
@@ -621,20 +621,16 @@ export default function SecondPage() {
 			}}
 		>
 			{/* Top bar */}
-			<header
+			<div
 				style={{
-					position: "sticky",
-					top: 0,
-					zIndex: 10,
 					display: "flex",
 					alignItems: "center",
 					justifyContent: "space-between",
 					padding: `${toRem(tokens.spacing.md)} ${toRem(tokens.spacing.xl)}`,
 					backgroundColor: tokens.color.surface,
-					boxShadow: `inset 0 -1px 0 0 ${tokens.color.outlineVariant}`,
 				}}
 			>
-				<Button text="← Назад" variant="ghost" size="sm" onClick={() => router.back()} />
+				<Button text="← Назад" variant="ghost" onClick={() => router.back()} />
 				<div style={{ display: "flex", gap: toRem(tokens.spacing.sm), alignItems: "center" }}>
 					<div style={{ width: "7.5rem" }}>
 						<SegmentedControl
@@ -647,7 +643,7 @@ export default function SecondPage() {
 						<ThemeSwitcher />
 					</div>
 				</div>
-			</header>
+			</div>
 
 			{/* Content */}
 			<main
@@ -660,21 +656,11 @@ export default function SecondPage() {
 				{/* Title */}
 				<div
 					style={{
-						marginBlockEnd: toRem(tokens.spacing.xxl),
-						maxWidth: "960px",
-						marginInline: "auto",
+						paddingBlock: toRem(tokens.spacing.lg),
+						textAlign: "center",
 					}}
 				>
-					<h1
-						style={{
-							fontSize: toRem(tokens.typography.largeTitle.fontSize),
-							fontWeight: tokens.typography.largeTitle.fontWeight,
-							lineHeight: toRem(tokens.typography.largeTitle.lineHeight),
-							color: tokens.color.textPrimary,
-						}}
-					>
-						Design System Showcase
-					</h1>
+					<Text text="Design System Showcase" variant="h1" />
 					<p
 						style={{
 							fontSize: toRem(tokens.typography.body.fontSize),
@@ -693,7 +679,7 @@ export default function SecondPage() {
 						marginInline: "auto",
 						display: "flex",
 						flexDirection: "column",
-						gap: toRem(tokens.spacing.xl),
+						gap: toRem(tokens.spacing.xxxl),
 					}}
 				>
 					<TypographyShowcase tokens={tokens} />

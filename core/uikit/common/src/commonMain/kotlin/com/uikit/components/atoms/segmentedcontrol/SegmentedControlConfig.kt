@@ -1,5 +1,6 @@
 package com.uikit.components.atoms.segmentedcontrol
 
+import com.uikit.foundation.ComponentSize
 import com.uikit.foundation.Visibility
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
@@ -16,6 +17,7 @@ data class SegmentedControlOption(
 data class SegmentedControlConfig(
 	val options: Array<SegmentedControlOption>,
 	val selectedId: String,
+	val size: ComponentSize = ComponentSize.Sm,
 	val id: String = "",
 	val testTag: String? = null,
 	val visibility: Visibility = Visibility.Visible,
@@ -26,6 +28,7 @@ data class SegmentedControlConfig(
 		return id == other.id &&
 			options.contentEquals(other.options) &&
 			selectedId == other.selectedId &&
+			size == other.size &&
 			testTag == other.testTag &&
 			visibility == other.visibility
 	}
@@ -34,6 +37,7 @@ data class SegmentedControlConfig(
 		var result = id.hashCode()
 		result = 31 * result + options.contentDeepHashCode()
 		result = 31 * result + selectedId.hashCode()
+		result = 31 * result + size.hashCode()
 		result = 31 * result + (testTag?.hashCode() ?: 0)
 		result = 31 * result + visibility.hashCode()
 		return result

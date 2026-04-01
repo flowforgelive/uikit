@@ -33,6 +33,7 @@ import com.uikit.components.atoms.button.ButtonConfig
 import com.uikit.components.atoms.button.ButtonStyleResolver
 import com.uikit.compose.theme.LocalDesignTokens
 import com.uikit.compose.theme.LocalKeyboardNavigationMode
+import com.uikit.compose.theme.LocalSurfaceContext
 import com.uikit.compose.theme.parseColor
 import com.uikit.foundation.Visibility
 
@@ -46,7 +47,10 @@ fun ButtonView(
 	if (config.visibility == Visibility.Gone) return
 
 	val tokens = LocalDesignTokens.current
-	val style = remember(config, tokens) { ButtonStyleResolver.resolve(config, tokens) }
+	val surfaceContext = LocalSurfaceContext.current
+	val style = remember(config, tokens, surfaceContext) {
+		ButtonStyleResolver.resolve(config, tokens, surfaceContext)
+	}
 	val shape = RoundedCornerShape(style.radius.dp)
 
 	val interactionSource = remember { MutableInteractionSource() }

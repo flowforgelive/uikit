@@ -2,6 +2,7 @@
 
 import React, { useMemo, useCallback } from "react";
 import { useDesignTokens } from "../../../theme/useDesignTokens";
+import { SurfaceContextProvider } from "../../../theme/SurfaceContext";
 import { toRem } from "../../../utils/units";
 import {
 	SurfaceStyleResolver,
@@ -48,33 +49,40 @@ export const SurfaceView: React.FC<SurfaceViewProps> = React.memo(
 			[config.clickable],
 		);
 
+		const surfaceContext = useMemo(
+			() => ({ level: config.level.ordinal, backgroundColor: style.bg }),
+			[config.level, style.bg],
+		);
+
 		const Tag = config.clickable ? "button" : "div";
 
 		return (
-			<Tag
-				onClick={config.clickable ? handleClick : undefined}
-				onPointerDown={config.clickable ? handlePointerDown : undefined}
-				data-testid={config.testTag ?? config.id}
-				className={`${css.surface} ${config.clickable ? css.clickable : ""} ${config.hoverable ? css.hoverable : ""} ${className ?? ""}`}
-				style={
-					{
-						"--surface-bg": style.bg,
-						"--surface-bg-hover": style.bgHover,
-						"--surface-border": style.border,
-						"--surface-radius": toRem(style.radius),
-						"--surface-shadow": style.shadow,
-						"--surface-duration": `${tokens.motion.durationFast}ms`,
-						"--surface-easing": tokens.motion.easingStandard,
-						"--surface-focus-ring": tokens.color.focusRing,
-						"--surface-border-width": `${tokens.borderWidth}px`,
-						"--surface-focus-ring-width": `${tokens.focusRingWidth}px`,
-						visibility:
-							config.visibility === Visibility.Invisible ? "hidden" : undefined,
-					} as React.CSSProperties
-				}
-			>
-				{children}
-			</Tag>
+			<SurfaceContextProvider value={surfaceContext}>
+				<Tag
+					onClick={config.clickable ? handleClick : undefined}
+					onPointerDown={config.clickable ? handlePointerDown : undefined}
+					data-testid={config.testTag ?? config.id}
+					className={`${css.surface} ${config.clickable ? css.clickable : ""} ${config.hoverable ? css.hoverable : ""} ${className ?? ""}`}
+					style={
+						{
+							"--surface-bg": style.bg,
+							"--surface-bg-hover": style.bgHover,
+							"--surface-border": style.border,
+							"--surface-radius": toRem(style.radius),
+							"--surface-shadow": style.shadow,
+							"--surface-duration": `${tokens.motion.durationFast}ms`,
+							"--surface-easing": tokens.motion.easingStandard,
+							"--surface-focus-ring": tokens.color.focusRing,
+							"--surface-border-width": `${tokens.borderWidth}px`,
+							"--surface-focus-ring-width": `${tokens.focusRingWidth}px`,
+							visibility:
+								config.visibility === Visibility.Invisible ? "hidden" : undefined,
+						} as React.CSSProperties
+					}
+				>
+					{children}
+				</Tag>
+			</SurfaceContextProvider>
 		);
 	},
 );

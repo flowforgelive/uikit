@@ -13,6 +13,9 @@ data class DesignTokens(
 	val radius: RadiusTokens,
 	val breakpoints: BreakpointTokens,
 	val motion: MotionTokens,
+	val controls: InteractiveControlTokens,
+	val shadows: ShadowTokens,
+	val state: InteractiveStateTokens,
 	val scaleFactor: Double,
 	val borderWidth: Double = 1.0,
 	val focusRingWidth: Double = 2.0,
@@ -48,11 +51,11 @@ data class DesignTokens(
 
 		private val defaultSizing =
 			SizingTokens(
-				buttonXs = 24.0,
-				buttonSm = 32.0,
-				buttonMd = 40.0,
-				buttonLg = 48.0,
-				buttonXl = 56.0,
+				controlXs = 24.0,
+				controlSm = 32.0,
+				controlMd = 40.0,
+				controlLg = 48.0,
+				controlXl = 56.0,
 				iconXs = 12.0,
 				iconSm = 16.0,
 				iconMd = 20.0,
@@ -80,6 +83,55 @@ data class DesignTokens(
 				extraLarge = 1600.0,
 			)
 
+		private val defaultControls =
+			InteractiveControlTokens(
+				xs = ControlSizeScale(
+					height = 24.0,
+					paddingH = 4.0,
+					fontSize = 11.0,
+					fontWeight = 600,
+					iconSize = 12.0,
+					letterSpacing = 0.07,
+					radius = 4.0,
+				),
+				sm = ControlSizeScale(
+					height = 32.0,
+					paddingH = 8.0,
+					fontSize = 12.0,
+					fontWeight = 600,
+					iconSize = 16.0,
+					letterSpacing = 0.0,
+					radius = 6.0,
+				),
+				md = ControlSizeScale(
+					height = 40.0,
+					paddingH = 16.0,
+					fontSize = 17.0,
+					fontWeight = 600,
+					iconSize = 20.0,
+					letterSpacing = -0.41,
+					radius = 8.0,
+				),
+				lg = ControlSizeScale(
+					height = 48.0,
+					paddingH = 24.0,
+					fontSize = 17.0,
+					fontWeight = 600,
+					iconSize = 24.0,
+					letterSpacing = -0.41,
+					radius = 10.0,
+				),
+				xl = ControlSizeScale(
+					height = 56.0,
+					paddingH = 32.0,
+					fontSize = 17.0,
+					fontWeight = 600,
+					iconSize = 32.0,
+					letterSpacing = -0.41,
+					radius = 12.0,
+				),
+			)
+
 		private val defaultMotion =
 			MotionTokens(
 				durationInstant = 100,
@@ -93,6 +145,21 @@ data class DesignTokens(
 				easingEmphasizedDecelerate = "cubic-bezier(0.05, 0.7, 0.1, 1.0)",
 				easingEmphasizedAccelerate = "cubic-bezier(0.3, 0, 0.8, 0.15)",
 				easingLinear = "linear",
+			)
+
+		private val defaultShadows =
+			ShadowTokens(
+				sm = "0 1px 2px 0 rgba(0,0,0,0.05)",
+				md = "0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1)",
+				lg = "0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)",
+				xl = "0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1)",
+			)
+
+		private val defaultState =
+			InteractiveStateTokens(
+				hoverOpacity = 0.08,
+				pressOpacity = 0.12,
+				disabledOpacity = 0.38,
 			)
 
 		val DefaultLight =
@@ -134,6 +201,9 @@ data class DesignTokens(
 				radius = defaultRadius,
 				breakpoints = defaultBreakpoints,
 				motion = defaultMotion,
+				controls = defaultControls,
+				shadows = defaultShadows,
+				state = defaultState,
 				scaleFactor = 1.0,
 			)
 
@@ -176,6 +246,9 @@ data class DesignTokens(
 				radius = defaultRadius,
 				breakpoints = defaultBreakpoints,
 				motion = defaultMotion,
+				controls = defaultControls,
+				shadows = defaultShadows,
+				state = defaultState,
 				scaleFactor = 1.0,
 			)
 

@@ -7,14 +7,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalLayoutDirection
+import com.uikit.foundation.DefaultSurfaceContext
 import com.uikit.foundation.DefaultThemeProvider
 import com.uikit.foundation.LayoutDirection
+import com.uikit.foundation.SurfaceContext
 import com.uikit.foundation.ThemeMode
 import com.uikit.foundation.ThemeProvider
 import com.uikit.tokens.DesignTokens
 
 val LocalDesignTokens = staticCompositionLocalOf { DesignTokens.Default }
 val LocalUIKitLayoutDirection = staticCompositionLocalOf { LayoutDirection.Ltr }
+val LocalSurfaceContext = staticCompositionLocalOf { DefaultSurfaceContext }
 
 private fun LayoutDirection.toCompose(): androidx.compose.ui.unit.LayoutDirection =
 	when (this) {

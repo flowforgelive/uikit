@@ -2,9 +2,11 @@
 
 import React, { useMemo, useCallback } from "react";
 import { useDesignTokens } from "../../../theme/useDesignTokens";
+import { useSurfaceContext } from "../../../theme/SurfaceContext";
 import { toRem } from "../../../utils/units";
 import {
 	ButtonStyleResolver,
+	SurfaceContext,
 	Visibility,
 	type ButtonConfig,
 	type DesignTokens,
@@ -25,9 +27,13 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 
 		const contextTokens = useDesignTokens();
 		const tokens = tokensProp ?? contextTokens;
+		const surface = useSurfaceContext();
 		const style = useMemo(
-			() => ButtonStyleResolver.getInstance().resolve(config, tokens),
-			[config, tokens],
+			() => {
+				const sc = new SurfaceContext(surface.level, surface.backgroundColor);
+				return ButtonStyleResolver.getInstance().resolve(config, tokens, sc);
+			},
+			[config, tokens, surface],
 		);
 
 		const handleClick = useCallback(() => {

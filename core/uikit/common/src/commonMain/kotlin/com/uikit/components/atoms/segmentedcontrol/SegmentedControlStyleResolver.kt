@@ -1,8 +1,10 @@
 package com.uikit.components.atoms.segmentedcontrol
 
+import com.uikit.foundation.ComponentSizeResolver
 import com.uikit.tokens.DesignTokens
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
+import kotlin.js.JsName
 
 @JsExport
 @Serializable
@@ -34,8 +36,11 @@ data class ResolvedSegmentedControlStyle(
 
 @JsExport
 object SegmentedControlStyleResolver {
-	fun resolve(tokens: DesignTokens): ResolvedSegmentedControlStyle =
-		ResolvedSegmentedControlStyle(
+	private const val TRACK_PADDING = 2.0
+
+	fun resolve(config: SegmentedControlConfig, tokens: DesignTokens): ResolvedSegmentedControlStyle {
+		val scale = ComponentSizeResolver.resolve(config.size, tokens.controls, tokens.scaleFactor)
+		return ResolvedSegmentedControlStyle(
 			colors =
 				SegmentedControlColors(
 					trackBg = tokens.color.surfaceHover,
@@ -46,12 +51,44 @@ object SegmentedControlStyleResolver {
 				),
 			sizes =
 				SegmentedControlSizes(
-					height = tokens.sizing.buttonSm,
-					paddingH = tokens.spacing.sm,
-					fontSize = tokens.typography.caption1.fontSize,
-					radius = tokens.radius.md,
-					thumbRadius = tokens.radius.sm + 2.0,
-					trackPadding = 2.0,
+					height = scale.height,
+					paddingH = scale.paddingH,
+					fontSize = scale.fontSize,
+					radius = scale.radius,
+					thumbRadius = scale.radius - TRACK_PADDING,
+					trackPadding = TRACK_PADDING,
 				),
 		)
+	}
+
+	/**
+	 * Backward-compatible overload: resolves with default size (Sm).
+	 */
+	@JsName("resolveDefault")
+	fun resolve(tokens: DesignTokens): ResolvedSegmentedControlStyle {
+		val scale = ComponentSizeResolver.resolve(
+			com.uikit.foundation.ComponentSize.Sm,
+			tokens.controls,
+			tokens.scaleFactor,
+		)
+		return ResolvedSegmentedControlStyle(
+			colors =
+				SegmentedControlColors(
+					trackBg = tokens.color.surfaceHover,
+					thumbBg = tokens.color.surface,
+					textActive = tokens.color.textPrimary,
+					textInactive = tokens.color.textSecondary,
+					border = tokens.color.border,
+				),
+			sizes =
+				SegmentedControlSizes(
+					height = scale.height,
+					paddingH = scale.paddingH,
+					fontSize = scale.fontSize,
+					radius = scale.radius,
+					thumbRadius = scale.radius - TRACK_PADDING,
+					trackPadding = TRACK_PADDING,
+				),
+		)
+	}
 }

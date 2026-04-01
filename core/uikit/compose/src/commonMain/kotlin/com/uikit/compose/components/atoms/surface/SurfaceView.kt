@@ -11,6 +11,7 @@ import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -24,7 +25,9 @@ import com.uikit.components.atoms.surface.SurfaceConfig
 import com.uikit.components.atoms.surface.SurfaceStyleResolver
 import com.uikit.compose.theme.LocalDesignTokens
 import com.uikit.compose.theme.LocalKeyboardNavigationMode
+import com.uikit.compose.theme.LocalSurfaceContext
 import com.uikit.compose.theme.parseColor
+import com.uikit.foundation.SurfaceContext
 import com.uikit.foundation.Visibility
 
 @Composable
@@ -52,6 +55,10 @@ fun SurfaceView(
 	val showFocusRing = isFocused && keyboardMode.value && isClickable
 	val focusBorder = if (showFocusRing) tokens.color.focusRing else style.border
 	val borderWidth = if (showFocusRing) tokens.focusRingWidth.dp else tokens.borderWidth.dp
+
+	val surfaceContext = remember(config.level, style.bg) {
+		SurfaceContext(level = config.level.ordinal, backgroundColor = style.bg)
+	}
 
 	Box(
 		modifier =
@@ -89,6 +96,8 @@ fun SurfaceView(
 				.then(if (config.visibility == Visibility.Invisible) Modifier.alpha(0f) else Modifier)
 				.testTag(config.testTag ?: config.id),
 	) {
-		content()
+		CompositionLocalProvider(LocalSurfaceContext provides surfaceContext) {
+			content()
+		}
 	}
 }

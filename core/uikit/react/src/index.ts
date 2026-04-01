@@ -14,6 +14,8 @@ export { SurfaceView } from "./components/atoms/surface/SurfaceView";
 export { useDesignTokens, DesignTokensProvider } from "./theme/useDesignTokens";
 export { UIKitThemeProvider, useUIKitTheme } from "./theme/UIKitThemeProvider";
 export { UIKitThemeScript } from "./theme/UIKitThemeScript";
+export { useSurfaceContext, SurfaceContextProvider } from "./theme/SurfaceContext";
+export type { SurfaceContextValue } from "./theme/SurfaceContext";
 
 // Utils
 export { toRem } from "./utils/units";
@@ -22,7 +24,8 @@ export { toRem } from "./utils/units";
 export {
 	DesignTokens,
 	ButtonConfig,
-	ButtonSize,
+	ComponentSize,
+	ComponentSize as ButtonSize,
 	ColorIntent,
 	VisualVariant,
 	TextBlockConfig,
@@ -38,4 +41,8 @@ export {
 	SurfaceLevel,
 	SurfaceShape,
 	SurfaceStyleResolver,
+	SurfaceContext,
+	ShadowTokens,
+	InteractiveStateTokens,
+	Density,
 } from "uikit-common";

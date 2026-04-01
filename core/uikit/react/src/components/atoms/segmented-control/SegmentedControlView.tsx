@@ -25,8 +25,8 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 		const contextTokens = useDesignTokens();
 		const tokens = tokensProp ?? contextTokens;
 		const style = useMemo(
-			() => SegmentedControlStyleResolver.getInstance().resolve(tokens),
-			[tokens],
+			() => SegmentedControlStyleResolver.getInstance().resolve(config, tokens),
+			[config, tokens],
 		);
 
 		const options = config.options;

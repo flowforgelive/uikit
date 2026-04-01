@@ -54,7 +54,7 @@ fun SegmentedControlView(
 	if (config.visibility == Visibility.Gone) return
 
 	val tokens = LocalDesignTokens.current
-	val style = remember(tokens) { SegmentedControlStyleResolver.resolve(tokens) }
+	val style = remember(config, tokens) { SegmentedControlStyleResolver.resolve(config, tokens) }
 	val keyboardMode = LocalKeyboardNavigationMode.current
 
 	val selectedIndex = config.options.indexOfFirst { it.id == config.selectedId }.coerceAtLeast(0)

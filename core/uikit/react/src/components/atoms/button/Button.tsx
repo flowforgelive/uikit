@@ -4,7 +4,7 @@ import React, { useMemo } from "react";
 import { ButtonView } from "./ButtonView";
 import {
 	ButtonConfig,
-	ButtonSize,
+	ComponentSize,
 	ColorIntent,
 	VisualVariant,
 } from "uikit-common";
@@ -23,9 +23,11 @@ const INTENT_MAP = {
 } as const;
 
 const SIZE_MAP = {
-	sm: ButtonSize.Sm,
-	md: ButtonSize.Md,
-	lg: ButtonSize.Lg,
+	xs: ComponentSize.Xs,
+	sm: ComponentSize.Sm,
+	md: ComponentSize.Md,
+	lg: ComponentSize.Lg,
+	xl: ComponentSize.Xl,
 } as const;
 
 interface ButtonProps {

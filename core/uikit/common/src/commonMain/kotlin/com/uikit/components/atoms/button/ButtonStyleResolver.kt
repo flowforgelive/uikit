@@ -1,6 +1,9 @@
 package com.uikit.components.atoms.button
 
 import com.uikit.foundation.ColorIntent
+import com.uikit.foundation.ComponentSizeResolver
+import com.uikit.foundation.SurfaceAwareColorResolver
+import com.uikit.foundation.SurfaceContext
 import com.uikit.foundation.VisualVariant
 import com.uikit.tokens.DesignTokens
 import kotlinx.serialization.Serializable
@@ -41,6 +44,7 @@ object ButtonStyleResolver {
 	fun resolve(
 		config: ButtonConfig,
 		tokens: DesignTokens,
+		surfaceContext: SurfaceContext? = null,
 	): ResolvedButtonStyle {
 		val colors =
 			if (config.disabled) {
@@ -53,49 +57,24 @@ object ButtonStyleResolver {
 					borderHover = tokens.color.borderDisabled,
 				)
 			} else {
-				resolveColors(config.variant, config.intent, tokens)
+				resolveColors(config.variant, config.intent, tokens, surfaceContext)
 			}
 
-		val sizes =
-			when (config.size) {
-				ButtonSize.Sm -> {
-					SizeSet(
-						height = tokens.sizing.buttonSm,
-						paddingH = tokens.spacing.sm,
-						fontSize = tokens.typography.caption1.fontSize,
-						fontWeight = tokens.typography.headline.fontWeight,
-						iconSize = tokens.sizing.iconSm,
-						letterSpacing = tokens.typography.caption1.letterSpacing,
-					)
-				}
+		val scale = ComponentSizeResolver.resolve(config.size, tokens.controls, tokens.scaleFactor)
 
-				ButtonSize.Md -> {
-					SizeSet(
-						height = tokens.sizing.buttonMd,
-						paddingH = tokens.spacing.lg,
-						fontSize = tokens.typography.body.fontSize,
-						fontWeight = tokens.typography.headline.fontWeight,
-						iconSize = tokens.sizing.iconMd,
-						letterSpacing = tokens.typography.body.letterSpacing,
-					)
-				}
-
-				ButtonSize.Lg -> {
-					SizeSet(
-						height = tokens.sizing.buttonLg,
-						paddingH = tokens.spacing.xl,
-						fontSize = tokens.typography.body.fontSize,
-						fontWeight = tokens.typography.headline.fontWeight,
-						iconSize = tokens.sizing.iconLg,
-						letterSpacing = tokens.typography.body.letterSpacing,
-					)
-				}
-			}
+		val sizes = SizeSet(
+			height = scale.height,
+			paddingH = scale.paddingH,
+			fontSize = scale.fontSize,
+			fontWeight = scale.fontWeight,
+			iconSize = scale.iconSize,
+			letterSpacing = scale.letterSpacing,
+		)
 
 		return ResolvedButtonStyle(
 			colors = colors,
 			sizes = sizes,
-			radius = tokens.radius.md,
+			radius = scale.radius,
 		)
 	}
 
@@ -103,10 +82,11 @@ object ButtonStyleResolver {
 		variant: VisualVariant,
 		intent: ColorIntent,
 		tokens: DesignTokens,
+		surfaceContext: SurfaceContext?,
 	): ColorSet =
 		when (variant) {
 			VisualVariant.Solid -> solidColors(intent, tokens)
-			VisualVariant.Soft -> softColors(intent, tokens)
+			VisualVariant.Soft -> softColors(intent, tokens, surfaceContext)
 			VisualVariant.Outline -> outlineColors(intent, tokens)
 			VisualVariant.Ghost -> ghostColors(intent, tokens)
 		}
@@ -141,25 +121,57 @@ object ButtonStyleResolver {
 			)
 		}
 
-	private fun softColors(intent: ColorIntent, tokens: DesignTokens): ColorSet =
+	private fun softColors(intent: ColorIntent, tokens: DesignTokens, surfaceContext: SurfaceContext?): ColorSet =
 		when (intent) {
-			ColorIntent.Primary -> ColorSet(
-				bg = tokens.color.surfaceContainerHigh,
-				bgHover = tokens.color.surfaceHover,
-				text = tokens.color.textPrimary,
-				textHover = tokens.color.textPrimary,
-				border = "transparent",
-				borderHover = "transparent",
-			)
+			ColorIntent.Primary -> {
+				val surfaceBg = surfaceContext?.backgroundColor
+				if (surfaceBg != null) {
+					val bg = SurfaceAwareColorResolver.resolveSoftBg(surfaceBg, tokens.color, isPrimary = true)
+					val bgHover = SurfaceAwareColorResolver.resolveSoftBgHover(bg, tokens.color)
+					ColorSet(
+						bg = bg,
+						bgHover = bgHover,
+						text = tokens.color.textPrimary,
+						textHover = tokens.color.textPrimary,
+						border = "transparent",
+						borderHover = "transparent",
+					)
+				} else {
+					ColorSet(
+						bg = tokens.color.surfaceContainerHigh,
+						bgHover = tokens.color.surfaceHover,
+						text = tokens.color.textPrimary,
+						textHover = tokens.color.textPrimary,
+						border = "transparent",
+						borderHover = "transparent",
+					)
+				}
+			}
 
-			ColorIntent.Neutral -> ColorSet(
-				bg = tokens.color.surfaceContainerLow,
-				bgHover = tokens.color.surfaceContainer,
-				text = tokens.color.textSecondary,
-				textHover = tokens.color.textPrimary,
-				border = "transparent",
-				borderHover = "transparent",
-			)
+			ColorIntent.Neutral -> {
+				val surfaceBg = surfaceContext?.backgroundColor
+				if (surfaceBg != null) {
+					val bg = SurfaceAwareColorResolver.resolveSoftBg(surfaceBg, tokens.color, isPrimary = false)
+					val bgHover = SurfaceAwareColorResolver.resolveSoftBgHover(bg, tokens.color)
+					ColorSet(
+						bg = bg,
+						bgHover = bgHover,
+						text = tokens.color.textSecondary,
+						textHover = tokens.color.textPrimary,
+						border = "transparent",
+						borderHover = "transparent",
+					)
+				} else {
+					ColorSet(
+						bg = tokens.color.surfaceContainerLow,
+						bgHover = tokens.color.surfaceContainer,
+						text = tokens.color.textSecondary,
+						textHover = tokens.color.textPrimary,
+						border = "transparent",
+						borderHover = "transparent",
+					)
+				}
+			}
 
 			ColorIntent.Danger -> ColorSet(
 				bg = tokens.color.dangerSoft,
