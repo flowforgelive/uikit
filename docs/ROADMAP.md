@@ -1006,68 +1006,451 @@ data class AccessibilityConfig(
 
 ## 12. Поэтапный план реализации
 
-### Phase 0: Рефакторинг фундамента (2-3 недели)
+### Философия: вертикальный срез вместо горизонтальных слоёв
 
-**Цель**: Привести текущую базу в соответствие с новой таксономией
+> **Не делаем** «все примитивы → все composites → все блоки» послойно.
+> **Делаем** вертикальный срез: берём связанную группу компонентов Icon → Button → IconButton → Chip → Tag → TextField → SegmentedControl и доводим до production-quality.
+>
+> **Почему**: Кнопки встречаются *везде* — внутри TextField (clear-иконка), внутри Chip (dismiss), внутри SegmentedControl (сегменты = IconButton). Если размеры, отступы и слоты не состыкованы — это станет техдолгом на 30+ компонентов. Лучше проверить гипотезу переиспользуемости на 7 компонентах, чем переделывать 30.
 
-| #   | Задача                        | Описание                                             |
-| --- | ----------------------------- | ---------------------------------------------------- |
-| 0.1 | **Переименование структуры**  | `atoms/` → `primitives/` + `composites/`             |
-| 0.2 | **DTCG JSON Source of Truth** | Создать `tokens/*.tokens.json` в DTCG формате        |
-| 0.3 | **Token codegen**             | Скрипт: DTCG JSON → Kotlin data classes + CSS vars   |
-| 0.4 | **AccessibilityConfig**       | Добавить `accessibility` поле во все ComponentConfig |
-| 0.5 | **ComponentDescriptor**       | Machine-readable каталог компонентов                 |
+```
+Phase 0 — Hypothesis Validation (вертикальный срез)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-### Phase 1: Core Primitives (3-4 недели)
+  0a: Icon ──────► 0b: Button + IconButton ──────► 0c: Chip + Tag
+       │                     │                           │
+       │                     │       ┌───────────────────┘
+       │                     ▼       ▼
+       │              0d: TextField (Icon + IconButton внутри)
+       │                     │ 
+       │                     ▼
+       └──────────► 0e: SegmentedControl (IconButton внутри)
 
-**Цель**: Все неделимые примитивы
+  Каждый шаг валидирует: размеры стыкуются? иконки правильные?
+  отступы консистентны? вложенные компоненты переиспользуются?
+```
 
-| #   | Компонент     | Приоритет | Примечание                           |
-| --- | ------------- | --------- | ------------------------------------ |
-| 1.1 | **Icon**      | P0        | Нужен почти всем composites          |
-| 1.2 | **Divider**   | P0        | Простой, нужен в lists/forms         |
-| 1.3 | **Spacer**    | P1        | Управляемый отступ для layout        |
-| 1.4 | **Skeleton**  | P1        | Loading states                       |
-| 1.5 | **Image**     | P1        | Async loading, placeholder, fallback |
-| 1.6 | **Indicator** | P2        | Dot/numeric badge base               |
+---
 
-### Phase 2: Essential Composites (6-8 недель)
+### Phase 0: Hypothesis Validation — вертикальный срез (4-6 недель)
 
-**Цель**: Базовые interactive-компоненты для форм и навигации
+**Цель**: Проверить архитектуру переиспользуемости на связанной группе компонентов.
+Все 7 компонентов должны использовать единую `ControlSizeScale`, единый Icon, единые правила отступов.
 
-| #    | Компонент       | Приоритет | Зависимости           |
-| ---- | --------------- | --------- | --------------------- |
-| 2.1  | **IconButton**  | P0        | Icon                  |
-| 2.2  | **TextField**   | P0        | Text, Icon, Surface   |
-| 2.3  | **Checkbox**    | P0        | Icon, Surface         |
-| 2.4  | **Radio**       | P0        | Indicator, Surface    |
-| 2.5  | **Toggle**      | P0        | Indicator, Surface    |
-| 2.6  | **Chip**        | P1        | Text, Icon, Surface   |
-| 2.7  | **Tag**         | P1        | Text, Icon, Surface   |
-| 2.8  | **Badge**       | P1        | Indicator, Text       |
-| 2.9  | **Avatar**      | P1        | Image, Text, Surface  |
-| 2.10 | **Tooltip**     | P2        | Text, Surface         |
-| 2.11 | **ProgressBar** | P1        | Surface               |
-| 2.12 | **Slider**      | P2        | Surface, Text         |
-| 2.13 | **Snackbar**    | P1        | Text, Button, Surface |
+#### Сквозная размерная сетка (Unified Sizing Grid)
 
-### Phase 3: Blocks + Patterns (4-6 недель)
+Все компоненты Phase 0 строятся на одной сетке. Это **главная гипотеза** для валидации.
 
-**Цель**: Сложные самодостаточные блоки и первые patterns
+```
+ControlSizeScale (текущие значения):
+┌──────┬────────┬──────────┬──────────┬────────────┬──────────┬───────────┬────────┐
+│ Size │ Height │ PaddingH │ FontSize │ FontWeight │ IconSize │ LetterSp  │ Radius │
+├──────┼────────┼──────────┼──────────┼────────────┼──────────┼───────────┼────────┤
+│ Xs   │  24    │    4     │   11     │    600     │   12     │   0.07    │   4    │
+│ Sm   │  32    │    8     │   12     │    600     │   16     │   0.0     │   6    │
+│ Md   │  40    │   16     │   17     │    600     │   20     │  -0.41    │   8    │
+│ Lg   │  48    │   24     │   17     │    600     │   24     │  -0.41    │  10    │
+│ Xl   │  56    │   32     │   17     │    600     │   32     │  -0.41    │  12    │
+└──────┴────────┴──────────┴──────────┴────────────┴──────────┴───────────┴────────┘
 
-| #    | Компонент/Паттерн     | Приоритет |
-| ---- | --------------------- | --------- |
-| 3.1  | **Card**              | P0        |
-| 3.2  | **ListItem**          | P0        |
-| 3.3  | **Accordion**         | P1        |
-| 3.4  | **Tabs**              | P0        |
-| 3.5  | **Dialog**            | P0        |
-| 3.6  | **BottomSheet**       | P1        |
-| 3.7  | **Banner**            | P1        |
-| 3.8  | **NavigationBar**     | P0        |
-| 3.9  | **FormPattern**       | P0        |
-| 3.10 | **CardListPattern**   | P1        |
-| 3.11 | **EmptyStatePattern** | P1        |
+Как компоненты используют эту сетку:
+┌────────────────────┬───────────────────────────────────────────────────────────────┐
+│ Компонент          │ Использование ControlSizeScale                               │
+├────────────────────┼───────────────────────────────────────────────────────────────┤
+│ Icon               │ iconSize из шкалы (12/16/20/24/32)                           │
+│ Button             │ height, paddingH, fontSize, iconSize, radius — всё из шкалы  │
+│ IconButton         │ height = width (квадрат), iconSize из шкалы, radius = full   │
+│ Chip               │ height из шкалы, iconSize, paddingH, fontSize — из шкалы     │
+│ Tag                │ высота = Xs/Sm из шкалы (компактный), iconSize, paddingH     │
+│ TextField          │ height из шкалы, внутренние IconButton — на 1-2 размера ↓    │
+│ SegmentedControl   │ height из шкалы, внутренние сегменты = IconButton-подобные    │
+└────────────────────┴───────────────────────────────────────────────────────────────┘
+
+Правило вложенности: вложенный контрол = размер родителя минус 1-2 ступени.
+  Button Md (40dp) внутри TextField Lg (48dp) ✓
+  IconButton Xs (24dp) внутри Chip Sm (32dp) ✓
+  IconButton Sm (32dp) внутри SegmentedControl Md (40dp - 2*trackPadding) ✓
+```
+
+#### 0a: Icon (примитив) — неделя 1
+
+**Цель**: Единый Icon-компонент, привязанный к `ControlSizeScale.iconSize`.
+
+| #    | Задача                       | Описание                                                                      |
+| ---- | ---------------------------- | ----------------------------------------------------------------------------- |
+| 0a.1 | **IconConfig**               | `name: String`, `size: ComponentSize`, `intent: ColorIntent`, `customSizeDp: Double?` |
+| 0a.2 | **IconStyleResolver**        | Резолвит размер из `ControlSizeScale.iconSize` + цвет из `ColorTokens`        |
+| 0a.3 | **Icon Compose renderer**    | Material Icons / custom SVG, размер = `tokens.iconSize.dp`                    |
+| 0a.4 | **Icon React renderer**      | SVG / icon font, размер = `toRem(iconSize)`                                   |
+| 0a.5 | **Icon в каталоге**          | Showcase всех размеров Xs-Xl + все intents в catalog-ui                       |
+
+```kotlin
+// IconConfig — привязан к единой сетке размеров
+@Serializable
+data class IconConfig(
+    val name: String,                                    // "close", "search", "chevron-right"
+    val size: ComponentSize = ComponentSize.Md,           // → iconSize: 12/16/20/24/32
+    val intent: ColorIntent = ColorIntent.Neutral,        // → цвет иконки
+    val customSizeDp: Double? = null,                    // override для нестандартных случаев
+    val decorative: Boolean = false,                     // true = aria-hidden, не для screen reader
+    val id: String = "",
+    val visibility: Visibility = Visibility.Visible,
+)
+
+// Размеры иконок — строго из ControlSizeScale:
+// Xs=12dp, Sm=16dp, Md=20dp, Lg=24dp, Xl=32dp
+// Совпадают с iconSize в кнопках, chip, TextField, etc.
+```
+
+**Критерий успеха**: Icon с `size = Md` (20dp) идеально вписывается в Button с `size = Md` (height=40dp) по визуальному балансу.
+
+#### 0b: Button (доработка) + IconButton — недели 1-2
+
+**Цель**: Расширить Button слотами для иконок. Создать IconButton как специализацию.
+
+| #    | Задача                           | Описание                                                                                     |
+| ---- | -------------------------------- | -------------------------------------------------------------------------------------------- |
+| 0b.1 | **ButtonConfig → icon slots**    | Добавить `leadingIcon`, `trailingIcon`, `iconPosition` (Start/End/Top/Bottom)                |
+| 0b.2 | **Button layout modes**          | Text-only, Icon+Text (horizontal), Icon+Text (vertical/stacked), Icon-only (= IconButton)   |
+| 0b.3 | **Внутренний gap и padding**     | `iconTextGap` из токенов (≈4-8dp по размеру), padding адаптивный: меньше при наличии иконки  |
+| 0b.4 | **IconButtonConfig**             | Отдельный Config: `icon: String`, `size`, `variant`, `intent`, `shape: Round/Square`          |
+| 0b.5 | **IconButton sizing**            | width = height (квадрат), иконка центрирована, `minTouchTarget = 48dp` для Xs/Sm             |
+| 0b.6 | **Compose + React renderers**    | Обновить ButtonView + создать IconButtonView для обеих платформ                               |
+| 0b.7 | **Каталог**                      | Showcase: Button с иконками (все позиции) + IconButton (все размеры × варианты × shapes)     |
+
+```kotlin
+// Обновлённый ButtonConfig с icon slots
+@Serializable
+data class ButtonConfig(
+    val text: String,
+    val variant: VisualVariant = VisualVariant.Solid,
+    val intent: ColorIntent = ColorIntent.Primary,
+    val size: ComponentSize = ComponentSize.Md,
+    // --- НОВОЕ: Icon slots ---
+    val leadingIcon: String? = null,              // имя иконки слева/сверху от текста
+    val trailingIcon: String? = null,             // имя иконки справа/снизу от текста
+    val iconPosition: IconPosition = IconPosition.Start,  // Start/End/Top/Bottom
+    // -------------------------
+    val disabled: Boolean = false,
+    val loading: Boolean = false,
+    val id: String = "",
+    val actionRoute: String? = null,
+    val testTag: String? = null,
+    val visibility: Visibility = Visibility.Visible,
+)
+
+@Serializable
+enum class IconPosition { Start, End, Top, Bottom }
+
+// IconButtonConfig — квадратная кнопка только с иконкой
+@Serializable
+data class IconButtonConfig(
+    val icon: String,                                     // имя иконки
+    val size: ComponentSize = ComponentSize.Md,
+    val variant: VisualVariant = VisualVariant.Solid,
+    val intent: ColorIntent = ColorIntent.Primary,
+    val shape: IconButtonShape = IconButtonShape.Round,   // Round = full radius, Square = из шкалы
+    val disabled: Boolean = false,
+    val loading: Boolean = false,
+    val selected: Boolean = false,                        // для toggle icon buttons
+    val id: String = "",
+    val actionRoute: String? = null,
+    val testTag: String? = null,
+    val visibility: Visibility = Visibility.Visible,
+)
+
+@Serializable
+enum class IconButtonShape { Round, Square }
+```
+
+**Правила отступов Button с иконкой** (вдохновлено M3 Expressive):
+
+```
+Button с текстом (без иконки):
+┌──── paddingH ────┬── text ──┬──── paddingH ────┐
+│                   │          │                   │
+
+Button с leadingIcon (IconPosition.Start):
+┌── paddingIcon ──┬── icon ──┬── gap ──┬── text ──┬── paddingH ──┐
+│    paddingH-4    │  20dp   │  4-8dp  │          │              │
+
+Button с trailingIcon (IconPosition.End):
+┌── paddingH ──┬── text ──┬── gap ──┬── icon ──┬── paddingIcon ──┐
+│              │          │  4-8dp  │  20dp   │    paddingH-4    │
+
+IconButton (квадрат, Round shape):
+┌───────────────────┐
+│    ╭─────────╮    │
+│    │  icon   │    │  width = height = controlHeight
+│    ╰─────────╯    │  radius = full (50%)
+└───────────────────┘
+
+IconButton (квадрат, Square shape):
+┌───────────────────┐
+│    ╭─────────╮    │
+│    │  icon   │    │  width = height = controlHeight
+│    ╰─────────╯    │  radius = из ControlSizeScale.radius
+└───────────────────┘
+```
+
+**Критерий успеха**: IconButton с `size = Sm` (32×32dp, icon=16dp) визуально и размерно совместим со слотом внутри SegmentedControl и Chip.
+
+#### 0c: Chip + Tag — недели 2-3
+
+**Цель**: Chip и Tag используют ту же `ControlSizeScale`, что и Button. Chip содержит dismiss-IconButton внутри.
+
+| #    | Задача                        | Описание                                                                              |
+| ---- | ----------------------------- | ------------------------------------------------------------------------------------- |
+| 0c.1 | **ChipConfig**                | `label`, `leadingIcon?`, `dismissible`, `selected`, `size`, `variant`                 |
+| 0c.2 | **Chip sizing = Button sizing** | `height` берётся из `ControlSizeScale` — Chip Sm = 32dp = Button Sm                |
+| 0c.3 | **Chip dismiss = вложенный IconButton** | Dismiss-крестик = IconButton на 2 ступени меньше (Chip Md → dismiss Xs)      |
+| 0c.4 | **TagConfig**                 | Упрощённый chip: `label`, `icon?`, `intent`, `size` (только Xs/Sm)                   |
+| 0c.5 | **Tag как компактный Chip**   | Tag использует Xs/Sm из `ControlSizeScale`, не интерактивный (не dismissible)         |
+| 0c.6 | **Compose + React renderers** | ChipView, TagView для обеих платформ                                                  |
+| 0c.7 | **Каталог**                   | Showcase: Chip (все варианты, с/без иконки, dismissible) + Tag (все intents, sizes)   |
+
+```kotlin
+@Serializable
+data class ChipConfig(
+    val label: String,
+    val leadingIcon: String? = null,                     // иконка слева
+    val dismissible: Boolean = false,                    // показать крестик
+    val selected: Boolean = false,                       // выделенное состояние
+    val size: ComponentSize = ComponentSize.Sm,           // height из ControlSizeScale
+    val variant: VisualVariant = VisualVariant.Outline,   // Outline по умолчанию (как M3)
+    val intent: ColorIntent = ColorIntent.Neutral,
+    val disabled: Boolean = false,
+    val id: String = "",
+    val actionRoute: String? = null,
+    val testTag: String? = null,
+    val visibility: Visibility = Visibility.Visible,
+)
+
+@Serializable
+data class TagConfig(
+    val label: String,
+    val icon: String? = null,                            // иконка слева
+    val size: ComponentSize = ComponentSize.Xs,           // компактный: Xs(24dp) или Sm(32dp)
+    val intent: ColorIntent = ColorIntent.Neutral,        // Status, Category coloring
+    val variant: VisualVariant = VisualVariant.Soft,      // Soft по умолчанию
+    val id: String = "",
+    val testTag: String? = null,
+    val visibility: Visibility = Visibility.Visible,
+)
+```
+
+**Правило вложенности Chip**:
+
+```
+Chip Sm (height=32dp):
+┌── 8dp ──┬── icon(16dp) ──┬── 4dp ──┬── label ──┬── 4dp ──┬── ✕(Xs=12dp) ──┬── 4dp ──┐
+│ paddingL │   leadingIcon   │   gap   │   text    │   gap   │ dismiss IconBtn │ paddR   │
+                                                              ↑
+                                                    IconButton Xs: 20×20dp внутри 
+                                                    (компактнее стандартного 24dp)
+
+Chip Md (height=40dp):  
+┌── 12dp ──┬── icon(20dp) ──┬── 6dp ──┬── label ──┬── 4dp ──┬── ✕(Sm=16dp) ──┬── 8dp ──┐
+│ paddingL  │   leadingIcon   │   gap   │   text    │   gap   │ dismiss IconBtn │ paddR   │
+                                                               ↑
+                                                     IconButton Xs: 24×24dp внутри
+```
+
+**Критерий успеха**: Chip Sm (32dp) + Button Sm (32dp) + SegmentedControl Sm (32dp) — идентичная высота. Dismiss-крестик в Chip — переиспользованный IconButton.
+
+#### 0d: TextField — недели 3-4
+
+**Цель**: TextField использует Icon и IconButton внутри, высота из `ControlSizeScale`.
+
+| #    | Задача                           | Описание                                                                                |
+| ---- | -------------------------------- | --------------------------------------------------------------------------------------- |
+| 0d.1 | **TextFieldConfig**              | `value`, `placeholder`, `label?`, `leadingIcon?`, `trailingIcon?`, `clearable`, `size`  |
+| 0d.2 | **TextField height = ControlSizeScale** | TextField Md = 40dp, Lg = 48dp (как Button)                                     |
+| 0d.3 | **Внутренние иконки = Icon**     | `leadingIcon` = Icon (декоративная, `intent = Neutral`)                                 |
+| 0d.4 | **Clear button = IconButton**    | `clearable = true` → IconButton(icon="close") Xs/Sm внутри (на 2 ступени ↓ от TextField) |
+| 0d.5 | **Состояния**                    | Default, Focused, Error, Disabled + hover transitions                                   |
+| 0d.6 | **Label + Error message**        | Floating label (опционально) + error Text под полем                                     |
+| 0d.7 | **Compose + React renderers**    | TextFieldView для обеих платформ                                                        |
+| 0d.8 | **Каталог**                      | Showcase: варианты (default/search/password), размеры, состояния, с иконками             |
+
+```kotlin
+@Serializable
+data class TextFieldConfig(
+    val value: String = "",
+    val placeholder: String = "",
+    val label: String? = null,                            // floating label
+    val leadingIcon: String? = null,                      // Icon слева (декоративная)
+    val trailingIcon: String? = null,                     // Icon справа (или custom action)
+    val clearable: Boolean = false,                       // крестик очистки (= IconButton)
+    val size: ComponentSize = ComponentSize.Md,            // height из ControlSizeScale
+    val variant: TextFieldVariant = TextFieldVariant.Outline, // Outline / Filled / Ghost
+    val inputType: TextFieldInputType = TextFieldInputType.Text,
+    val multiline: Boolean = false,
+    val maxLines: Int = 1,
+    val error: String? = null,                            // error message под полем
+    val disabled: Boolean = false,
+    val readOnly: Boolean = false,
+    val id: String = "",
+    val testTag: String? = null,
+    val visibility: Visibility = Visibility.Visible,
+)
+
+@Serializable
+enum class TextFieldVariant { Outline, Filled, Ghost }
+
+@Serializable
+enum class TextFieldInputType { Text, Password, Email, Number, Search, Tel, Url }
+```
+
+**Layout TextField с вложенными компонентами**:
+
+```
+TextField Md (height=40dp, Outline variant):
+┌─────────────────────────────────────────────────────────────────────┐
+│ ┌──────┐                                              ┌──────────┐ │
+│ │ Icon │  placeholder / value text                    │ IconBtn  │ │
+│ │ 20dp │  fontSize=17, из ControlSizeScale.Md         │ clear Xs │ │
+│ └──────┘                                              └──────────┘ │
+└─────── paddingH=16dp ──────────────────── paddingH=8dp ───────────┘
+   ↑                                           ↑
+   leadingIcon = Icon(Md, 20dp)                clearable → IconButton(Xs, icon="close")
+   
+TextField Lg (height=48dp):
+┌─────────────────────────────────────────────────────────────────────┐
+│ ┌──────┐                                              ┌──────────┐ │
+│ │ Icon │  placeholder / value text                    │ IconBtn  │ │
+│ │ 24dp │  fontSize=17, из ControlSizeScale.Lg         │ clear Sm │ │
+│ └──────┘                                              └──────────┘ │
+└─────── paddingH=24dp ──────────────────── paddingH=12dp ──────────┘
+   ↑                                           ↑
+   leadingIcon = Icon(Lg, 24dp)                clearable → IconButton(Sm, icon="close")
+```
+
+**Критерий успеха**: Icon и IconButton внутри TextField — **те же самые** компоненты, что используются standalone. Размеры корректно вычисляются через правило вложенности «родитель - 2 ступени».
+
+#### 0e: SegmentedControl (доработка) — недели 4-5
+
+**Цель**: SegmentedControl поддерживает иконки (Icon-only, Icon+Text), внутренние сегменты используют sizing на основе IconButton.
+
+| #    | Задача                                  | Описание                                                                             |
+| ---- | --------------------------------------- | ------------------------------------------------------------------------------------ |
+| 0e.1 | **SegmentedControlOption → icon slot**  | Добавить `icon: String?` к `SegmentedControlOption`                                  |
+| 0e.2 | **Icon-only сегменты**                  | Если `label = ""` и `icon != null` → иконка-only сегмент (квадратный, как IconButton)|
+| 0e.3 | **Icon + Text сегменты**                | `icon + label` → иконка слева от текста с gap (аналогично Button с leadingIcon)      |
+| 0e.4 | **Внутренний sizing**                   | Thumb и сегменты используют iconSize из ControlSizeScale (согласовано с IconButton)   |
+| 0e.5 | **Compose + React renderers**           | Обновить SegmentedControlView для обеих платформ                                     |
+| 0e.6 | **Каталог**                             | Showcase: text-only, icon-only, icon+text, разные размеры                            |
+
+```kotlin
+// Обновлённый SegmentedControlOption с icon слотом
+@Serializable
+data class SegmentedControlOption(
+    val id: String,
+    val label: String = "",                // пустой label → icon-only сегмент
+    val icon: String? = null,              // имя иконки
+)
+
+// Sizing сегментов: 
+// SegmentedControl Md (height=40dp, trackPadding=2dp)
+//   → внутренний сегмент высота = 40 - 2*2 = 36dp
+//   → icon внутри = iconSize Md = 20dp
+//   → визуально совпадает с IconButton между Sm(32) и Md(40)
+```
+
+**Layout SegmentedControl с иконками**:
+
+```
+SegmentedControl Md (height=40dp), text-only (текущее поведение):
+┌──────────────────────────────────────────────────────────┐
+│ ┌─── trackPad ──┬──────────┬──────────┬──────────┬─────┐│
+│ │               │ Option A │ Option B │ Option C │     ││
+│ │     2dp       │ text-only│ text-only│ text-only│ 2dp ││
+│ └───────────────┴──────────┴──────────┴──────────┴─────┘│
+└──────────────────────────────────────────────────────────┘
+
+SegmentedControl Md (height=40dp), icon-only:
+┌──────────────────────────────────────────────────────────┐
+│ ┌─── 2dp ──┬──────────┬──────────┬──────────┬── 2dp ──┐│
+│ │          │  ⊞ 20dp  │  ≡ 20dp  │  ◷ 20dp  │         ││
+│ │          │ icon-only│ icon-only│ icon-only│         ││
+│ └──────────┴──────────┴──────────┴──────────┴─────────┘│
+└──────────────────────────────────────────────────────────┘
+
+SegmentedControl Md (height=40dp), icon + text:
+┌─────────────────────────────────────────────────────────────────────┐
+│ ┌── 2dp ──┬─────────────────┬─────────────────┬─────────┬── 2dp ──┐│
+│ │         │ ⊞ 20dp  Grid    │ ≡ 20dp  List    │ ◷ Map   │         ││
+│ │         │ icon+text       │ icon+text       │ i+txt   │         ││
+│ └─────────┴─────────────────┴─────────────────┴─────────┴─────────┘│
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+**Критерий успеха**: Иконки в сегментах SegmentedControl визуально идентичны standalone Icon с тем же `ComponentSize`. Переключение между icon-only/text-only/icon+text не ломает высоту и alignment.
+
+#### 0f: Ретроспектива и фиксация стандартов — неделя 5-6
+
+| #    | Задача                                    | Описание                                                                        |
+| ---- | ----------------------------------------- | ------------------------------------------------------------------------------- |
+| 0f.1 | **Sizing Audit**                          | Проверить все 7 компонентов: высоты, отступы, iconSize совпадают по шкале?       |
+| 0f.2 | **Nesting Rules Document**                | Зафиксировать правила вложенности (родитель - N ступеней = дочерний размер)     |
+| 0f.3 | **Visual Regression Baseline**            | Screenshot-тесты для ВСЕХ комбинаций 7 компонентов × 5 размеров × 2 тем         |
+| 0f.4 | **Token Gap Analysis**                    | Нужны ли дополнительные токены (iconTextGap, chipDismissSize, innerControlOffset)?|
+| 0f.5 | **Cross-platform Pixel-Perfect Check**    | Compose vs React рендер — совпадение по размерам, отступам, радиусам            |
+| 0f.6 | **Фиксация InteractiveControlTokens v2** | Расширить ControlSizeScale если нужны доп. поля (iconTextGap, innerPadding)     |
+
+**Выход Phase 0**: Документ `SIZING_STANDARDS.md` с зафиксированными правилами + 7 production-ready компонентов + visual regression baseline.
+
+---
+
+### Phase 1: Оставшиеся примитивы + формовые composites (3-4 недели)
+
+**Цель**: Достроить примитивы и базовые формовые элементы, используя стандарты из Phase 0.
+
+| #   | Компонент       | Тип        | Описание                                              |
+| --- | --------------- | ---------- | ----------------------------------------------------- |
+| 1.1 | **Divider**     | Primitive  | Horizontal/Vertical разделитель, 1dp                  |
+| 1.2 | **Spacer**      | Primitive  | Fixed/Flexible, значения из SpacingTokens             |
+| 1.3 | **Skeleton**    | Primitive  | Text/Circle/Rectangle placeholder загрузки            |
+| 1.4 | **Image**       | Primitive  | Static/Async/Placeholder/Fallback                     |
+| 1.5 | **Indicator**   | Primitive  | Dot/Numeric — база для Badge                          |
+| 1.6 | **Checkbox**    | Composite  | Icon(check) + Surface + Label, size из ControlSizeScale|
+| 1.7 | **Radio**       | Composite  | Indicator(dot) + Surface + Label                      |
+| 1.8 | **Toggle**      | Composite  | Indicator(thumb) + Track + Label                      |
+| 1.9 | **Badge**       | Composite  | Indicator + Text (overlay-positioned)                 |
+
+### Phase 2: Расширенные composites + первые блоки (4-6 недель)
+
+**Цель**: Composites для навигации и обратной связи + первые блоки.
+
+| #    | Компонент       | Тип        | Описание                                           |
+| ---- | --------------- | ---------- | -------------------------------------------------- |
+| 2.1  | **Avatar**      | Composite  | Image/Initials/Icon × размеры из ControlSizeScale  |
+| 2.2  | **Tooltip**     | Composite  | Text + Surface + Arrow                             |
+| 2.3  | **ProgressBar** | Composite  | Track + Fill + Label (Linear/Circular)             |
+| 2.4  | **Slider**      | Composite  | Track + Thumb + Label (Single/Range)               |
+| 2.5  | **Snackbar**    | Composite  | Text + Button + Surface (переиспользует Button)    |
+| 2.6  | **Select**      | Composite  | TextField + Dropdown (переиспользует TextField)    |
+| 2.7  | **DatePicker**  | Composite  | TextField + Calendar popup                         |
+| 2.8  | **Card**        | Block      | Surface + header/body/footer slots                 |
+| 2.9  | **ListItem**    | Block      | Surface + leading/content/trailing slots           |
+| 2.10 | **Banner**      | Block      | Surface + Icon + Text + Button (Info/Warning/Error)|
+
+### Phase 3: Блоки + Patterns (4-6 недель)
+
+**Цель**: Сложные блоки и первые паттерны сборки.
+
+| #    | Компонент/Паттерн     | Тип     | Описание                                       |
+| ---- | --------------------- | ------- | ---------------------------------------------- |
+| 3.1  | **Accordion**         | Block   | Expandable секции                              |
+| 3.2  | **Tabs**              | Block   | Табуляция (переиспользует SegmentedControl?)   |
+| 3.3  | **Dialog**            | Block   | Модальное окно с Button actions                |
+| 3.4  | **BottomSheet**       | Block   | Overlay снизу                                  |
+| 3.5  | **NavigationBar**     | Block   | Top bar с IconButton actions                   |
+| 3.6  | **DataTable**         | Block   | Сортируемая таблица данных                     |
+| 3.7  | **FormPattern**       | Pattern | best-practice: TextField + Checkbox + Button   |
+| 3.8  | **CardListPattern**   | Pattern | Card + ListItem + Skeleton                     |
+| 3.9  | **EmptyStatePattern** | Pattern | Image + Text + Button                          |
+| 3.10 | **ErrorPattern**      | Pattern | Banner + Button + Text                         |
 
 ### Phase 4: Design Algorithms + Multi-Brand (3-4 недели)
 
@@ -1142,17 +1525,18 @@ data class AccessibilityConfig(
 
 ## Сводная таблица: от текущего состояния к целевому
 
-| Аспект          | Сейчас (Phase 0) | После Phase 3                | После Phase 5     | После Phase 8   |
-| --------------- | ---------------- | ---------------------------- | ----------------- | --------------- |
-| **Компоненты**  | 4                | 30+                          | 30+               | 30+             |
-| **Иерархия**    | atoms            | primitives/composites/blocks | + patterns        | + AI catalog    |
-| **Токены**      | Kotlin only      | DTCG JSON → codegen          | + expressions     | + AI-queryable  |
-| **Multi-brand** | 2 presets        | 4+ algorithms                | + brand JSON      | + dynamic brand |
-| **BDUI**        | ❌                | Static only                  | Full BDUI         | + Generative    |
-| **Layout**      | Manual           | Manual                       | + LayoutEngine    | Auto + AI       |
-| **A11y**        | Basic            | Full a11y config             | + contrast checks | + self-healing  |
-| **SSR**         | ✅                | ✅                            | + streaming       | + edge-cached   |
-| **AI**          | ❌                | ❌                            | ❌                 | Full Generative |
+| Аспект          | Сейчас          | После Phase 0              | После Phase 3                | После Phase 5     | После Phase 8   |
+| --------------- | --------------- | -------------------------- | ---------------------------- | ----------------- | --------------- |
+| **Компоненты**  | 4               | 7 (вертикальный срез)      | 30+                          | 30+               | 30+             |
+| **Sizing**      | ControlSizeScale| + вложенность, gap-токены  | Полная шкала                 | + auto-layout     | + AI-sizing     |
+| **Иерархия**    | atoms           | primitives + composites    | + blocks + patterns          | + patterns        | + AI catalog    |
+| **Токены**      | Kotlin only     | + iconTextGap, innerPad    | DTCG JSON → codegen          | + expressions     | + AI-queryable  |
+| **Multi-brand** | 2 presets       | 2 presets (валидация)      | 4+ algorithms                | + brand JSON      | + dynamic brand |
+| **BDUI**        | ❌               | ❌                          | Static only                  | Full BDUI         | + Generative    |
+| **Reuse proof** | ❌               | ✅ (7 компонентов)          | ✅ (30+ компонентов)          | ✅                 | ✅               |
+| **A11y**        | Basic           | + aria для 7 компонентов   | Full a11y config             | + contrast checks | + self-healing  |
+| **SSR**         | ✅               | ✅                          | ✅                            | + streaming       | + edge-cached   |
+| **AI**          | ❌               | ❌                          | ❌                            | ❌                 | Full Generative |
 
 ---
 
