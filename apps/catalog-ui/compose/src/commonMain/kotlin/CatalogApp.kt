@@ -33,6 +33,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
@@ -50,6 +53,7 @@ import com.uikit.compose.theme.LocalDesignTokens
 import com.uikit.compose.theme.UIKitTheme
 import com.uikit.compose.theme.parseColor
 import com.uikit.foundation.ColorIntent
+import com.uikit.foundation.ComponentSize
 import com.uikit.foundation.LayoutDirection
 import com.uikit.foundation.VisualVariant
 import com.uikit.foundation.InMemoryThemeProvider
@@ -289,6 +293,7 @@ private fun SecondScreen(
 			SurfaceShowcase(tokens)
 			TextShowcase(tokens)
 			SegmentedControlShowcase(tokens)
+			HeightAlignmentShowcase(tokens)
 		}
 	}
 }
@@ -771,12 +776,31 @@ private fun BreakpointsShowcase(tokens: DesignTokens) {
 	}
 }
 
+/* ─── Size options for showcases ─────────────────────────── */
+
+private val SIZE_OPTIONS = ComponentSize.entries.map { it.name to it.name.uppercase() }
+
+private fun sizeFromId(id: String): ComponentSize =
+	ComponentSize.entries.first { it.name == id }
+
+private fun buttonSizeFromComponentSize(cs: ComponentSize): ButtonSize =
+	ButtonSize.entries.first { it.name == cs.name }
+
 /* ─── Button variants ────────────────────────────────────── */
 
 @Composable
 private fun ButtonShowcase(tokens: DesignTokens) {
+	var selectedSizeId by remember { mutableStateOf(ComponentSize.Md.name) }
+	val selectedSize = buttonSizeFromComponentSize(sizeFromId(selectedSizeId))
+
 	ShowcaseSection("Button — Visual × Intent", tokens) {
 		Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xl.dp)) {
+			SegmentedControl(
+				options = SIZE_OPTIONS,
+				selectedId = selectedSizeId,
+				onSelectionChange = { selectedSizeId = it },
+			)
+
 			VisualVariant.entries.forEach { variant ->
 				Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
 					androidx.compose.material3.Text(
@@ -800,16 +824,14 @@ private fun ButtonShowcase(tokens: DesignTokens) {
 								horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
 								modifier = Modifier.horizontalScroll(rememberScrollState()),
 							) {
-								ButtonSize.entries.forEach { size ->
-									Button(
-										text = "${variant.name} ${size.name}",
-										variant = variant,
-										intent = intent,
-										size = size,
-									)
-								}
-								Button(text = "Disabled", variant = variant, intent = intent, disabled = true)
-								Button(text = "Loading", variant = variant, intent = intent, loading = true)
+								Button(
+									text = "${variant.name} ${selectedSize.name}",
+									variant = variant,
+									intent = intent,
+									size = selectedSize,
+								)
+								Button(text = "Disabled", variant = variant, intent = intent, size = selectedSize, disabled = true)
+								Button(text = "Loading", variant = variant, intent = intent, size = selectedSize, loading = true)
 							}
 						}
 					}
@@ -897,6 +919,7 @@ private fun TextShowcase(tokens: DesignTokens) {
 			)
 			TextBlock(text = "Caption — Подпись к элементам", variant = TextBlockVariant.Caption)
 		}
+
 	}
 }
 
@@ -905,9 +928,28 @@ private fun TextShowcase(tokens: DesignTokens) {
 @Composable
 private fun SegmentedControlShowcase(tokens: DesignTokens) {
 	var selected by remember { mutableStateOf("a") }
+	var selectedSizeId by remember { mutableStateOf(ComponentSize.Sm.name) }
+	val selectedSize = sizeFromId(selectedSizeId)
 
 	ShowcaseSection("Segmented Control", tokens) {
 		Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.lg.dp)) {
+			// Size switcher
+			Row(
+				verticalAlignment = Alignment.CenterVertically,
+				horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
+			) {
+				androidx.compose.material3.Text(
+					text = "Size:",
+					fontSize = tokens.typography.caption1.fontSize.sp,
+					color = parseColor(tokens.color.textMuted),
+				)
+				SegmentedControl(
+					options = SIZE_OPTIONS,
+					selectedId = selectedSizeId,
+					onSelectionChange = { selectedSizeId = it },
+				)
+			}
+
 			Column {
 				androidx.compose.material3.Text(
 					text = "3 options",
@@ -919,6 +961,7 @@ private fun SegmentedControlShowcase(tokens: DesignTokens) {
 					options = listOf("a" to "First", "b" to "Second", "c" to "Third"),
 					selectedId = selected,
 					onSelectionChange = { selected = it },
+					size = selectedSize,
 				)
 			}
 			Column {
@@ -932,7 +975,103 @@ private fun SegmentedControlShowcase(tokens: DesignTokens) {
 					options = listOf("on" to "Вкл", "off" to "Выкл"),
 					selectedId = "on",
 					onSelectionChange = {},
+					size = selectedSize,
 				)
+			}
+		}
+	}
+}
+
+/* ─── Height Alignment Check ─────────────────────────────── */
+
+@Composable
+private fun HeightAlignmentShowcase(tokens: DesignTokens) {
+	var selectedSizeId by remember { mutableStateOf(ComponentSize.Md.name) }
+	val selectedSize = sizeFromId(selectedSizeId)
+	val btnSize = buttonSizeFromComponentSize(selectedSize)
+	val railColor = parseColor(tokens.color.outlineVariant)
+
+	ShowcaseSection("Height Alignment Check", tokens) {
+		Column(
+			verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
+		) {
+			// Size selector
+			Row(
+				verticalAlignment = Alignment.CenterVertically,
+				horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
+			) {
+				androidx.compose.material3.Text(
+					text = "Size:",
+					fontSize = tokens.typography.footnote.fontSize.sp,
+					fontWeight = FontWeight.SemiBold,
+					color = parseColor(tokens.color.textMuted),
+				)
+				SegmentedControl(
+					options = SIZE_OPTIONS,
+					selectedId = selectedSizeId,
+					onSelectionChange = { selectedSizeId = it },
+				)
+			}
+
+			// Rails container — two horizontal dashed lines with components between them
+			Box(
+				modifier = Modifier
+					.fillMaxWidth()
+					.drawBehind {
+						val dashEffect = PathEffect.dashPathEffect(floatArrayOf(6f, 4f))
+						// Top rail
+						drawLine(
+							color = railColor,
+							start = Offset(0f, 0f),
+							end = Offset(size.width, 0f),
+							strokeWidth = 1f,
+							pathEffect = dashEffect,
+						)
+						// Bottom rail
+						drawLine(
+							color = railColor,
+							start = Offset(0f, size.height),
+							end = Offset(size.width, size.height),
+							strokeWidth = 1f,
+							pathEffect = dashEffect,
+						)
+					},
+			) {
+				Row(
+					verticalAlignment = Alignment.CenterVertically,
+					horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
+					modifier = Modifier.horizontalScroll(rememberScrollState()),
+				) {
+					Button(
+						text = "Solid",
+						variant = VisualVariant.Solid,
+						intent = ColorIntent.Primary,
+						size = btnSize,
+					)
+					Button(
+						text = "Outline",
+						variant = VisualVariant.Outline,
+						intent = ColorIntent.Neutral,
+						size = btnSize,
+					)
+					Button(
+						text = "Ghost",
+						variant = VisualVariant.Ghost,
+						intent = ColorIntent.Primary,
+						size = btnSize,
+					)
+					SegmentedControl(
+						options = listOf("a" to "On", "b" to "Off"),
+						selectedId = "a",
+						onSelectionChange = {},
+						size = selectedSize,
+						modifier = Modifier.width(160.dp),
+					)
+					TextBlock(
+						text = "Text label",
+						variant = TextBlockVariant.Body,
+					)
+				}
 			}
 		}
 	}

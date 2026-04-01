@@ -411,15 +411,83 @@ function MotionShowcase({ tokens }: { tokens: any }) {
 	);
 }
 
+/* ─── Size options for showcases ────────────────────────── */
+
+const SIZE_OPTIONS = [
+	{ id: "xs", label: "XS" },
+	{ id: "sm", label: "SM" },
+	{ id: "md", label: "MD" },
+	{ id: "lg", label: "LG" },
+	{ id: "xl", label: "XL" },
+];
+
+/* ─── Height Alignment Check ───────────────────────────── */
+
+function HeightAlignmentShowcase({ tokens }: { tokens: any }) {
+	const [selectedSize, setSelectedSize] = useState("md");
+
+	return (
+		<Section id="height-alignment" title="Height Alignment Check" tokens={tokens}>
+			<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.md) }}>
+				<div style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md) }}>
+					<span style={{ fontSize: toRem(tokens.typography.footnote.fontSize), fontWeight: 600, color: tokens.color.textMuted, whiteSpace: "nowrap" }}>
+						Size:
+					</span>
+					<SegmentedControl
+						options={SIZE_OPTIONS}
+						selectedId={selectedSize}
+						onSelectionChange={setSelectedSize}
+					/>
+				</div>
+				{/* Rails container — dashed top/bottom borders to verify equal heights */}
+				<div
+					style={{
+						display: "flex",
+						alignItems: "center",
+						gap: toRem(tokens.spacing.md),
+						overflowX: "auto",
+						borderBlockStart: `1px dashed ${tokens.color.outlineVariant}`,
+						borderBlockEnd: `1px dashed ${tokens.color.outlineVariant}`,
+					}}
+				>
+					<Button text="Solid" variant="solid" intent="primary" size={selectedSize as any} />
+					<Button text="Outline" variant="outline" intent="neutral" size={selectedSize as any} />
+					<Button text="Ghost" variant="ghost" intent="primary" size={selectedSize as any} />
+					<div style={{ width: "fit-content", flexShrink: 0 }}>
+						<SegmentedControl
+							options={[
+								{ id: "a", label: "On" },
+								{ id: "b", label: "Off" },
+							]}
+							selectedId="a"
+							onSelectionChange={() => {}}
+							size={selectedSize as any}
+						/>
+					</div>
+					<Text text="Text label" variant="body" />
+				</div>
+			</div>
+		</Section>
+	);
+}
+
 /* ─── Button variants showcase ─────────────────────────── */
 
 const BUTTON_VARIANTS = ["solid", "soft", "outline", "ghost"] as const;
 const BUTTON_INTENTS = ["primary", "neutral", "danger"] as const;
-const BUTTON_SIZES = ["xs", "sm", "md", "lg", "xl"] as const;
 
 function ButtonShowcase({ tokens }: { tokens: any }) {
+	const [selectedSize, setSelectedSize] = useState("md");
+
 	return (
 		<Section id="buttons" title="Button — Visual × Intent" tokens={tokens}>
+			<div style={{ marginBlockEnd: toRem(tokens.spacing.xl) }}>
+				<SegmentedControl
+					options={SIZE_OPTIONS}
+					selectedId={selectedSize}
+					onSelectionChange={setSelectedSize}
+				/>
+			</div>
 			{BUTTON_VARIANTS.map((variant) => (
 				<div key={variant} style={{ marginBlockEnd: toRem(tokens.spacing.xl) }}>
 					<h3 style={{ fontSize: toRem(tokens.typography.headline.fontSize), fontWeight: 600, color: tokens.color.textPrimary, marginBlockEnd: toRem(tokens.spacing.sm), textTransform: "capitalize" }}>
@@ -430,12 +498,10 @@ function ButtonShowcase({ tokens }: { tokens: any }) {
 							<span style={{ fontSize: toRem(tokens.typography.caption1.fontSize), color: tokens.color.textMuted, marginInlineEnd: toRem(tokens.spacing.sm), textTransform: "capitalize" }}>
 								{intent}:
 							</span>
-						<div style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md), overflowX: "auto" }}>
-								{BUTTON_SIZES.map((size) => (
-									<Button key={size} text={`${variant} ${size}`} variant={variant} intent={intent} size={size} />
-								))}
-								<Button text="Disabled" variant={variant} intent={intent} disabled />
-								<Button text="Loading" variant={variant} intent={intent} loading />
+							<div style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md), overflowX: "auto" }}>
+								<Button text={`${variant} ${selectedSize}`} variant={variant} intent={intent} size={selectedSize as any} />
+								<Button text="Disabled" variant={variant} intent={intent} size={selectedSize as any} disabled />
+								<Button text="Loading" variant={variant} intent={intent} size={selectedSize as any} loading />
 							</div>
 						</div>
 					))}
@@ -541,9 +607,22 @@ function TextShowcase({ tokens }: { tokens: any }) {
 
 function SegmentedControlShowcase({ tokens }: { tokens: any }) {
 	const [selected, setSelected] = useState("a");
+	const [selectedSize, setSelectedSize] = useState("sm");
+
 	return (
 		<Section id="segmented-control" title="Segmented Control" tokens={tokens}>
 			<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.lg) }}>
+				{/* Size switcher */}
+				<div style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md) }}>
+					<span style={{ fontSize: toRem(tokens.typography.caption1.fontSize), color: tokens.color.textMuted }}>
+						Size:
+					</span>
+					<SegmentedControl
+						options={SIZE_OPTIONS}
+						selectedId={selectedSize}
+						onSelectionChange={setSelectedSize}
+					/>
+				</div>
 				<div>
 					<span style={{ fontSize: toRem(tokens.typography.footnote.fontSize), color: tokens.color.textMuted, display: "block", marginBlockEnd: toRem(tokens.spacing.xs) }}>
 						3 options
@@ -556,6 +635,7 @@ function SegmentedControlShowcase({ tokens }: { tokens: any }) {
 						]}
 						selectedId={selected}
 						onSelectionChange={setSelected}
+						size={selectedSize as any}
 					/>
 				</div>
 				<div>
@@ -569,6 +649,7 @@ function SegmentedControlShowcase({ tokens }: { tokens: any }) {
 						]}
 						selectedId="on"
 						onSelectionChange={() => {}}
+						size={selectedSize as any}
 					/>
 				</div>
 			</div>
@@ -693,6 +774,7 @@ export default function SecondPage() {
 					<SurfaceShowcase tokens={tokens} />
 					<TextShowcase tokens={tokens} />
 					<SegmentedControlShowcase tokens={tokens} />
+					<HeightAlignmentShowcase tokens={tokens} />
 				</div>
 			</main>
 		</div>
