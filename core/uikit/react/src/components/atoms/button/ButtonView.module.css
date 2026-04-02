@@ -22,6 +22,35 @@
 	white-space: nowrap;
 }
 
+.content {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--btn-icon-gap);
+}
+
+.contentVertical {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: var(--btn-icon-gap);
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: var(--btn-icon-size);
+	height: var(--btn-icon-size);
+	color: inherit;
+}
+
+.label {
+	/* Preserve text layout within flex */
+}
+
 .button::after {
 	content: "";
 	position: absolute;
@@ -61,8 +90,8 @@
 }
 
 .spinner {
-	width: var(--btn-icon-size, 1rem);
-	height: var(--btn-icon-size, 1rem);
+	width: var(--btn-icon-size);
+	height: var(--btn-icon-size);
 	border: 2px solid currentColor;
 	border-top-color: transparent;
 	border-radius: 50%;

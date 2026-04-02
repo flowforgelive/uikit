@@ -1,13 +1,12 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { ButtonView } from "./ButtonView";
+import { IconButtonView } from "./IconButtonView";
 import {
-	ButtonConfig,
+	IconButtonConfig,
 	ComponentSize,
 	ColorIntent,
 	VisualVariant,
-	IconPosition,
 } from "uikit-common";
 
 const VARIANT_MAP = {
@@ -31,62 +30,56 @@ const SIZE_MAP = {
 	xl: ComponentSize.Xl,
 } as const;
 
-const ICON_POSITION_MAP = {
-	none: IconPosition.None,
-	start: IconPosition.Start,
-	end: IconPosition.End,
-	top: IconPosition.Top,
-	bottom: IconPosition.Bottom,
-} as const;
-
-interface ButtonProps {
-	text: string;
+interface IconButtonProps {
+	icon: React.ReactNode;
 	onClick?: () => void;
 	variant?: keyof typeof VARIANT_MAP;
 	intent?: keyof typeof INTENT_MAP;
 	size?: keyof typeof SIZE_MAP;
-	iconPosition?: keyof typeof ICON_POSITION_MAP;
-	iconStart?: React.ReactNode;
-	iconEnd?: React.ReactNode;
 	disabled?: boolean;
 	loading?: boolean;
+	ariaLabel?: string;
 	className?: string;
 }
 
-export const Button: React.FC<ButtonProps> = React.memo(
+export const IconButton: React.FC<IconButtonProps> = React.memo(
 	({
-		text,
+		icon,
 		onClick,
 		variant = "solid",
 		intent = "primary",
 		size = "md",
-		iconPosition = "none",
-		iconStart,
-		iconEnd,
 		disabled = false,
 		loading = false,
+		ariaLabel,
 		className,
 	}) => {
 		const config = useMemo(
 			() =>
-				new ButtonConfig(
-					text,
+				new IconButtonConfig(
 					VARIANT_MAP[variant],
 					INTENT_MAP[intent],
 					SIZE_MAP[size],
-					ICON_POSITION_MAP[iconPosition],
-					!!iconStart,
-					!!iconEnd,
 					disabled,
 					loading,
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					ariaLabel,
 				),
-			[text, variant, intent, size, iconPosition, !!iconStart, !!iconEnd, disabled, loading],
+			[variant, intent, size, disabled, loading, ariaLabel],
 		);
 
 		return (
-			<ButtonView config={config} iconStart={iconStart} iconEnd={iconEnd} onClick={onClick} className={className} />
+			<IconButtonView
+				config={config}
+				icon={icon}
+				onClick={onClick}
+				className={className}
+			/>
 		);
 	},
 );
 
-Button.displayName = "Button";
+IconButton.displayName = "IconButton";

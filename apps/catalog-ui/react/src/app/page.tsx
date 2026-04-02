@@ -49,9 +49,14 @@ export default function FirstPage() {
 					<ThemeSwitcher />
 				</div>
 			</div>
-			<Text text="Первая страница" variant="h1" />
+			<Text text="UIKit Catalog" variant="h1" />
 			<Button
-				text="Перейти на вторую страницу"
+				text="Foundation Tokens"
+				onClick={() => router.push("/foundation")}
+			/>
+			<Button
+				text="Components"
+				variant="soft"
 				onClick={() => router.push("/second")}
 			/>
 		</main>

@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
 	Button,
+	IconButton,
 	Text,
 	SegmentedControl,
 	Surface,
@@ -17,7 +18,76 @@ const DIR_OPTIONS = [
 	{ id: "rtl", label: "RTL" },
 ];
 
-/* ─── Section wrapper (divider style — matches Compose ShowcaseSection) ── */
+/* ─── Local SVG icon helpers (catalog only) ────────────── */
+
+const svgStyle: React.CSSProperties = {
+	display: "block",
+	fill: "none",
+	stroke: "currentColor",
+	strokeWidth: 2,
+	strokeLinecap: "round",
+	strokeLinejoin: "round",
+};
+
+const svgProps = {
+	xmlns: "http://www.w3.org/2000/svg",
+	viewBox: "0 0 24 24",
+	width: "100%",
+	height: "100%",
+	style: svgStyle,
+};
+
+const searchIcon = (
+	<svg {...svgProps}>
+		<circle cx="11" cy="11" r="8" />
+		<path d="m21 21-4.35-4.35" />
+	</svg>
+);
+const starIcon = (
+	<svg {...svgProps} style={{ ...svgStyle, fill: "currentColor", stroke: "none" }}>
+		<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+	</svg>
+);
+const checkIcon = (
+	<svg {...svgProps}>
+		<path d="M20 6L9 17l-5-5" />
+	</svg>
+);
+const closeIcon = (
+	<svg {...svgProps}>
+		<path d="M18 6L6 18M6 6l12 12" />
+	</svg>
+);
+const plusIcon = (
+	<svg {...svgProps}>
+		<path d="M12 5v14M5 12h14" />
+	</svg>
+);
+const settingsIcon = (
+	<svg {...svgProps}>
+		<circle cx="12" cy="12" r="3" />
+		<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+	</svg>
+);
+const arrowLeftIcon = (
+	<svg {...svgProps}>
+		<path d="M19 12H5M12 19l-7-7 7-7" />
+	</svg>
+);
+const arrowRightIcon = (
+	<svg {...svgProps}>
+		<path d="M5 12h14M12 5l7 7-7 7" />
+	</svg>
+);
+const chevronRightIcon = (
+	<svg {...svgProps}>
+		<path d="M9 18l6-6-6-6" />
+	</svg>
+);
+
+const ICON_BUTTON_SAMPLES = [searchIcon, plusIcon, starIcon, settingsIcon, closeIcon, checkIcon];
+
+/* ─── Section wrapper ──────────────────────────────────── */
 
 function Section({
 	id,
@@ -64,353 +134,6 @@ function Section({
 	);
 }
 
-/* ─── Typography showcase ──────────────────────────────── */
-
-const TYPOGRAPHY_STYLES = [
-	["largeTitle", "Large Title"],
-	["title1", "Title 1"],
-	["title2", "Title 2"],
-	["title3", "Title 3"],
-	["headline", "Headline"],
-	["body", "Body"],
-	["callout", "Callout"],
-	["subhead", "Subhead"],
-	["footnote", "Footnote"],
-	["caption1", "Caption 1"],
-	["caption2", "Caption 2"],
-] as const;
-
-function TypographyShowcase({ tokens }: { tokens: any }) {
-	return (
-		<Section id="typography" title="Typography" tokens={tokens}>
-			<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.md) }}>
-				{TYPOGRAPHY_STYLES.map(([key, label]) => {
-					const style = tokens.typography[key];
-					return (
-						<div key={key} style={{ display: "flex", alignItems: "baseline", gap: toRem(tokens.spacing.lg), flexWrap: "wrap" }}>
-							<span
-								style={{
-									fontSize: toRem(style.fontSize),
-									fontWeight: style.fontWeight,
-									lineHeight: toRem(style.lineHeight),
-									letterSpacing: toRem(style.letterSpacing),
-									color: tokens.color.textPrimary,
-								}}
-							>
-								{label}
-							</span>
-							<span
-								style={{
-									fontSize: toRem(tokens.typography.caption1.fontSize),
-									color: tokens.color.textMuted,
-								}}
-							>
-								{style.fontSize}dp / {style.fontWeight} / {style.lineHeight}dp
-							</span>
-						</div>
-					);
-				})}
-			</div>
-		</Section>
-	);
-}
-
-/* ─── Colors showcase ──────────────────────────────────── */
-
-const COLOR_KEYS = [
-	["primary", "Primary"],
-	["primaryHover", "Primary Hover"],
-	["secondary", "Secondary"],
-	["danger", "Danger"],
-	["dangerHover", "Danger Hover"],
-	["dangerSoft", "Danger Soft"],
-	["dangerSoftHover", "Danger Soft Hover"],
-	["background", "Background"],
-	["surface", "Surface"],
-	["surfaceContainerLowest", "Container Lowest"],
-	["surfaceContainerLow", "Container Low"],
-	["surfaceContainer", "Surface Container"],
-	["surfaceContainerHigh", "Container High"],
-	["surfaceContainerHighest", "Container Highest"],
-	["surfaceHover", "Surface Hover"],
-	["onSurface", "On Surface"],
-	["outline", "Outline"],
-	["outlineVariant", "Outline Variant"],
-	["textPrimary", "Text Primary"],
-	["textSecondary", "Text Secondary"],
-	["textMuted", "Text Muted"],
-	["textOnPrimary", "Text on Primary"],
-	["textOnDanger", "Text on Danger"],
-	["textDisabled", "Text Disabled"],
-	["surfaceDisabled", "Surface Disabled"],
-	["borderDisabled", "Border Disabled"],
-	["border", "Border"],
-] as const;
-
-function ColorsShowcase({ tokens }: { tokens: any }) {
-	return (
-		<Section id="colors" title="Colors" tokens={tokens}>
-			<div
-				style={{
-					display: "grid",
-					gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
-					gap: toRem(tokens.spacing.md),
-				}}
-			>
-				{COLOR_KEYS.map(([key, label]) => {
-					const hex = tokens.color[key];
-					return (
-						<div key={key} style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
-							<div
-								style={{
-									width: "100%",
-									aspectRatio: "1",
-									backgroundColor: hex,
-									borderRadius: toRem(tokens.radius.md),
-								boxShadow: `inset 0 0 0 1px ${tokens.color.outlineVariant}`,
-								}}
-							/>
-							<span style={{ fontSize: toRem(tokens.typography.caption2.fontSize), fontWeight: 600, color: tokens.color.textPrimary }}>
-								{label}
-							</span>
-							<span style={{ fontSize: toRem(tokens.typography.caption2.fontSize), color: tokens.color.textMuted, fontFamily: "monospace" }}>
-								{hex}
-							</span>
-						</div>
-					);
-				})}
-			</div>
-		</Section>
-	);
-}
-
-/* ─── Spacing showcase ─────────────────────────────────── */
-
-const SPACING_KEYS = [
-	["xxs", "xxs"],
-	["xs", "xs"],
-	["sm", "sm"],
-	["md", "md"],
-	["lg", "lg"],
-	["xl", "xl"],
-	["xxl", "xxl"],
-	["xxxl", "xxxl"],
-	["xxxxl", "xxxxl"],
-] as const;
-
-function SpacingShowcase({ tokens }: { tokens: any }) {
-	return (
-		<Section id="spacing" title="Spacing" tokens={tokens}>
-			<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.sm) }}>
-				{SPACING_KEYS.map(([key, label]) => {
-					const val = tokens.spacing[key];
-					return (
-						<div key={key} style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md) }}>
-							<span style={{ fontSize: toRem(tokens.typography.caption1.fontSize), color: tokens.color.textMuted, minWidth: "4rem", textAlign: "end" }}>
-								{label} ({val}dp)
-							</span>
-							<div
-								style={{
-									width: toRem(val),
-									height: toRem(tokens.spacing.lg),
-									backgroundColor: tokens.color.primary,
-									borderRadius: toRem(tokens.radius.xs),
-									transition: `width ${tokens.motion.durationNormal}ms ${tokens.motion.easingStandard}`,
-								}}
-							/>
-						</div>
-					);
-				})}
-			</div>
-		</Section>
-	);
-}
-
-/* ─── Sizing showcase ──────────────────────────────────── */
-
-function SizingShowcase({ tokens }: { tokens: any }) {
-	const btnSizes = [
-		["controlXs", "XS", tokens.sizing.controlXs],
-		["controlSm", "SM", tokens.sizing.controlSm],
-		["controlMd", "MD", tokens.sizing.controlMd],
-		["controlLg", "LG", tokens.sizing.controlLg],
-		["controlXl", "XL", tokens.sizing.controlXl],
-	] as const;
-
-	const iconSizes = [
-		["iconXs", "XS", tokens.sizing.iconXs],
-		["iconSm", "SM", tokens.sizing.iconSm],
-		["iconMd", "MD", tokens.sizing.iconMd],
-		["iconLg", "LG", tokens.sizing.iconLg],
-		["iconXl", "XL", tokens.sizing.iconXl],
-	] as const;
-
-	return (
-		<Section id="sizing" title="Sizing" tokens={tokens}>
-			<h3 style={{ fontSize: toRem(tokens.typography.headline.fontSize), fontWeight: 600, color: tokens.color.textPrimary, marginBlockEnd: toRem(tokens.spacing.sm) }}>
-				Button Heights
-			</h3>
-			<div style={{ display: "flex", alignItems: "end", gap: toRem(tokens.spacing.md), flexWrap: "wrap", marginBlockEnd: toRem(tokens.spacing.xl) }}>
-				{btnSizes.map(([key, label, val]) => (
-					<div key={key} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: toRem(tokens.spacing.xs) }}>
-						<div
-							style={{
-								width: toRem(val * 2),
-								height: toRem(val),
-								backgroundColor: tokens.color.primary,
-								borderRadius: toRem(tokens.radius.md),
-								display: "flex",
-								alignItems: "center",
-								justifyContent: "center",
-								color: tokens.color.textOnPrimary,
-								fontSize: toRem(tokens.typography.caption2.fontSize),
-								fontWeight: 600,
-							}}
-						>
-							{val}dp
-						</div>
-						<span style={{ fontSize: toRem(tokens.typography.caption1.fontSize), color: tokens.color.textMuted }}>{label}</span>
-					</div>
-				))}
-			</div>
-
-			<h3 style={{ fontSize: toRem(tokens.typography.headline.fontSize), fontWeight: 600, color: tokens.color.textPrimary, marginBlockEnd: toRem(tokens.spacing.sm) }}>
-				Icon Sizes
-			</h3>
-			<div style={{ display: "flex", alignItems: "end", gap: toRem(tokens.spacing.lg), flexWrap: "wrap", marginBlockEnd: toRem(tokens.spacing.xl) }}>
-				{iconSizes.map(([key, label, val]) => (
-					<div key={key} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: toRem(tokens.spacing.xs) }}>
-						<div
-							style={{
-								width: toRem(val),
-								height: toRem(val),
-								backgroundColor: tokens.color.primary,
-								borderRadius: toRem(tokens.radius.sm),
-							}}
-						/>
-						<span style={{ fontSize: toRem(tokens.typography.caption1.fontSize), color: tokens.color.textMuted }}>{label} ({val}dp)</span>
-					</div>
-				))}
-			</div>
-
-			<div
-				style={{
-					display: "flex",
-					alignItems: "center",
-					gap: toRem(tokens.spacing.md),
-					padding: toRem(tokens.spacing.md),
-					boxShadow: `inset 0 0 0 1px ${tokens.color.outlineVariant}`,
-					borderRadius: toRem(tokens.radius.md),
-				}}
-			>
-				<div
-					style={{
-						width: toRem(tokens.sizing.minTouchTarget),
-						height: toRem(tokens.sizing.minTouchTarget),
-						boxShadow: `inset 0 0 0 2px ${tokens.color.danger}`,
-						borderRadius: toRem(tokens.radius.sm),
-						display: "flex",
-						alignItems: "center",
-						justifyContent: "center",
-						fontSize: toRem(tokens.typography.caption2.fontSize),
-						color: tokens.color.danger,
-						fontWeight: 600,
-					}}
-				>
-					{tokens.sizing.minTouchTarget}dp
-				</div>
-				<span style={{ fontSize: toRem(tokens.typography.footnote.fontSize), color: tokens.color.textSecondary }}>
-					Min Touch Target (Apple HIG 44dp / Material 48dp)
-				</span>
-			</div>
-		</Section>
-	);
-}
-
-/* ─── Radius showcase ──────────────────────────────────── */
-
-const RADIUS_KEYS = [
-	["xs", "xs"],
-	["sm", "sm"],
-	["md", "md"],
-	["lg", "lg"],
-	["xl", "xl"],
-	["full", "full"],
-] as const;
-
-function RadiusShowcase({ tokens }: { tokens: any }) {
-	return (
-		<Section id="radius" title="Radius" tokens={tokens}>
-			<div style={{ display: "flex", gap: toRem(tokens.spacing.lg), flexWrap: "wrap" }}>
-				{RADIUS_KEYS.map(([key, label]) => {
-					const val = tokens.radius[key];
-					return (
-						<div key={key} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: toRem(tokens.spacing.xs) }}>
-							<div
-								style={{
-									width: toRem(56),
-									height: toRem(56),
-									backgroundColor: tokens.color.primary,
-									borderRadius: toRem(val),
-								}}
-							/>
-							<span style={{ fontSize: toRem(tokens.typography.caption1.fontSize), color: tokens.color.textMuted }}>
-								{label} ({val}dp)
-							</span>
-						</div>
-					);
-				})}
-			</div>
-		</Section>
-	);
-}
-
-/* ─── Motion showcase ──────────────────────────────────── */
-
-const DURATION_KEYS = [
-	["durationInstant", "Instant"],
-	["durationFast", "Fast"],
-	["durationNormal", "Normal"],
-	["durationSlow", "Slow"],
-	["durationSlower", "Slower"],
-] as const;
-
-function MotionShowcase({ tokens }: { tokens: any }) {
-	const [animate, setAnimate] = useState(false);
-
-	const toggle = useCallback(() => {
-		setAnimate((a) => !a);
-	}, []);
-
-	return (
-		<Section id="motion" title="Motion" tokens={tokens}>
-			<Button text={animate ? "Reset" : "Play Animation"} variant="soft" onClick={toggle} />
-			<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.md), marginBlockStart: toRem(tokens.spacing.lg) }}>
-				{DURATION_KEYS.map(([key, label]) => {
-					const val = tokens.motion[key];
-					return (
-						<div key={key} style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md) }}>
-							<span style={{ fontSize: toRem(tokens.typography.caption1.fontSize), color: tokens.color.textMuted, minWidth: "6rem", textAlign: "end" }}>
-								{label} ({val}ms)
-							</span>
-							<div
-								style={{
-									width: toRem(40),
-									height: toRem(40),
-									backgroundColor: tokens.color.primary,
-									borderRadius: toRem(tokens.radius.md),
-									transform: animate ? "translateX(200px)" : "translateX(0)",
-									transition: `transform ${val}ms ${tokens.motion.easingStandard}`,
-								}}
-							/>
-						</div>
-					);
-				})}
-			</div>
-		</Section>
-	);
-}
-
 /* ─── Size options for showcases ────────────────────────── */
 
 const SIZE_OPTIONS = [
@@ -453,6 +176,20 @@ function HeightAlignmentShowcase({ tokens }: { tokens: any }) {
 					<Button text="Solid" variant="solid" intent="primary" size={selectedSize as any} />
 					<Button text="Outline" variant="outline" intent="neutral" size={selectedSize as any} />
 					<Button text="Ghost" variant="ghost" intent="primary" size={selectedSize as any} />
+					<Button
+						text="With Icon"
+						variant="solid"
+						intent="primary"
+						size={selectedSize as any}
+						iconPosition="start"
+						iconStart={searchIcon}
+					/>
+					<IconButton
+						icon={starIcon}
+						variant="solid"
+						intent="primary"
+						size={selectedSize as any}
+					/>
 					<div style={{ width: "fit-content", flexShrink: 0 }}>
 						<SegmentedControl
 							options={[
@@ -471,16 +208,36 @@ function HeightAlignmentShowcase({ tokens }: { tokens: any }) {
 	);
 }
 
-/* ─── Button variants showcase ─────────────────────────── */
+/* ─── Button showcase (merged: plain + with icons) ─────── */
 
 const BUTTON_VARIANTS = ["solid", "soft", "outline", "ghost"] as const;
 const BUTTON_INTENTS = ["primary", "neutral", "danger"] as const;
 
+const ICON_POSITION_OPTIONS = [
+	{ id: "none", label: "None" },
+	{ id: "start", label: "Start" },
+	{ id: "end", label: "End" },
+	{ id: "top", label: "Top" },
+	{ id: "bottom", label: "Bottom" },
+	{ id: "startend", label: "Start+End" },
+];
+
 function ButtonShowcase({ tokens }: { tokens: any }) {
 	const [selectedSize, setSelectedSize] = useState("md");
+	const [selectedPosition, setSelectedPosition] = useState("none");
+	const isStartEnd = selectedPosition === "startend";
+	const hasIcons = selectedPosition !== "none";
 
 	return (
-		<Section id="buttons" title="Button — Visual × Intent" tokens={tokens}>
+		<Section id="buttons" title="Button" tokens={tokens}>
+			<div style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md), marginBlockEnd: toRem(tokens.spacing.md) }}>
+				<span style={{ fontSize: toRem(tokens.typography.caption1.fontSize), color: tokens.color.textMuted }}>Icon position:</span>
+				<SegmentedControl
+					options={ICON_POSITION_OPTIONS}
+					selectedId={selectedPosition}
+					onSelectionChange={setSelectedPosition}
+				/>
+			</div>
 			<div style={{ marginBlockEnd: toRem(tokens.spacing.xl) }}>
 				<SegmentedControl
 					options={SIZE_OPTIONS}
@@ -499,9 +256,112 @@ function ButtonShowcase({ tokens }: { tokens: any }) {
 								{intent}:
 							</span>
 							<div style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md), overflowX: "auto" }}>
-								<Button text={`${variant} ${selectedSize}`} variant={variant} intent={intent} size={selectedSize as any} />
-								<Button text="Disabled" variant={variant} intent={intent} size={selectedSize as any} disabled />
-								<Button text="Loading" variant={variant} intent={intent} size={selectedSize as any} loading />
+								{hasIcons ? (
+									<>
+										{isStartEnd ? (
+											<Button
+												text="Start+End"
+												variant={variant}
+												intent={intent}
+												size={selectedSize as any}
+												iconPosition="start"
+												iconStart={arrowLeftIcon}
+												iconEnd={arrowRightIcon}
+											/>
+										) : (
+											<Button
+												text="Кнопка"
+												variant={variant}
+												intent={intent}
+												size={selectedSize as any}
+												iconPosition={selectedPosition as any}
+												iconStart={selectedPosition !== "end" ? searchIcon : undefined}
+												iconEnd={selectedPosition === "end" ? chevronRightIcon : undefined}
+											/>
+										)}
+										<Button
+											text="Disabled"
+											variant={variant}
+											intent={intent}
+											size={selectedSize as any}
+											iconPosition={isStartEnd ? "start" : selectedPosition as any}
+											iconStart={starIcon}
+											disabled
+										/>
+										<Button
+											text="Loading"
+											variant={variant}
+											intent={intent}
+											size={selectedSize as any}
+											iconPosition={selectedPosition as any}
+											iconStart={checkIcon}
+											loading
+										/>
+									</>
+								) : (
+									<>
+										<Button text={`${variant} ${selectedSize}`} variant={variant} intent={intent} size={selectedSize as any} />
+										<Button text="Disabled" variant={variant} intent={intent} size={selectedSize as any} disabled />
+										<Button text="Loading" variant={variant} intent={intent} size={selectedSize as any} loading />
+									</>
+								)}
+							</div>
+						</div>
+					))}
+				</div>
+			))}
+		</Section>
+	);
+}
+
+/* ─── Icon Button showcase ─────────────────────────────── */
+
+function IconButtonShowcase({ tokens }: { tokens: any }) {
+	const [selectedSize, setSelectedSize] = useState("md");
+
+	return (
+		<Section id="icon-button" title="Icon Button" tokens={tokens}>
+			<div style={{ marginBlockEnd: toRem(tokens.spacing.xl) }}>
+				<SegmentedControl
+					options={SIZE_OPTIONS}
+					selectedId={selectedSize}
+					onSelectionChange={setSelectedSize}
+				/>
+			</div>
+			{BUTTON_VARIANTS.map((variant) => (
+				<div key={variant} style={{ marginBlockEnd: toRem(tokens.spacing.xl) }}>
+					<h3 style={{ fontSize: toRem(tokens.typography.headline.fontSize), fontWeight: 600, color: tokens.color.textPrimary, marginBlockEnd: toRem(tokens.spacing.sm), textTransform: "capitalize" }}>
+						{variant}
+					</h3>
+					{BUTTON_INTENTS.map((intent) => (
+						<div key={intent} style={{ marginBlockEnd: toRem(tokens.spacing.md) }}>
+							<span style={{ fontSize: toRem(tokens.typography.caption1.fontSize), color: tokens.color.textMuted, marginInlineEnd: toRem(tokens.spacing.sm), textTransform: "capitalize" }}>
+								{intent}:
+							</span>
+							<div style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md), overflowX: "auto" }}>
+								{ICON_BUTTON_SAMPLES.map((icon, i) => (
+									<IconButton
+										key={i}
+										icon={icon}
+										variant={variant}
+										intent={intent}
+										size={selectedSize as any}
+									/>
+								))}
+								<IconButton
+									icon={starIcon}
+									variant={variant}
+									intent={intent}
+									size={selectedSize as any}
+									disabled
+								/>
+								<IconButton
+									icon={starIcon}
+									variant={variant}
+									intent={intent}
+									size={selectedSize as any}
+									loading
+								/>
 							</div>
 						</div>
 					))}
@@ -514,7 +374,6 @@ function ButtonShowcase({ tokens }: { tokens: any }) {
 /* ─── Surface variants showcase ────────────────────────── */
 
 const SURFACE_VARIANTS = ["solid", "soft", "outline"] as const;
-
 const SURFACE_LEVELS = [0, 1, 2, 3, 4, 5] as const;
 
 const SURFACE_MODES = [
@@ -657,38 +516,9 @@ function SegmentedControlShowcase({ tokens }: { tokens: any }) {
 	);
 }
 
-/* ─── Breakpoints showcase ─────────────────────────────── */
-
-function BreakpointsShowcase({ tokens }: { tokens: any }) {
-	const bp = [
-		["compact", tokens.breakpoints.compact],
-		["medium", tokens.breakpoints.medium],
-		["expanded", tokens.breakpoints.expanded],
-		["large", tokens.breakpoints.large],
-		["extraLarge", tokens.breakpoints.extraLarge],
-	] as const;
-
-	return (
-		<Section id="breakpoints" title="Breakpoints (Material Design 3)" tokens={tokens}>
-			<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.sm) }}>
-				{bp.map(([label, val]) => (
-					<div key={label} style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md) }}>
-						<span style={{ fontSize: toRem(tokens.typography.caption1.fontSize), color: tokens.color.textMuted, minWidth: "6rem", textAlign: "end" }}>
-							{label}
-						</span>
-						<span style={{ fontSize: toRem(tokens.typography.body.fontSize), fontWeight: 600, color: tokens.color.textPrimary, fontFamily: "monospace" }}>
-							{val}dp
-						</span>
-					</div>
-				))}
-			</div>
-		</Section>
-	);
-}
-
 /* ─── Main Page ────────────────────────────────────────── */
 
-export default function SecondPage() {
+export default function ComponentsPage() {
 	const router = useRouter();
 	const { tokens, dir, setDir } = useUIKitTheme();
 
@@ -711,7 +541,7 @@ export default function SecondPage() {
 					backgroundColor: tokens.color.surface,
 				}}
 			>
-				<Button text="← Назад" variant="ghost" onClick={() => router.back()} />
+				<Button text="← Назад" variant="ghost" onClick={() => router.push("/")} />
 				<div style={{ display: "flex", gap: toRem(tokens.spacing.sm), alignItems: "center" }}>
 					<div style={{ width: "7.5rem" }}>
 						<SegmentedControl
@@ -741,7 +571,7 @@ export default function SecondPage() {
 						textAlign: "center",
 					}}
 				>
-					<Text text="Design System Showcase" variant="h1" />
+					<Text text="Components" variant="h1" />
 					<p
 						style={{
 							fontSize: toRem(tokens.typography.body.fontSize),
@@ -749,7 +579,7 @@ export default function SecondPage() {
 							marginBlockStart: toRem(tokens.spacing.sm),
 						}}
 					>
-						Все токены, размеры и компоненты UIKit
+						Кнопки, иконки, поверхности, текст, контролы
 					</p>
 				</div>
 
@@ -763,14 +593,8 @@ export default function SecondPage() {
 						gap: toRem(tokens.spacing.xxxl),
 					}}
 				>
-					<TypographyShowcase tokens={tokens} />
-					<ColorsShowcase tokens={tokens} />
-					<SpacingShowcase tokens={tokens} />
-					<SizingShowcase tokens={tokens} />
-					<RadiusShowcase tokens={tokens} />
-					<MotionShowcase tokens={tokens} />
-					<BreakpointsShowcase tokens={tokens} />
 					<ButtonShowcase tokens={tokens} />
+					<IconButtonShowcase tokens={tokens} />
 					<SurfaceShowcase tokens={tokens} />
 					<TextShowcase tokens={tokens} />
 					<SegmentedControlShowcase tokens={tokens} />

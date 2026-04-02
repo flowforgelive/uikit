@@ -1,0 +1,82 @@
+.iconButton {
+	position: relative;
+	overflow: hidden;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--ib-bg);
+	color: var(--ib-text);
+	border: none;
+	box-shadow: inset 0 0 0 var(--ib-border-width, 1px) var(--ib-border);
+	width: var(--ib-size);
+	height: var(--ib-size);
+	border-radius: var(--ib-radius);
+	cursor: pointer;
+	padding: 0;
+	transition: background var(--ib-duration) var(--ib-easing),
+		box-shadow var(--ib-duration) var(--ib-easing),
+		filter var(--ib-duration) var(--ib-easing);
+}
+
+.iconButton::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: radial-gradient(circle at center, currentColor 0%, transparent 70%);
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	pointer-events: none;
+}
+
+.iconButton:active:not([aria-disabled="true"])::after {
+	opacity: 0.12;
+	transition: opacity 0s;
+}
+
+.iconButton:hover:not([aria-disabled="true"]) {
+	background: var(--ib-bg-hover);
+	color: var(--ib-text-hover);
+	box-shadow: inset 0 0 0 var(--ib-border-width) var(--ib-border-hover);
+}
+
+.iconButton:active:not([aria-disabled="true"]) {
+	background: var(--ib-bg-hover);
+	color: var(--ib-text-hover);
+	box-shadow: inset 0 0 0 var(--ib-border-width) var(--ib-border-hover);
+	filter: brightness(0.88);
+}
+
+.iconButton[aria-disabled="true"] {
+	cursor: not-allowed;
+	opacity: 0.6;
+}
+
+.iconButton:focus-visible {
+	outline: none;
+	box-shadow: inset 0 0 0 var(--ib-focus-ring-width, 2px) var(--ib-focus-ring);
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: var(--ib-icon-size);
+	height: var(--ib-icon-size);
+	color: inherit;
+}
+
+.spinner {
+	width: var(--ib-icon-size);
+	height: var(--ib-icon-size);
+	border: 2px solid currentColor;
+	border-top-color: transparent;
+	border-radius: 50%;
+	animation: spin var(--ib-spinner-duration) linear infinite;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}

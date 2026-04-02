@@ -46,6 +46,7 @@ import com.uikit.components.atoms.button.ButtonSize
 import com.uikit.components.atoms.text.TextBlockVariant
 import com.uikit.components.atoms.surface.SurfaceLevel
 import com.uikit.compose.components.atoms.button.Button
+import com.uikit.compose.components.atoms.iconbutton.IconButton
 import com.uikit.compose.components.atoms.segmentedcontrol.SegmentedControl
 import com.uikit.compose.components.atoms.text.TextBlock
 import com.uikit.compose.components.atoms.surface.Surface
@@ -54,12 +55,24 @@ import com.uikit.compose.theme.UIKitTheme
 import com.uikit.compose.theme.parseColor
 import com.uikit.foundation.ColorIntent
 import com.uikit.foundation.ComponentSize
+import com.uikit.foundation.IconPosition
 import com.uikit.foundation.LayoutDirection
 import com.uikit.foundation.VisualVariant
 import com.uikit.foundation.InMemoryThemeProvider
 import com.uikit.foundation.ThemeMode
 import com.uikit.tokens.DesignTokens
 import kotlinx.coroutines.launch
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Icon
 
 @Composable
 fun CatalogApp() {
@@ -121,8 +134,29 @@ fun CatalogApp() {
 					}
 				}
 
-				"second" -> {
-					SecondScreen(
+				"foundation" -> {
+					FoundationScreen(
+						tokens = currentTokens,
+						currentMode = currentMode,
+						currentDir = currentDir,
+						onDirChange = { currentDir = it },
+						onThemeChange = { id ->
+							scope.launch {
+								themeProvider.setTheme(
+									when (id) {
+										"dark" -> ThemeMode.Dark
+										"light" -> ThemeMode.Light
+										else -> ThemeMode.System
+									},
+								)
+							}
+						},
+						onBack = { onAction("/first") },
+					)
+				}
+
+				"components" -> {
+					ComponentsScreen(
 						tokens = currentTokens,
 						currentMode = currentMode,
 						currentDir = currentDir,
@@ -186,15 +220,23 @@ private fun DirSwitcherControl(
 @Composable
 private fun FirstScreen(onAction: (String) -> Unit) {
 	TextBlock(
-		text = "Первая страница",
+		text = "UIKit Catalog",
 		variant = TextBlockVariant.H1,
 	)
 
 	Spacer(Modifier.height(24.dp))
 
 	Button(
-		text = "Перейти на вторую страницу",
-		onClick = { onAction("/second") },
+		text = "Foundation Tokens",
+		onClick = { onAction("/foundation") },
+	)
+
+	Spacer(Modifier.height(12.dp))
+
+	Button(
+		text = "Components",
+		variant = VisualVariant.Soft,
+		onClick = { onAction("/components") },
 	)
 }
 
@@ -224,10 +266,10 @@ private fun ShowcaseSection(
 	}
 }
 
-/* ─── Second screen (Showcase) ──────────────────────────── */
+/* ─── Foundation screen ─────────────────────────────────── */
 
 @Composable
-private fun SecondScreen(
+private fun FoundationScreen(
 	tokens: DesignTokens,
 	currentMode: ThemeMode,
 	currentDir: LayoutDirection,
@@ -264,10 +306,10 @@ private fun SecondScreen(
 			modifier = Modifier.fillMaxWidth().padding(vertical = tokens.spacing.lg.dp),
 			horizontalAlignment = Alignment.CenterHorizontally,
 		) {
-			TextBlock(text = "Design System Showcase", variant = TextBlockVariant.H1)
+			TextBlock(text = "Foundation Tokens", variant = TextBlockVariant.H1)
 			Spacer(Modifier.height(tokens.spacing.sm.dp))
 			androidx.compose.material3.Text(
-				text = "Все токены, размеры и компоненты UIKit",
+				text = "Типография, цвета, отступы, размеры, радиусы, анимации, брейкпоинты",
 				fontSize = tokens.typography.body.fontSize.sp,
 				color = parseColor(tokens.color.textSecondary),
 			)
@@ -289,7 +331,70 @@ private fun SecondScreen(
 			RadiusShowcase(tokens)
 			MotionShowcase(tokens)
 			BreakpointsShowcase(tokens)
+		}
+	}
+}
+
+/* ─── Components screen ─────────────────────────────────── */
+
+@Composable
+private fun ComponentsScreen(
+	tokens: DesignTokens,
+	currentMode: ThemeMode,
+	currentDir: LayoutDirection,
+	onDirChange: (LayoutDirection) -> Unit,
+	onThemeChange: (String) -> Unit,
+	onBack: () -> Unit,
+) {
+	Column(
+		modifier =
+			Modifier
+				.fillMaxSize()
+				.verticalScroll(rememberScrollState()),
+		horizontalAlignment = Alignment.CenterHorizontally,
+	) {
+		// Top bar
+		Row(
+			modifier =
+				Modifier
+					.fillMaxWidth()
+					.background(parseColor(tokens.color.surface))
+					.padding(horizontal = tokens.spacing.xl.dp, vertical = tokens.spacing.md.dp),
+			verticalAlignment = Alignment.CenterVertically,
+			horizontalArrangement = Arrangement.SpaceBetween,
+		) {
+			Button(text = "← Назад", variant = VisualVariant.Ghost, onClick = onBack)
+			Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+				DirSwitcherControl(currentDir, onDirChange)
+				ThemeSwitcherControl(currentMode, onThemeChange)
+			}
+		}
+
+		// Title
+		Column(
+			modifier = Modifier.fillMaxWidth().padding(vertical = tokens.spacing.lg.dp),
+			horizontalAlignment = Alignment.CenterHorizontally,
+		) {
+			TextBlock(text = "Components", variant = TextBlockVariant.H1)
+			Spacer(Modifier.height(tokens.spacing.sm.dp))
+			androidx.compose.material3.Text(
+				text = "Кнопки, иконки, поверхности, текст, контролы",
+				fontSize = tokens.typography.body.fontSize.sp,
+				color = parseColor(tokens.color.textSecondary),
+			)
+		}
+
+		// Sections
+		Column(
+			modifier =
+				Modifier
+					.widthIn(max = 960.dp)
+					.padding(horizontal = tokens.spacing.xl.dp)
+					.padding(bottom = tokens.spacing.xxxxl.dp),
+			verticalArrangement = Arrangement.spacedBy(tokens.spacing.xxxl.dp),
+		) {
 			ButtonShowcase(tokens)
+			IconButtonShowcase(tokens)
 			SurfaceShowcase(tokens)
 			TextShowcase(tokens)
 			SegmentedControlShowcase(tokens)
@@ -786,14 +891,156 @@ private fun sizeFromId(id: String): ComponentSize =
 private fun buttonSizeFromComponentSize(cs: ComponentSize): ButtonSize =
 	ButtonSize.entries.first { it.name == cs.name }
 
-/* ─── Button variants ────────────────────────────────────── */
+/* ─── Button variants (merged with icons) ────────────────── */
+
+private val ICON_POSITION_OPTIONS = listOf(
+	"None" to "None",
+	"Start" to "Start",
+	"End" to "End",
+	"Top" to "Top",
+	"Bottom" to "Bottom",
+	"StartEnd" to "Start+End",
+)
+
+private fun iconPositionFromId(id: String): IconPosition = when (id) {
+	"Start" -> IconPosition.Start
+	"End" -> IconPosition.End
+	"Top" -> IconPosition.Top
+	"Bottom" -> IconPosition.Bottom
+	else -> IconPosition.None
+}
 
 @Composable
 private fun ButtonShowcase(tokens: DesignTokens) {
 	var selectedSizeId by remember { mutableStateOf(ComponentSize.Md.name) }
+	var selectedPositionId by remember { mutableStateOf("None") }
 	val selectedSize = buttonSizeFromComponentSize(sizeFromId(selectedSizeId))
+	val selectedPosition = iconPositionFromId(selectedPositionId)
+	val isStartEnd = selectedPositionId == "StartEnd"
+	val hasIcons = selectedPositionId != "None"
 
-	ShowcaseSection("Button — Visual × Intent", tokens) {
+	ShowcaseSection("Button", tokens) {
+		Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xl.dp)) {
+			Row(
+				verticalAlignment = Alignment.CenterVertically,
+				horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
+			) {
+				androidx.compose.material3.Text(
+					text = "Icon position:",
+					fontSize = tokens.typography.caption1.fontSize.sp,
+					color = parseColor(tokens.color.textMuted),
+				)
+				SegmentedControl(
+					options = ICON_POSITION_OPTIONS,
+					selectedId = selectedPositionId,
+					onSelectionChange = { selectedPositionId = it },
+				)
+			}
+			SegmentedControl(
+				options = SIZE_OPTIONS,
+				selectedId = selectedSizeId,
+				onSelectionChange = { selectedSizeId = it },
+			)
+
+			VisualVariant.entries.forEach { variant ->
+				Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
+					androidx.compose.material3.Text(
+						text = variant.name,
+						fontSize = tokens.typography.headline.fontSize.sp,
+						fontWeight = FontWeight.SemiBold,
+						color = parseColor(tokens.color.textPrimary),
+					)
+					ColorIntent.entries.forEach { intent ->
+						Row(
+							verticalAlignment = Alignment.CenterVertically,
+							horizontalArrangement = Arrangement.spacedBy(tokens.spacing.sm.dp),
+						) {
+							androidx.compose.material3.Text(
+								text = "${intent.name}:",
+								fontSize = tokens.typography.caption1.fontSize.sp,
+								color = parseColor(tokens.color.textMuted),
+								modifier = Modifier.width(60.dp),
+							)
+							Row(
+								horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
+								modifier = Modifier.horizontalScroll(rememberScrollState()),
+							) {
+								if (hasIcons) {
+									if (isStartEnd) {
+										Button(
+											text = "Start+End",
+											variant = variant,
+											intent = intent,
+											size = selectedSize,
+											iconPosition = IconPosition.Start,
+											iconStart = { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) },
+											iconEnd = { Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null) },
+										)
+									} else {
+										Button(
+											text = "Кнопка",
+											variant = variant,
+											intent = intent,
+											size = selectedSize,
+											iconPosition = selectedPosition,
+											iconStart = if (selectedPosition != IconPosition.End) ({ Icon(Icons.Filled.Search, contentDescription = null) }) else null,
+											iconEnd = if (selectedPosition == IconPosition.End) ({ Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) }) else null,
+										)
+									}
+									Button(
+										text = "Disabled",
+										variant = variant,
+										intent = intent,
+										size = selectedSize,
+										iconPosition = if (isStartEnd) IconPosition.Start else selectedPosition,
+										iconStart = { Icon(Icons.Filled.Star, contentDescription = null) },
+										disabled = true,
+									)
+									Button(
+										text = "Loading",
+										variant = variant,
+										intent = intent,
+										size = selectedSize,
+										iconPosition = selectedPosition,
+										iconStart = { Icon(Icons.Filled.Check, contentDescription = null) },
+										loading = true,
+									)
+								} else {
+									Button(
+										text = "${variant.name} ${selectedSize.name}",
+										variant = variant,
+										intent = intent,
+										size = selectedSize,
+									)
+									Button(text = "Disabled", variant = variant, intent = intent, size = selectedSize, disabled = true)
+									Button(text = "Loading", variant = variant, intent = intent, size = selectedSize, loading = true)
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+/* ─── Icon Button ────────────────────────────────────────── */
+
+private val ICON_BUTTON_SAMPLES: List<@Composable () -> Unit> = listOf(
+	{ Icon(Icons.Filled.Search, contentDescription = null) },
+	{ Icon(Icons.Filled.Add, contentDescription = null) },
+	{ Icon(Icons.Filled.Star, contentDescription = null) },
+	{ Icon(Icons.Filled.Settings, contentDescription = null) },
+	{ Icon(Icons.Filled.Close, contentDescription = null) },
+	{ Icon(Icons.Filled.Check, contentDescription = null) },
+)
+
+@Composable
+private fun IconButtonShowcase(tokens: DesignTokens) {
+	var selectedSizeId by remember { mutableStateOf(ComponentSize.Md.name) }
+	val selectedSize = sizeFromId(selectedSizeId)
+
+	ShowcaseSection("Icon Button", tokens) {
 		Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xl.dp)) {
 			SegmentedControl(
 				options = SIZE_OPTIONS,
@@ -824,14 +1071,28 @@ private fun ButtonShowcase(tokens: DesignTokens) {
 								horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
 								modifier = Modifier.horizontalScroll(rememberScrollState()),
 							) {
-								Button(
-									text = "${variant.name} ${selectedSize.name}",
+								ICON_BUTTON_SAMPLES.forEach { iconSlot ->
+									IconButton(
+										icon = iconSlot,
+										variant = variant,
+										intent = intent,
+										size = selectedSize,
+									)
+								}
+								IconButton(
+									icon = { Icon(Icons.Filled.Star, contentDescription = null) },
 									variant = variant,
 									intent = intent,
 									size = selectedSize,
+									disabled = true,
 								)
-								Button(text = "Disabled", variant = variant, intent = intent, size = selectedSize, disabled = true)
-								Button(text = "Loading", variant = variant, intent = intent, size = selectedSize, loading = true)
+								IconButton(
+									icon = { Icon(Icons.Filled.Star, contentDescription = null) },
+									variant = variant,
+									intent = intent,
+									size = selectedSize,
+									loading = true,
+								)
 							}
 						}
 					}
@@ -1059,6 +1320,20 @@ private fun HeightAlignmentShowcase(tokens: DesignTokens) {
 						variant = VisualVariant.Ghost,
 						intent = ColorIntent.Primary,
 						size = btnSize,
+					)
+					Button(
+						text = "With Icon",
+						variant = VisualVariant.Solid,
+						intent = ColorIntent.Primary,
+						size = btnSize,
+						iconPosition = IconPosition.Start,
+						iconStart = { Icon(Icons.Filled.Search, contentDescription = null) },
+					)
+					IconButton(
+						icon = { Icon(Icons.Filled.Star, contentDescription = null) },
+						variant = VisualVariant.Solid,
+						intent = ColorIntent.Primary,
+						size = selectedSize,
 					)
 					SegmentedControl(
 						options = listOf("a" to "On", "b" to "Off"),

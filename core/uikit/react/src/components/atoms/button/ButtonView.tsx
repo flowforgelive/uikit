@@ -7,6 +7,7 @@ import { toRem } from "../../../utils/units";
 import {
 	ButtonStyleResolver,
 	Visibility,
+	IconPosition,
 	type ButtonConfig,
 	type DesignTokens,
 } from "uikit-common";
@@ -14,6 +15,8 @@ import css from "./ButtonView.module.css";
 
 interface ButtonViewProps {
 	config: ButtonConfig;
+	iconStart?: React.ReactNode;
+	iconEnd?: React.ReactNode;
 	onAction?: (route: string) => void;
 	onClick?: () => void;
 	tokens?: DesignTokens;
@@ -21,7 +24,7 @@ interface ButtonViewProps {
 }
 
 export const ButtonView: React.FC<ButtonViewProps> = React.memo(
-	({ config, onAction, onClick, tokens: tokensProp, className }) => {
+	({ config, iconStart, iconEnd, onAction, onClick, tokens: tokensProp, className }) => {
 		const contextTokens = useDesignTokens();
 		const tokens = tokensProp ?? contextTokens;
 		const surface = useSurfaceContext();
@@ -41,6 +44,48 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 
 		if (config.visibility === Visibility.Gone) return null;
 
+		const isVertical =
+			config.iconPosition === IconPosition.Top ||
+			config.iconPosition === IconPosition.Bottom;
+
+		const hasIcon = config.hasIcon;
+
+		const renderIcon = (node: React.ReactNode) => (
+			<span className={css.icon}>{node}</span>
+		);
+
+		const renderContent = () => {
+			if (config.loading) {
+				return <span className={css.spinner} />;
+			}
+
+			if (!hasIcon) {
+				return config.text;
+			}
+
+			const textEl = <span className={css.label}>{config.text}</span>;
+
+			if (isVertical) {
+				const icon = iconStart ?? iconEnd;
+				if (!icon) return textEl;
+				return (
+					<span className={css.contentVertical}>
+						{config.iconPosition === IconPosition.Top && renderIcon(icon)}
+						{textEl}
+						{config.iconPosition === IconPosition.Bottom && renderIcon(icon)}
+					</span>
+				);
+			}
+
+			return (
+				<span className={css.content}>
+					{iconStart && renderIcon(iconStart)}
+					{textEl}
+					{iconEnd && renderIcon(iconEnd)}
+				</span>
+			);
+		};
+
 		return (
 			<button
 				onClick={handleClick}
@@ -51,12 +96,17 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 					{
 						"--btn-bg": style.colors.bg,
 						"--btn-bg-hover": style.colors.bgHover,
-						"--btn-text": style.colors.text,					"--btn-text-hover": style.colors.textHover,						"--btn-border": style.colors.border,
+						"--btn-text": style.colors.text,
+						"--btn-text-hover": style.colors.textHover,
+						"--btn-border": style.colors.border,
 						"--btn-border-hover": style.colors.borderHover,
 						"--btn-height": toRem(style.sizes.height),
 						"--btn-padding-h": toRem(style.sizes.paddingH),
-						"--btn-font-size": toRem(style.sizes.fontSize),					"--btn-font-weight": style.sizes.fontWeight,
-					"--btn-icon-size": toRem(style.sizes.iconSize),						"--btn-radius": toRem(style.radius),
+						"--btn-font-size": toRem(style.sizes.fontSize),
+						"--btn-font-weight": style.sizes.fontWeight,
+						"--btn-icon-size": toRem(style.sizes.iconSize),
+						"--btn-icon-gap": toRem(style.sizes.iconGap),
+						"--btn-radius": toRem(style.radius),
 						"--btn-letter-spacing": toRem(style.sizes.letterSpacing),
 						"--btn-duration": `${tokens.motion.durationFast}ms`,
 						"--btn-easing": tokens.motion.easingStandard,
@@ -69,11 +119,7 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 					} as React.CSSProperties
 				}
 			>
-				{config.loading ? (
-					<span className={css.spinner} />
-				) : (
-					config.text
-				)}
+				{renderContent()}
 			</button>
 		);
 	},

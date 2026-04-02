@@ -90,51 +90,18 @@ data class DesignTokens(
 
 		private val defaultControls =
 			InteractiveControlTokens(
-				xs = ControlSizeScale(
-					height = 24.0,
-					paddingH = 4.0,
-					fontSize = 11.0,
-					fontWeight = 600,
-					iconSize = 12.0,
-					letterSpacing = 0.07,
-					radius = 4.0,
+				proportions = ControlProportions(
+					heightRatio = 2.5,
+					paddingHRatio = 1.0,
+					iconSizeRatio = 1.2,
+					iconGapRatio = 0.5,
+					radiusFraction = 0.2,
 				),
-				sm = ControlSizeScale(
-					height = 32.0,
-					paddingH = 8.0,
-					fontSize = 12.0,
-					fontWeight = 600,
-					iconSize = 16.0,
-					letterSpacing = 0.0,
-					radius = 6.0,
-				),
-				md = ControlSizeScale(
-					height = 40.0,
-					paddingH = 16.0,
-					fontSize = 17.0,
-					fontWeight = 600,
-					iconSize = 20.0,
-					letterSpacing = -0.41,
-					radius = 8.0,
-				),
-				lg = ControlSizeScale(
-					height = 48.0,
-					paddingH = 24.0,
-					fontSize = 17.0,
-					fontWeight = 600,
-					iconSize = 24.0,
-					letterSpacing = -0.41,
-					radius = 10.0,
-				),
-				xl = ControlSizeScale(
-					height = 56.0,
-					paddingH = 32.0,
-					fontSize = 17.0,
-					fontWeight = 600,
-					iconSize = 32.0,
-					letterSpacing = -0.41,
-					radius = 12.0,
-				),
+				xs = ControlSizeInput(fontSize = 11.0, fontWeight = 600, letterSpacing = 0.07),
+				sm = ControlSizeInput(fontSize = 13.0, fontWeight = 600, letterSpacing = 0.0),
+				md = ControlSizeInput(fontSize = 15.0, fontWeight = 600, letterSpacing = -0.24),
+				lg = ControlSizeInput(fontSize = 17.0, fontWeight = 600, letterSpacing = -0.41),
+				xl = ControlSizeInput(fontSize = 20.0, fontWeight = 600, letterSpacing = -0.41),
 			)
 
 		private val defaultMotion =

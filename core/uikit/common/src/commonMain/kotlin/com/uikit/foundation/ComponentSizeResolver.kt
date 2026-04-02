@@ -5,8 +5,8 @@ import com.uikit.tokens.InteractiveControlTokens
 import kotlin.js.JsExport
 
 /**
- * Resolves a [ComponentSize] to a [ControlSizeScale] from the interactive control tokens,
- * optionally applying a density [scaleFactor].
+ * Resolves a [ComponentSize] to a [ControlSizeScale] by computing proportional dimensions
+ * from [ControlSizeInput] × [ControlProportions], optionally applying a density [scaleFactor].
  */
 @JsExport
 object ComponentSizeResolver {
@@ -15,22 +15,30 @@ object ComponentSizeResolver {
 		controls: InteractiveControlTokens,
 		scaleFactor: Double = 1.0,
 	): ControlSizeScale {
-		val base = when (size) {
+		val input = when (size) {
 			ComponentSize.Xs -> controls.xs
 			ComponentSize.Sm -> controls.sm
 			ComponentSize.Md -> controls.md
 			ComponentSize.Lg -> controls.lg
 			ComponentSize.Xl -> controls.xl
 		}
-		if (scaleFactor == 1.0) return base
+		val p = controls.proportions
+		val fs = input.fontSize
+		val height = fs * p.heightRatio
+		val paddingH = fs * p.paddingHRatio
+		val iconSize = fs * p.iconSizeRatio
+		val iconGap = fs * p.iconGapRatio
+		val radius = height * p.radiusFraction
+
 		return ControlSizeScale(
-			height = base.height * scaleFactor,
-			paddingH = base.paddingH * scaleFactor,
-			fontSize = base.fontSize,
-			fontWeight = base.fontWeight,
-			iconSize = base.iconSize * scaleFactor,
-			letterSpacing = base.letterSpacing,
-			radius = base.radius * scaleFactor,
+			height = height * scaleFactor,
+			paddingH = paddingH * scaleFactor,
+			fontSize = fs,
+			fontWeight = input.fontWeight,
+			iconSize = iconSize * scaleFactor,
+			iconGap = iconGap * scaleFactor,
+			letterSpacing = input.letterSpacing,
+			radius = radius * scaleFactor,
 		)
 	}
 }

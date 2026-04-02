@@ -12,6 +12,7 @@ kotlin {
 			implementation(project(":core:uikit:common"))
 			implementation(project(":core:uikit:compose"))
 			implementation(compose.material3)
+			implementation(compose.materialIconsExtended)
 			implementation(compose.foundation)
 			implementation(compose.runtime)
 		}

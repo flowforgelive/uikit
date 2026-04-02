@@ -1,45 +1,38 @@
-package com.uikit.compose.components.atoms.button
+package com.uikit.compose.components.atoms.iconbutton
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.uikit.components.atoms.button.ButtonConfig
-import com.uikit.components.atoms.button.ButtonSize
+import com.uikit.components.atoms.iconbutton.IconButtonConfig
 import com.uikit.foundation.ColorIntent
-import com.uikit.foundation.IconPosition
+import com.uikit.foundation.ComponentSize
 import com.uikit.foundation.VisualVariant
 
 @Composable
-fun Button(
-	text: String,
+fun IconButton(
+	icon: @Composable () -> Unit,
 	onClick: () -> Unit = {},
 	variant: VisualVariant = VisualVariant.Solid,
 	intent: ColorIntent = ColorIntent.Primary,
-	size: ButtonSize = ButtonSize.Md,
-	iconPosition: IconPosition = IconPosition.None,
-	iconStart: (@Composable () -> Unit)? = null,
-	iconEnd: (@Composable () -> Unit)? = null,
+	size: ComponentSize = ComponentSize.Md,
 	disabled: Boolean = false,
 	loading: Boolean = false,
+	ariaLabel: String? = null,
 	testTag: String? = null,
 	modifier: Modifier = Modifier,
 ) {
-	ButtonView(
+	IconButtonView(
 		config =
-			ButtonConfig(
-				text = text,
+			IconButtonConfig(
 				variant = variant,
 				intent = intent,
 				size = size,
-				iconPosition = iconPosition,
-				hasIconStart = iconStart != null,
-				hasIconEnd = iconEnd != null,
 				disabled = disabled,
 				loading = loading,
+				ariaLabel = ariaLabel,
 				testTag = testTag,
 			),
+		icon = icon,
 		onClick = onClick,
-		iconStart = iconStart,
-		iconEnd = iconEnd,
 		modifier = modifier,
 	)
 }

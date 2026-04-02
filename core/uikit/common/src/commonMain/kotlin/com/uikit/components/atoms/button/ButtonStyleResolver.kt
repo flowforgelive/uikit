@@ -9,6 +9,18 @@ import com.uikit.tokens.DesignTokens
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
 
+/**
+ * Resolved foreground/background color contract for interactive components.
+ *
+ * PLATFORM CONTRACT:
+ * - [text] / [textHover] define the color for ALL foreground content inside the component:
+ *   text labels, icons, spinners, and any other visual elements.
+ * - React: achieved via CSS `color` + `color: inherit` cascade.
+ * - Compose: achieved via `CompositionLocalProvider(LocalContentColor provides ...)`.
+ * - Platform implementations MUST propagate [text]/[textHover] to both text and icon slots.
+ *
+ * SSR SAFETY: Pure data class, no platform dependencies.
+ */
 @JsExport
 @Serializable
 data class ColorSet(
@@ -28,6 +40,7 @@ data class SizeSet(
 	val fontSize: Double,
 	val fontWeight: Int,
 	val iconSize: Double,
+	val iconGap: Double,
 	val letterSpacing: Double,
 )
 
@@ -73,6 +86,7 @@ object ButtonStyleResolver {
 			fontSize = scale.fontSize,
 			fontWeight = scale.fontWeight,
 			iconSize = scale.iconSize,
+			iconGap = scale.iconGap,
 			letterSpacing = scale.letterSpacing,
 		)
 

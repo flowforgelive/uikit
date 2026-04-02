@@ -1,11 +1,13 @@
 // Convenience API (primary)
 export { Button } from "./components/atoms/button/Button";
+export { IconButton } from "./components/atoms/icon-button/IconButton";
 export { Text } from "./components/atoms/text/Text";
 export { SegmentedControl } from "./components/atoms/segmented-control/SegmentedControl";
 export { Surface } from "./components/atoms/surface/Surface";
 
 // Config-based API (advanced / SDUI)
 export { ButtonView } from "./components/atoms/button/ButtonView";
+export { IconButtonView } from "./components/atoms/icon-button/IconButtonView";
 export { TextBlockView } from "./components/atoms/text/TextBlockView";
 export { SegmentedControlView } from "./components/atoms/segmented-control/SegmentedControlView";
 export { SurfaceView } from "./components/atoms/surface/SurfaceView";
@@ -27,6 +29,9 @@ export {
 	ComponentSize as ButtonSize,
 	ColorIntent,
 	VisualVariant,
+	IconPosition,
+	IconButtonConfig,
+	IconButtonStyleResolver,
 	TextBlockConfig,
 	TextBlockVariant,
 	SegmentedControlConfig,
