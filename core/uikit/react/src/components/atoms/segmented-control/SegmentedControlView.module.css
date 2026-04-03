@@ -37,11 +37,12 @@
 	cursor: pointer;
 	font-size: var(--sc-font-size);
 	color: var(--sc-text-inactive);
-	padding-inline: 12px;
+	padding-inline: var(--sc-padding-h);
 	white-space: nowrap;
 	transition: color var(--sc-duration) var(--sc-easing),
 		opacity var(--sc-duration) var(--sc-easing);
-	font-weight: 500;
+	font-weight: var(--sc-font-weight);
+	letter-spacing: var(--sc-letter-spacing);
 	line-height: 1;
 	height: 100%;
 }

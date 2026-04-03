@@ -48,4 +48,5 @@ data class InteractiveControlTokens(
 	val md: ControlSizeInput,
 	val lg: ControlSizeInput,
 	val xl: ControlSizeInput,
+	val segmentedControlTrackPadding: Double = 2.0,
 )

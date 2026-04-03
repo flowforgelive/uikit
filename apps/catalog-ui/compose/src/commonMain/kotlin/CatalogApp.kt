@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -197,7 +198,7 @@ private fun ThemeSwitcherControl(
 				ThemeMode.System -> "system"
 			},
 		onSelectionChange = onThemeChange,
-		modifier = Modifier.width(240.dp),
+		modifier = Modifier.wrapContentWidth(),
 	)
 }
 
@@ -212,7 +213,7 @@ private fun DirSwitcherControl(
 		onSelectionChange = { id ->
 			onDirChange(if (id == "rtl") LayoutDirection.Rtl else LayoutDirection.Ltr)
 		},
-		modifier = Modifier.width(120.dp),
+		modifier = Modifier.wrapContentWidth(),
 	)
 }
 
@@ -296,42 +297,48 @@ private fun FoundationScreen(
 			horizontalArrangement = Arrangement.SpaceBetween,
 		) {
 			Button(text = "← Назад", variant = VisualVariant.Ghost, onClick = onBack)
-			Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+			Row(horizontalArrangement = Arrangement.spacedBy(tokens.spacing.sm.dp)) {
 				DirSwitcherControl(currentDir, onDirChange)
 				ThemeSwitcherControl(currentMode, onThemeChange)
 			}
 		}
 
-		// Title
-		Column(
-			modifier = Modifier.fillMaxWidth().padding(vertical = tokens.spacing.lg.dp),
-			horizontalAlignment = Alignment.CenterHorizontally,
-		) {
-			TextBlock(text = "Foundation Tokens", variant = TextBlockVariant.H1)
-			Spacer(Modifier.height(tokens.spacing.sm.dp))
-			androidx.compose.material3.Text(
-				text = "Типография, цвета, отступы, размеры, радиусы, анимации, брейкпоинты",
-				fontSize = tokens.typography.body.fontSize.sp,
-				color = parseColor(tokens.color.textSecondary),
-			)
-		}
-
-		// Sections
+		// Content area (matches React's <main> padding structure)
 		Column(
 			modifier =
 				Modifier
-					.widthIn(max = 960.dp)
-					.padding(horizontal = tokens.spacing.xl.dp)
-					.padding(bottom = tokens.spacing.xxxxl.dp),
-			verticalArrangement = Arrangement.spacedBy(tokens.spacing.xxxl.dp),
+					.fillMaxWidth()
+					.padding(top = tokens.spacing.xxl.dp, bottom = tokens.spacing.xxxxl.dp)
+					.padding(horizontal = tokens.spacing.xl.dp),
+			horizontalAlignment = Alignment.CenterHorizontally,
 		) {
-			TypographyShowcase(tokens)
-			ColorsShowcase(tokens)
-			SpacingShowcase(tokens)
-			SizingShowcase(tokens)
-			RadiusShowcase(tokens)
-			MotionShowcase(tokens)
-			BreakpointsShowcase(tokens)
+			// Title
+			Column(
+				modifier = Modifier.fillMaxWidth().padding(vertical = tokens.spacing.lg.dp),
+				horizontalAlignment = Alignment.CenterHorizontally,
+			) {
+				TextBlock(text = "Foundation Tokens", variant = TextBlockVariant.H1)
+				Spacer(Modifier.height(tokens.spacing.sm.dp))
+				androidx.compose.material3.Text(
+					text = "Типография, цвета, отступы, размеры, радиусы, анимации, брейкпоинты",
+					fontSize = tokens.typography.body.fontSize.sp,
+					color = parseColor(tokens.color.textSecondary),
+				)
+			}
+
+			// Sections
+			Column(
+				modifier = Modifier.widthIn(max = 960.dp),
+				verticalArrangement = Arrangement.spacedBy(tokens.spacing.xxxl.dp),
+			) {
+				TypographyShowcase(tokens)
+				ColorsShowcase(tokens)
+				SpacingShowcase(tokens)
+				SizingShowcase(tokens)
+				RadiusShowcase(tokens)
+				MotionShowcase(tokens)
+				BreakpointsShowcase(tokens)
+			}
 		}
 	}
 }
@@ -382,7 +389,7 @@ private fun ComponentsScreen(
 		) {
 			Button(text = "← Назад", variant = VisualVariant.Ghost, onClick = onBack)
 			Row(
-				horizontalArrangement = Arrangement.spacedBy(8.dp),
+				horizontalArrangement = Arrangement.spacedBy(tokens.spacing.sm.dp),
 				verticalAlignment = Alignment.CenterVertically,
 				modifier = Modifier.horizontalScroll(rememberScrollState()),
 			) {
@@ -391,58 +398,66 @@ private fun ComponentsScreen(
 					text = "Размер:",
 					fontSize = tokens.typography.caption1.fontSize.sp,
 					color = parseColor(tokens.color.textMuted),
+					softWrap = false,
 				)
 				SegmentedControl(
 					options = SIZE_OPTIONS,
 					selectedId = globalSizeId,
 					onSelectionChange = { globalSizeId = it },
-					modifier = Modifier.width(180.dp),
+					modifier = Modifier.wrapContentWidth(),
 				)
 				androidx.compose.material3.Text(
 					text = "Скругление:",
 					fontSize = tokens.typography.caption1.fontSize.sp,
 					color = parseColor(tokens.color.textMuted),
+					softWrap = false,
 				)
 				SegmentedControl(
 					options = RADIUS_OPTIONS,
 					selectedId = globalRadiusId,
 					onSelectionChange = { globalRadiusId = it },
-					modifier = Modifier.width(220.dp),
+					modifier = Modifier.wrapContentWidth(),
 				)
 				ThemeSwitcherControl(currentMode, onThemeChange)
 			}
 		}
 
-		// Title
+		// Content area (matches React's <main> paddingBlockStart + paddingInline)
 		Column(
-			modifier = Modifier.fillMaxWidth().padding(vertical = tokens.spacing.lg.dp),
+			modifier =
+				Modifier
+					.fillMaxWidth()
+					.padding(top = tokens.spacing.xxl.dp, bottom = tokens.spacing.xxxxl.dp)
+					.padding(horizontal = tokens.spacing.xl.dp),
 			horizontalAlignment = Alignment.CenterHorizontally,
 		) {
-			TextBlock(text = "Компоненты (Components)", variant = TextBlockVariant.H1)
-			Spacer(Modifier.height(tokens.spacing.sm.dp))
-			androidx.compose.material3.Text(
-				text = "Кнопки, иконки, поверхности, текст, контролы",
-				fontSize = tokens.typography.body.fontSize.sp,
-				color = parseColor(tokens.color.textSecondary),
-			)
-		}
-
-		// Sections — wrapped in CompositionLocalProvider for radius override
-		CompositionLocalProvider(LocalDesignTokens provides modifiedTokens) {
+			// Title
 			Column(
-				modifier =
-					Modifier
-						.widthIn(max = 960.dp)
-						.padding(horizontal = tokens.spacing.xl.dp)
-						.padding(bottom = tokens.spacing.xxxxl.dp),
-				verticalArrangement = Arrangement.spacedBy(tokens.spacing.xxxl.dp),
+				modifier = Modifier.fillMaxWidth().padding(vertical = tokens.spacing.lg.dp),
+				horizontalAlignment = Alignment.CenterHorizontally,
 			) {
-				TextShowcase(modifiedTokens)
-				ButtonShowcase(modifiedTokens, globalSize)
-				IconButtonShowcase(modifiedTokens, globalSize)
-				SurfaceShowcase(modifiedTokens)
-				SegmentedControlShowcase(modifiedTokens, globalSize)
-				HeightAlignmentShowcase(modifiedTokens, globalSize)
+				TextBlock(text = "Компоненты (Components)", variant = TextBlockVariant.H1)
+				Spacer(Modifier.height(tokens.spacing.sm.dp))
+				androidx.compose.material3.Text(
+					text = "Кнопки, иконки, поверхности, текст, контролы",
+					fontSize = tokens.typography.body.fontSize.sp,
+					color = parseColor(tokens.color.textSecondary),
+				)
+			}
+
+			// Sections — wrapped in CompositionLocalProvider for radius override
+			CompositionLocalProvider(LocalDesignTokens provides modifiedTokens) {
+				Column(
+					modifier = Modifier.widthIn(max = 960.dp),
+					verticalArrangement = Arrangement.spacedBy(tokens.spacing.xxxl.dp),
+				) {
+					TextShowcase(modifiedTokens)
+					ButtonShowcase(modifiedTokens, globalSize)
+					IconButtonShowcase(modifiedTokens, globalSize)
+					SurfaceShowcase(modifiedTokens)
+					SegmentedControlShowcase(modifiedTokens, globalSize)
+					HeightAlignmentShowcase(modifiedTokens, globalSize)
+				}
 			}
 		}
 	}
@@ -991,6 +1006,7 @@ private fun ButtonShowcase(tokens: DesignTokens, globalSize: ComponentSize) {
 					text = "Позиция иконки:",
 					fontSize = tokens.typography.caption1.fontSize.sp,
 					color = parseColor(tokens.color.textMuted),
+					softWrap = false,
 				)
 				SegmentedControl(
 					options = ICON_POSITION_OPTIONS,
@@ -1000,28 +1016,27 @@ private fun ButtonShowcase(tokens: DesignTokens, globalSize: ComponentSize) {
 			}
 
 			VisualVariant.entries.forEach { variant ->
-				Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
+				Column {
 					androidx.compose.material3.Text(
 						text = variant.name,
 						fontSize = tokens.typography.headline.fontSize.sp,
 						fontWeight = FontWeight.SemiBold,
 						color = parseColor(tokens.color.textPrimary),
 					)
-					ColorIntent.entries.forEach { intent ->
-						Row(
-							verticalAlignment = Alignment.CenterVertically,
-							horizontalArrangement = Arrangement.spacedBy(tokens.spacing.sm.dp),
-						) {
-							androidx.compose.material3.Text(
-								text = "${intent.name}:",
-								fontSize = tokens.typography.caption1.fontSize.sp,
-								color = parseColor(tokens.color.textMuted),
-								modifier = Modifier.width(60.dp),
-							)
-							Row(
-								horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
-								modifier = Modifier.horizontalScroll(rememberScrollState()),
-							) {
+					Spacer(Modifier.height(tokens.spacing.sm.dp))
+					Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
+						ColorIntent.entries.forEach { intent ->
+							Column {
+								androidx.compose.material3.Text(
+									text = "${intent.name}:",
+									fontSize = tokens.typography.caption1.fontSize.sp,
+									color = parseColor(tokens.color.textMuted),
+								)
+								Row(
+									horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
+									verticalAlignment = Alignment.CenterVertically,
+									modifier = Modifier.horizontalScroll(rememberScrollState()),
+								) {
 								if (hasIcons) {
 									if (isStartEnd) {
 										Button(
@@ -1072,6 +1087,7 @@ private fun ButtonShowcase(tokens: DesignTokens, globalSize: ComponentSize) {
 									Button(text = "Disabled", variant = variant, intent = intent, size = selectedSize, disabled = true)
 									Button(text = "Loading", variant = variant, intent = intent, size = selectedSize, loading = true)
 								}
+								}
 							}
 						}
 					}
@@ -1100,50 +1116,50 @@ private fun IconButtonShowcase(tokens: DesignTokens, globalSize: ComponentSize) 
 		Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xl.dp)) {
 
 			VisualVariant.entries.forEach { variant ->
-				Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
+				Column {
 					androidx.compose.material3.Text(
 						text = variant.name,
 						fontSize = tokens.typography.headline.fontSize.sp,
 						fontWeight = FontWeight.SemiBold,
 						color = parseColor(tokens.color.textPrimary),
 					)
-					ColorIntent.entries.forEach { intent ->
-						Row(
-							verticalAlignment = Alignment.CenterVertically,
-							horizontalArrangement = Arrangement.spacedBy(tokens.spacing.sm.dp),
-						) {
-							androidx.compose.material3.Text(
-								text = "${intent.name}:",
-								fontSize = tokens.typography.caption1.fontSize.sp,
-								color = parseColor(tokens.color.textMuted),
-								modifier = Modifier.width(60.dp),
-							)
-							Row(
-								horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
-								modifier = Modifier.horizontalScroll(rememberScrollState()),
-							) {
-								ICON_BUTTON_SAMPLES.forEach { iconSlot ->
+					Spacer(Modifier.height(tokens.spacing.sm.dp))
+					Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
+						ColorIntent.entries.forEach { intent ->
+							Column {
+								androidx.compose.material3.Text(
+									text = "${intent.name}:",
+									fontSize = tokens.typography.caption1.fontSize.sp,
+									color = parseColor(tokens.color.textMuted),
+								)
+								Row(
+									horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
+									verticalAlignment = Alignment.CenterVertically,
+									modifier = Modifier.horizontalScroll(rememberScrollState()),
+								) {
+									ICON_BUTTON_SAMPLES.forEach { iconSlot ->
+										IconButton(
+											icon = iconSlot,
+											variant = variant,
+											intent = intent,
+											size = selectedSize,
+										)
+									}
 									IconButton(
-										icon = iconSlot,
+										icon = { Icon(Icons.Filled.Star, contentDescription = null) },
 										variant = variant,
 										intent = intent,
 										size = selectedSize,
+										disabled = true,
+									)
+									IconButton(
+										icon = { Icon(Icons.Filled.Star, contentDescription = null) },
+										variant = variant,
+										intent = intent,
+										size = selectedSize,
+										loading = true,
 									)
 								}
-								IconButton(
-									icon = { Icon(Icons.Filled.Star, contentDescription = null) },
-									variant = variant,
-									intent = intent,
-									size = selectedSize,
-									disabled = true,
-								)
-								IconButton(
-									icon = { Icon(Icons.Filled.Star, contentDescription = null) },
-									variant = variant,
-									intent = intent,
-									size = selectedSize,
-									loading = true,
-								)
 							}
 						}
 					}
@@ -1195,14 +1211,14 @@ private fun SurfaceShowcase(tokens: DesignTokens) {
 							) {
 								Column(modifier = Modifier.padding(tokens.spacing.md.dp)) {
 									androidx.compose.material3.Text(
-										text = level.name,
+										text = "Уровень ${level.ordinal}",
 										fontSize = tokens.typography.caption1.fontSize.sp,
 										fontWeight = FontWeight.SemiBold,
 										color = parseColor(tokens.color.textPrimary),
 									)
 									Spacer(Modifier.height(tokens.spacing.xs.dp))
 									androidx.compose.material3.Text(
-										text = variant.name,
+										text = variant.name.lowercase() + if (variant == VisualVariant.Ghost) " (hover)" else "",
 										fontSize = tokens.typography.caption2.fontSize.sp,
 										color = parseColor(tokens.color.textMuted),
 									)
@@ -1283,13 +1299,13 @@ private fun SegmentedControlShowcase(tokens: DesignTokens, globalSize: Component
 				)
 				Spacer(Modifier.height(tokens.spacing.xs.dp))
 				Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.sm.dp)) {
-					VisualVariant.entries.forEach { variant ->
+					listOf(VisualVariant.Surface, VisualVariant.Soft, VisualVariant.Outline, VisualVariant.Solid, VisualVariant.Ghost).forEach { variant ->
 						Row(
 							verticalAlignment = Alignment.CenterVertically,
 							horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
 						) {
 							androidx.compose.material3.Text(
-								text = variant.name,
+								text = variant.name.lowercase(),
 								fontSize = tokens.typography.caption1.fontSize.sp,
 								color = parseColor(tokens.color.textMuted),
 								modifier = Modifier.width(64.dp),
@@ -1322,10 +1338,10 @@ private fun SegmentedControlShowcase(tokens: DesignTokens, globalSize: Component
 						"settings" to { Icon(Icons.Filled.Settings, contentDescription = null) },
 					)
 					listOf(
-						"Start" to IconPosition.Start,
-						"End" to IconPosition.End,
-						"Top" to IconPosition.Top,
-						"Bottom" to IconPosition.Bottom,
+						"start" to IconPosition.Start,
+						"end" to IconPosition.End,
+						"top" to IconPosition.Top,
+						"bottom" to IconPosition.Bottom,
 					).forEach { (label, pos) ->
 						Row(
 							verticalAlignment = Alignment.CenterVertically,
@@ -1431,7 +1447,7 @@ private fun HeightAlignmentShowcase(tokens: DesignTokens, globalSize: ComponentS
 						selectedId = "a",
 						onSelectionChange = {},
 						size = selectedSize,
-						modifier = Modifier.width(160.dp),
+						modifier = Modifier.wrapContentWidth(),
 					)
 					TextBlock(
 						text = "Text label",

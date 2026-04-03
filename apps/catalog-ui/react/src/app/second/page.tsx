@@ -284,7 +284,7 @@ function ButtonShowcase({ tokens, globalSize }: { tokens: any; globalSize: strin
 									</>
 								) : (
 									<>
-										<Button text={`${variant} ${selectedSize}`} variant={variant} intent={intent} size={selectedSize as any} />
+										<Button text={`${variant.charAt(0).toUpperCase() + variant.slice(1)} ${selectedSize.charAt(0).toUpperCase() + selectedSize.slice(1)}`} variant={variant} intent={intent} size={selectedSize as any} />
 										<Button text="Disabled" variant={variant} intent={intent} size={selectedSize as any} disabled />
 										<Button text="Loading" variant={variant} intent={intent} size={selectedSize as any} loading />
 									</>

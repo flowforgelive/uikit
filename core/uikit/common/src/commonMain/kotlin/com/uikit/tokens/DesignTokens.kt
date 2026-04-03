@@ -19,6 +19,7 @@ data class DesignTokens(
 	val scaleFactor: Double,
 	val borderWidth: Double = 1.0,
 	val focusRingWidth: Double = 2.0,
+	val spinnerStrokeWidth: Double = 2.0,
 ) {
 	/**
 	 * SSR SAFETY: These values are cached as singletons in Node.js between requests.

@@ -11,8 +11,8 @@ import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LocalContentColor
+import com.uikit.compose.components.atoms.Spinner
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -106,10 +106,11 @@ fun IconButtonView(
 	) {
 		CompositionLocalProvider(LocalContentColor provides textColor) {
 			if (config.loading) {
-				CircularProgressIndicator(
-					modifier = Modifier.size(style.sizes.iconSize.dp),
+				Spinner(
+					size = style.sizes.iconSize.dp,
 					color = textColor,
-					strokeWidth = 2.dp,
+					strokeWidth = tokens.spinnerStrokeWidth.dp,
+					durationMs = (tokens.motion.durationSlower * 1.5).toInt(),
 				)
 			} else {
 				Box(

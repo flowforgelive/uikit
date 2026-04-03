@@ -67,6 +67,7 @@ export const IconButtonView: React.FC<IconButtonViewProps> = React.memo(
 						"--ib-border-width": `${tokens.borderWidth}px`,
 						"--ib-focus-ring-width": `${tokens.focusRingWidth}px`,
 						"--ib-spinner-duration": `${tokens.motion.durationSlower * 1.5}ms`,
+						"--ib-spinner-stroke": `${tokens.spinnerStrokeWidth}px`,
 						visibility:
 							config.visibility === Visibility.Invisible ? "hidden" : undefined,
 					} as React.CSSProperties

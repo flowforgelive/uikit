@@ -65,7 +65,7 @@ fun SurfaceView(
 			modifier
 				.then(
 					if (config.elevated) {
-						Modifier.shadow(4.dp, shape)
+						Modifier.shadow(style.elevationDp.dp, shape)
 					} else {
 						Modifier
 					},

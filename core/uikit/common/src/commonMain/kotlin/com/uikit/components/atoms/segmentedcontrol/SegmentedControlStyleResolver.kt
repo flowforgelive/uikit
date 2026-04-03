@@ -23,6 +23,8 @@ data class SegmentedControlSizes(
 	val height: Double,
 	val paddingH: Double,
 	val fontSize: Double,
+	val fontWeight: Int,
+	val letterSpacing: Double,
 	val radius: Double,
 	val thumbRadius: Double,
 	val trackPadding: Double,
@@ -44,10 +46,10 @@ data class ResolvedSegmentedControlStyle(
  */
 @JsExport
 object SegmentedControlStyleResolver {
-	private const val TRACK_PADDING = 2.0
 
 	fun resolve(config: SegmentedControlConfig, tokens: DesignTokens): ResolvedSegmentedControlStyle {
 		val scale = ComponentSizeResolver.resolve(config.size, tokens.controls, tokens.scaleFactor)
+		val trackPadding = tokens.controls.segmentedControlTrackPadding
 		return ResolvedSegmentedControlStyle(
 			colors = resolveColors(config.variant, tokens),
 			sizes =
@@ -55,9 +57,11 @@ object SegmentedControlStyleResolver {
 					height = scale.height,
 					paddingH = scale.paddingH,
 					fontSize = scale.fontSize,
+					fontWeight = scale.fontWeight,
+					letterSpacing = scale.letterSpacing,
 					radius = scale.radius,
-					thumbRadius = scale.radius - TRACK_PADDING,
-					trackPadding = TRACK_PADDING,
+					thumbRadius = scale.radius - trackPadding,
+					trackPadding = trackPadding,
 					iconSize = scale.iconSize,
 					iconGap = scale.iconGap,
 				),
@@ -74,6 +78,7 @@ object SegmentedControlStyleResolver {
 			tokens.controls,
 			tokens.scaleFactor,
 		)
+		val trackPadding = tokens.controls.segmentedControlTrackPadding
 		return ResolvedSegmentedControlStyle(
 			colors = resolveColors(VisualVariant.Surface, tokens),
 			sizes =
@@ -81,9 +86,11 @@ object SegmentedControlStyleResolver {
 					height = scale.height,
 					paddingH = scale.paddingH,
 					fontSize = scale.fontSize,
+					fontWeight = scale.fontWeight,
+					letterSpacing = scale.letterSpacing,
 					radius = scale.radius,
-					thumbRadius = scale.radius - TRACK_PADDING,
-					trackPadding = TRACK_PADDING,
+					thumbRadius = scale.radius - trackPadding,
+					trackPadding = trackPadding,
 					iconSize = scale.iconSize,
 					iconGap = scale.iconGap,
 				),

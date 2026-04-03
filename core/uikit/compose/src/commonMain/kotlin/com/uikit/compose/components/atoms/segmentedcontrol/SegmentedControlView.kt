@@ -38,6 +38,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -192,6 +193,8 @@ fun SegmentedControlView(
 							Text(
 								text = option.label,
 								fontSize = style.sizes.fontSize.sp,
+								fontWeight = FontWeight(style.sizes.fontWeight),
+								letterSpacing = style.sizes.letterSpacing.sp,
 								color = textColor,
 								textAlign = TextAlign.Center,
 							)
@@ -234,6 +237,8 @@ fun SegmentedControlView(
 						Text(
 							text = option.label,
 							fontSize = style.sizes.fontSize.sp,
+							fontWeight = FontWeight(style.sizes.fontWeight),
+							letterSpacing = style.sizes.letterSpacing.sp,
 							color = textColor,
 							textAlign = TextAlign.Center,
 						)

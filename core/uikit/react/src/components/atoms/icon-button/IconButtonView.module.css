@@ -69,7 +69,7 @@
 .spinner {
 	width: var(--ib-icon-size);
 	height: var(--ib-icon-size);
-	border: 2px solid currentColor;
+	border: var(--ib-spinner-stroke) solid currentColor;
 	border-top-color: transparent;
 	border-radius: 50%;
 	animation: spin var(--ib-spinner-duration) linear infinite;

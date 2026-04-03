@@ -13,6 +13,7 @@ data class ResolvedSurfaceStyle(
 	val border: String,
 	val radius: Double,
 	val shadow: String,
+	val elevationDp: Double,
 )
 
 /**
@@ -66,6 +67,7 @@ object SurfaceStyleResolver {
 			border = border,
 			radius = radius,
 			shadow = shadow,
+			elevationDp = if (config.elevated) 4.0 else 0.0,
 		)
 	}
 

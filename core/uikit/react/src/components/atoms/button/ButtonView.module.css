@@ -92,7 +92,7 @@
 .spinner {
 	width: var(--btn-icon-size);
 	height: var(--btn-icon-size);
-	border: 2px solid currentColor;
+	border: var(--btn-spinner-stroke) solid currentColor;
 	border-top-color: transparent;
 	border-radius: 50%;
 	animation: spin var(--btn-spinner-duration) linear infinite;
