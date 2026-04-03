@@ -106,6 +106,7 @@ object ButtonStyleResolver {
 		when (variant) {
 			VisualVariant.Solid -> solidColors(intent, tokens)
 			VisualVariant.Soft -> softColors(intent, tokens, surfaceContext)
+			VisualVariant.Surface -> surfaceColors(intent, tokens)
 			VisualVariant.Outline -> outlineColors(intent, tokens)
 			VisualVariant.Ghost -> ghostColors(intent, tokens)
 		}
@@ -144,12 +145,11 @@ object ButtonStyleResolver {
 		when (intent) {
 			ColorIntent.Primary -> {
 				val surfaceBg = surfaceContext?.backgroundColor
-				if (surfaceBg != null) {
-					val bg = SurfaceAwareColorResolver.resolveSoftBg(surfaceBg, tokens.color, isPrimary = true)
-					val bgHover = SurfaceAwareColorResolver.resolveSoftBgHover(bg, tokens.color)
+				if (surfaceBg != null && surfaceBg == tokens.color.primarySoft) {
+					// Edge case: soft bg matches surface bg → fall back to hover shade
 					ColorSet(
-						bg = bg,
-						bgHover = bgHover,
+						bg = tokens.color.primarySoftHover,
+						bgHover = tokens.color.surfaceHover,
 						text = tokens.color.textPrimary,
 						textHover = tokens.color.textPrimary,
 						border = "transparent",
@@ -157,8 +157,8 @@ object ButtonStyleResolver {
 					)
 				} else {
 					ColorSet(
-						bg = tokens.color.surfaceContainerHigh,
-						bgHover = tokens.color.surfaceHover,
+						bg = tokens.color.primarySoft,
+						bgHover = tokens.color.primarySoftHover,
 						text = tokens.color.textPrimary,
 						textHover = tokens.color.textPrimary,
 						border = "transparent",
@@ -169,12 +169,10 @@ object ButtonStyleResolver {
 
 			ColorIntent.Neutral -> {
 				val surfaceBg = surfaceContext?.backgroundColor
-				if (surfaceBg != null) {
-					val bg = SurfaceAwareColorResolver.resolveSoftBg(surfaceBg, tokens.color, isPrimary = false)
-					val bgHover = SurfaceAwareColorResolver.resolveSoftBgHover(bg, tokens.color)
+				if (surfaceBg != null && surfaceBg == tokens.color.neutralSoft) {
 					ColorSet(
-						bg = bg,
-						bgHover = bgHover,
+						bg = tokens.color.neutralSoftHover,
+						bgHover = tokens.color.surfaceHover,
 						text = tokens.color.textSecondary,
 						textHover = tokens.color.textPrimary,
 						border = "transparent",
@@ -182,8 +180,8 @@ object ButtonStyleResolver {
 					)
 				} else {
 					ColorSet(
-						bg = tokens.color.surfaceContainerLow,
-						bgHover = tokens.color.surfaceContainer,
+						bg = tokens.color.neutralSoft,
+						bgHover = tokens.color.neutralSoftHover,
 						text = tokens.color.textSecondary,
 						textHover = tokens.color.textPrimary,
 						border = "transparent",
@@ -199,6 +197,36 @@ object ButtonStyleResolver {
 				textHover = tokens.color.danger,
 				border = "transparent",
 				borderHover = "transparent",
+			)
+		}
+
+	private fun surfaceColors(intent: ColorIntent, tokens: DesignTokens): ColorSet =
+		when (intent) {
+			ColorIntent.Primary -> ColorSet(
+				bg = tokens.color.primarySoft,
+				bgHover = tokens.color.primarySoftHover,
+				text = tokens.color.textPrimary,
+				textHover = tokens.color.textPrimary,
+				border = tokens.color.primaryBorder,
+				borderHover = tokens.color.primaryBorderHover,
+			)
+
+			ColorIntent.Neutral -> ColorSet(
+				bg = tokens.color.neutralSoft,
+				bgHover = tokens.color.neutralSoftHover,
+				text = tokens.color.textSecondary,
+				textHover = tokens.color.textPrimary,
+				border = tokens.color.borderSubtle,
+				borderHover = tokens.color.outline,
+			)
+
+			ColorIntent.Danger -> ColorSet(
+				bg = tokens.color.dangerSoft,
+				bgHover = tokens.color.dangerSoftHover,
+				text = tokens.color.danger,
+				textHover = tokens.color.danger,
+				border = tokens.color.danger,
+				borderHover = tokens.color.dangerHover,
 			)
 		}
 

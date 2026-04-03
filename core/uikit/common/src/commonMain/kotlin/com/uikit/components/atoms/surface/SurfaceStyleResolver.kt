@@ -28,15 +28,20 @@ object SurfaceStyleResolver {
 	): ResolvedSurfaceStyle {
 		val bg =
 			when (config.variant) {
-				VisualVariant.Ghost -> "transparent"
-				else -> resolveBg(config.level, tokens)
+				VisualVariant.Ghost, VisualVariant.Outline -> "transparent"
+				VisualVariant.Soft -> resolveSoftBg(config.level, tokens)
+				else -> resolveBg(config.level, tokens) // Solid, Surface
 			}
 
 		val bgHover =
 			if (config.clickable || config.hoverable) tokens.color.surfaceHover else bg
 
 		val border =
-			if (config.variant == VisualVariant.Outline) tokens.color.outlineVariant else "transparent"
+			when (config.variant) {
+				VisualVariant.Outline -> tokens.color.outlineVariant
+				VisualVariant.Surface -> tokens.color.borderSubtle
+				else -> "transparent"
+			}
 
 		val shadow =
 			if (config.elevated) {
@@ -72,5 +77,19 @@ object SurfaceStyleResolver {
 			SurfaceLevel.Level3 -> tokens.color.surfaceContainer
 			SurfaceLevel.Level4 -> tokens.color.surfaceContainerHigh
 			SurfaceLevel.Level5 -> tokens.color.surfaceContainerHighest
+		}
+
+	/**
+	 * Soft variant uses one level lighter than the requested level,
+	 * ensuring visual distinction from Solid at the same level.
+	 */
+	private fun resolveSoftBg(level: SurfaceLevel, tokens: DesignTokens): String =
+		when (level) {
+			SurfaceLevel.Level0 -> tokens.color.surface
+			SurfaceLevel.Level1 -> tokens.color.surface
+			SurfaceLevel.Level2 -> tokens.color.surfaceContainerLowest
+			SurfaceLevel.Level3 -> tokens.color.surfaceContainerLow
+			SurfaceLevel.Level4 -> tokens.color.surfaceContainer
+			SurfaceLevel.Level5 -> tokens.color.surfaceContainerHigh
 		}
 }

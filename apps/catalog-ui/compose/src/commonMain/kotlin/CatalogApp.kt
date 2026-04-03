@@ -24,6 +24,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -346,6 +347,22 @@ private fun ComponentsScreen(
 	onThemeChange: (String) -> Unit,
 	onBack: () -> Unit,
 ) {
+	var globalSizeId by remember { mutableStateOf(ComponentSize.Md.name) }
+	var globalRadiusId by remember { mutableStateOf("md") }
+	val globalSize = sizeFromId(globalSizeId)
+
+	val modifiedTokens = remember(tokens, globalRadiusId) {
+		val fraction = RADIUS_FRACTION_MAP[globalRadiusId] ?: 0.2
+		if (fraction == tokens.controls.proportions.radiusFraction) tokens
+		else tokens.copy(
+			controls = tokens.controls.copy(
+				proportions = tokens.controls.proportions.copy(
+					radiusFraction = fraction,
+				),
+			),
+		)
+	}
+
 	Column(
 		modifier =
 			Modifier
@@ -364,8 +381,34 @@ private fun ComponentsScreen(
 			horizontalArrangement = Arrangement.SpaceBetween,
 		) {
 			Button(text = "← Назад", variant = VisualVariant.Ghost, onClick = onBack)
-			Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+			Row(
+				horizontalArrangement = Arrangement.spacedBy(8.dp),
+				verticalAlignment = Alignment.CenterVertically,
+				modifier = Modifier.horizontalScroll(rememberScrollState()),
+			) {
 				DirSwitcherControl(currentDir, onDirChange)
+				androidx.compose.material3.Text(
+					text = "Размер:",
+					fontSize = tokens.typography.caption1.fontSize.sp,
+					color = parseColor(tokens.color.textMuted),
+				)
+				SegmentedControl(
+					options = SIZE_OPTIONS,
+					selectedId = globalSizeId,
+					onSelectionChange = { globalSizeId = it },
+					modifier = Modifier.width(180.dp),
+				)
+				androidx.compose.material3.Text(
+					text = "Скругление:",
+					fontSize = tokens.typography.caption1.fontSize.sp,
+					color = parseColor(tokens.color.textMuted),
+				)
+				SegmentedControl(
+					options = RADIUS_OPTIONS,
+					selectedId = globalRadiusId,
+					onSelectionChange = { globalRadiusId = it },
+					modifier = Modifier.width(220.dp),
+				)
 				ThemeSwitcherControl(currentMode, onThemeChange)
 			}
 		}
@@ -375,7 +418,7 @@ private fun ComponentsScreen(
 			modifier = Modifier.fillMaxWidth().padding(vertical = tokens.spacing.lg.dp),
 			horizontalAlignment = Alignment.CenterHorizontally,
 		) {
-			TextBlock(text = "Components", variant = TextBlockVariant.H1)
+			TextBlock(text = "Компоненты (Components)", variant = TextBlockVariant.H1)
 			Spacer(Modifier.height(tokens.spacing.sm.dp))
 			androidx.compose.material3.Text(
 				text = "Кнопки, иконки, поверхности, текст, контролы",
@@ -384,21 +427,23 @@ private fun ComponentsScreen(
 			)
 		}
 
-		// Sections
-		Column(
-			modifier =
-				Modifier
-					.widthIn(max = 960.dp)
-					.padding(horizontal = tokens.spacing.xl.dp)
-					.padding(bottom = tokens.spacing.xxxxl.dp),
-			verticalArrangement = Arrangement.spacedBy(tokens.spacing.xxxl.dp),
-		) {
-			ButtonShowcase(tokens)
-			IconButtonShowcase(tokens)
-			SurfaceShowcase(tokens)
-			TextShowcase(tokens)
-			SegmentedControlShowcase(tokens)
-			HeightAlignmentShowcase(tokens)
+		// Sections — wrapped in CompositionLocalProvider for radius override
+		CompositionLocalProvider(LocalDesignTokens provides modifiedTokens) {
+			Column(
+				modifier =
+					Modifier
+						.widthIn(max = 960.dp)
+						.padding(horizontal = tokens.spacing.xl.dp)
+						.padding(bottom = tokens.spacing.xxxxl.dp),
+				verticalArrangement = Arrangement.spacedBy(tokens.spacing.xxxl.dp),
+			) {
+				TextShowcase(modifiedTokens)
+				ButtonShowcase(modifiedTokens, globalSize)
+				IconButtonShowcase(modifiedTokens, globalSize)
+				SurfaceShowcase(modifiedTokens)
+				SegmentedControlShowcase(modifiedTokens, globalSize)
+				HeightAlignmentShowcase(modifiedTokens, globalSize)
+			}
 		}
 	}
 }
@@ -885,6 +930,24 @@ private fun BreakpointsShowcase(tokens: DesignTokens) {
 
 private val SIZE_OPTIONS = ComponentSize.entries.map { it.name to it.name.uppercase() }
 
+private val RADIUS_OPTIONS = listOf(
+	"none" to "None",
+	"sm" to "SM",
+	"md" to "MD",
+	"lg" to "LG",
+	"xl" to "XL",
+	"full" to "Full",
+)
+
+private val RADIUS_FRACTION_MAP = mapOf(
+	"none" to 0.0,
+	"sm" to 0.1,
+	"md" to 0.2,
+	"lg" to 0.35,
+	"xl" to 0.5,
+	"full" to 1.0,
+)
+
 private fun sizeFromId(id: String): ComponentSize =
 	ComponentSize.entries.first { it.name == id }
 
@@ -911,22 +974,21 @@ private fun iconPositionFromId(id: String): IconPosition = when (id) {
 }
 
 @Composable
-private fun ButtonShowcase(tokens: DesignTokens) {
-	var selectedSizeId by remember { mutableStateOf(ComponentSize.Md.name) }
+private fun ButtonShowcase(tokens: DesignTokens, globalSize: ComponentSize) {
 	var selectedPositionId by remember { mutableStateOf("None") }
-	val selectedSize = buttonSizeFromComponentSize(sizeFromId(selectedSizeId))
+	val selectedSize = buttonSizeFromComponentSize(globalSize)
 	val selectedPosition = iconPositionFromId(selectedPositionId)
 	val isStartEnd = selectedPositionId == "StartEnd"
 	val hasIcons = selectedPositionId != "None"
 
-	ShowcaseSection("Button", tokens) {
+	ShowcaseSection("Кнопка (Button)", tokens) {
 		Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xl.dp)) {
 			Row(
 				verticalAlignment = Alignment.CenterVertically,
 				horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
 			) {
 				androidx.compose.material3.Text(
-					text = "Icon position:",
+					text = "Позиция иконки:",
 					fontSize = tokens.typography.caption1.fontSize.sp,
 					color = parseColor(tokens.color.textMuted),
 				)
@@ -936,11 +998,6 @@ private fun ButtonShowcase(tokens: DesignTokens) {
 					onSelectionChange = { selectedPositionId = it },
 				)
 			}
-			SegmentedControl(
-				options = SIZE_OPTIONS,
-				selectedId = selectedSizeId,
-				onSelectionChange = { selectedSizeId = it },
-			)
 
 			VisualVariant.entries.forEach { variant ->
 				Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
@@ -1036,17 +1093,11 @@ private val ICON_BUTTON_SAMPLES: List<@Composable () -> Unit> = listOf(
 )
 
 @Composable
-private fun IconButtonShowcase(tokens: DesignTokens) {
-	var selectedSizeId by remember { mutableStateOf(ComponentSize.Md.name) }
-	val selectedSize = sizeFromId(selectedSizeId)
+private fun IconButtonShowcase(tokens: DesignTokens, globalSize: ComponentSize) {
+	val selectedSize = globalSize
 
-	ShowcaseSection("Icon Button", tokens) {
+	ShowcaseSection("Кнопка-иконка (Icon Button)", tokens) {
 		Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xl.dp)) {
-			SegmentedControl(
-				options = SIZE_OPTIONS,
-				selectedId = selectedSizeId,
-				onSelectionChange = { selectedSizeId = it },
-			)
 
 			VisualVariant.entries.forEach { variant ->
 				Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
@@ -1108,19 +1159,19 @@ private fun IconButtonShowcase(tokens: DesignTokens) {
 private fun SurfaceShowcase(tokens: DesignTokens) {
 	var surfaceMode by remember { mutableStateOf("default") }
 
-	ShowcaseSection("Surface — Variant × Level", tokens) {
+	ShowcaseSection("Поверхность (Surface) — Вариант × Уровень", tokens) {
 		Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xl.dp)) {
 			SegmentedControl(
 				options = listOf(
-					"default" to "Default",
-					"hoverable" to "Hoverable",
-					"clickable" to "Clickable",
+					"default" to "Обычный",
+					"hoverable" to "По наведению",
+					"clickable" to "По клику",
 				),
 				selectedId = surfaceMode,
 				onSelectionChange = { surfaceMode = it },
 			)
 
-			VisualVariant.entries.filter { it != VisualVariant.Ghost }.forEach { variant ->
+			VisualVariant.entries.forEach { variant ->
 				Column {
 					androidx.compose.material3.Text(
 						text = variant.name,
@@ -1169,7 +1220,7 @@ private fun SurfaceShowcase(tokens: DesignTokens) {
 
 @Composable
 private fun TextShowcase(tokens: DesignTokens) {
-	ShowcaseSection("Text Variants", tokens) {
+	ShowcaseSection("Варианты текста (Text)", tokens) {
 		Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
 			TextBlock(text = "Heading 1 — Заголовок", variant = TextBlockVariant.H1)
 			TextBlock(text = "Heading 2 — Подзаголовок", variant = TextBlockVariant.H2)
@@ -1187,33 +1238,16 @@ private fun TextShowcase(tokens: DesignTokens) {
 /* ─── Segmented Control ──────────────────────────────────── */
 
 @Composable
-private fun SegmentedControlShowcase(tokens: DesignTokens) {
+private fun SegmentedControlShowcase(tokens: DesignTokens, globalSize: ComponentSize) {
 	var selected by remember { mutableStateOf("a") }
-	var selectedSizeId by remember { mutableStateOf(ComponentSize.Sm.name) }
-	val selectedSize = sizeFromId(selectedSizeId)
+	val selectedSize = globalSize
 
-	ShowcaseSection("Segmented Control", tokens) {
+	ShowcaseSection("Сегментированный переключатель (Segmented Control)", tokens) {
 		Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.lg.dp)) {
-			// Size switcher
-			Row(
-				verticalAlignment = Alignment.CenterVertically,
-				horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
-			) {
-				androidx.compose.material3.Text(
-					text = "Size:",
-					fontSize = tokens.typography.caption1.fontSize.sp,
-					color = parseColor(tokens.color.textMuted),
-				)
-				SegmentedControl(
-					options = SIZE_OPTIONS,
-					selectedId = selectedSizeId,
-					onSelectionChange = { selectedSizeId = it },
-				)
-			}
 
 			Column {
 				androidx.compose.material3.Text(
-					text = "3 options",
+					text = "3 опции",
 					fontSize = tokens.typography.footnote.fontSize.sp,
 					color = parseColor(tokens.color.textMuted),
 				)
@@ -1227,7 +1261,7 @@ private fun SegmentedControlShowcase(tokens: DesignTokens) {
 			}
 			Column {
 				androidx.compose.material3.Text(
-					text = "2 options",
+					text = "2 опции",
 					fontSize = tokens.typography.footnote.fontSize.sp,
 					color = parseColor(tokens.color.textMuted),
 				)
@@ -1239,6 +1273,82 @@ private fun SegmentedControlShowcase(tokens: DesignTokens) {
 					size = selectedSize,
 				)
 			}
+
+			// Variant showcase
+			Column {
+				androidx.compose.material3.Text(
+					text = "Варианты (Variants)",
+					fontSize = tokens.typography.footnote.fontSize.sp,
+					color = parseColor(tokens.color.textMuted),
+				)
+				Spacer(Modifier.height(tokens.spacing.xs.dp))
+				Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.sm.dp)) {
+					VisualVariant.entries.forEach { variant ->
+						Row(
+							verticalAlignment = Alignment.CenterVertically,
+							horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
+						) {
+							androidx.compose.material3.Text(
+								text = variant.name,
+								fontSize = tokens.typography.caption1.fontSize.sp,
+								color = parseColor(tokens.color.textMuted),
+								modifier = Modifier.width(64.dp),
+							)
+							SegmentedControl(
+								options = listOf("a" to "First", "b" to "Second", "c" to "Third"),
+								selectedId = selected,
+								onSelectionChange = { selected = it },
+								variant = variant,
+								size = selectedSize,
+							)
+						}
+					}
+				}
+			}
+
+			// Icon positions showcase
+			Column {
+				androidx.compose.material3.Text(
+					text = "С иконками (Icons)",
+					fontSize = tokens.typography.footnote.fontSize.sp,
+					color = parseColor(tokens.color.textMuted),
+				)
+				Spacer(Modifier.height(tokens.spacing.xs.dp))
+				Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.sm.dp)) {
+					val iconOptions = listOf("search" to "Search", "star" to "Star", "settings" to "Settings")
+					val iconMap: Map<String, @Composable () -> Unit> = mapOf(
+						"search" to { Icon(Icons.Filled.Search, contentDescription = null) },
+						"star" to { Icon(Icons.Filled.Star, contentDescription = null) },
+						"settings" to { Icon(Icons.Filled.Settings, contentDescription = null) },
+					)
+					listOf(
+						"Start" to IconPosition.Start,
+						"End" to IconPosition.End,
+						"Top" to IconPosition.Top,
+						"Bottom" to IconPosition.Bottom,
+					).forEach { (label, pos) ->
+						Row(
+							verticalAlignment = Alignment.CenterVertically,
+							horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
+						) {
+							androidx.compose.material3.Text(
+								text = label,
+								fontSize = tokens.typography.caption1.fontSize.sp,
+								color = parseColor(tokens.color.textMuted),
+								modifier = Modifier.width(64.dp),
+							)
+							SegmentedControl(
+								options = iconOptions,
+								selectedId = selected,
+								onSelectionChange = { selected = it },
+								iconPosition = pos,
+								icons = iconMap,
+								size = selectedSize,
+							)
+						}
+					}
+				}
+			}
 		}
 	}
 }
@@ -1246,34 +1356,15 @@ private fun SegmentedControlShowcase(tokens: DesignTokens) {
 /* ─── Height Alignment Check ─────────────────────────────── */
 
 @Composable
-private fun HeightAlignmentShowcase(tokens: DesignTokens) {
-	var selectedSizeId by remember { mutableStateOf(ComponentSize.Md.name) }
-	val selectedSize = sizeFromId(selectedSizeId)
+private fun HeightAlignmentShowcase(tokens: DesignTokens, globalSize: ComponentSize) {
+	val selectedSize = globalSize
 	val btnSize = buttonSizeFromComponentSize(selectedSize)
 	val railColor = parseColor(tokens.color.outlineVariant)
 
-	ShowcaseSection("Height Alignment Check", tokens) {
+	ShowcaseSection("Проверка выравнивания высот (Height Alignment)", tokens) {
 		Column(
 			verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
 		) {
-			// Size selector
-			Row(
-				verticalAlignment = Alignment.CenterVertically,
-				horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
-			) {
-				androidx.compose.material3.Text(
-					text = "Size:",
-					fontSize = tokens.typography.footnote.fontSize.sp,
-					fontWeight = FontWeight.SemiBold,
-					color = parseColor(tokens.color.textMuted),
-				)
-				SegmentedControl(
-					options = SIZE_OPTIONS,
-					selectedId = selectedSizeId,
-					onSelectionChange = { selectedSizeId = it },
-				)
-			}
-
 			// Rails container — two horizontal dashed lines with components between them
 			Box(
 				modifier = Modifier

@@ -9,6 +9,7 @@ import {
 	SegmentedControl,
 	Surface,
 	useUIKitTheme,
+	DesignTokensProvider,
 	toRem,
 } from "@uikit/react";
 import { ThemeSwitcher } from "../components/theme-switcher/ThemeSwitcher";
@@ -146,22 +147,12 @@ const SIZE_OPTIONS = [
 
 /* ─── Height Alignment Check ───────────────────────────── */
 
-function HeightAlignmentShowcase({ tokens }: { tokens: any }) {
-	const [selectedSize, setSelectedSize] = useState("md");
+function HeightAlignmentShowcase({ tokens, globalSize }: { tokens: any; globalSize: string }) {
+	const selectedSize = globalSize;
 
 	return (
-		<Section id="height-alignment" title="Height Alignment Check" tokens={tokens}>
+		<Section id="height-alignment" title="Проверка выравнивания высот (Height Alignment)" tokens={tokens}>
 			<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.md) }}>
-				<div style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md) }}>
-					<span style={{ fontSize: toRem(tokens.typography.footnote.fontSize), fontWeight: 600, color: tokens.color.textMuted, whiteSpace: "nowrap" }}>
-						Size:
-					</span>
-					<SegmentedControl
-						options={SIZE_OPTIONS}
-						selectedId={selectedSize}
-						onSelectionChange={setSelectedSize}
-					/>
-				</div>
 				{/* Rails container — dashed top/bottom borders to verify equal heights */}
 				<div
 					style={{
@@ -210,7 +201,7 @@ function HeightAlignmentShowcase({ tokens }: { tokens: any }) {
 
 /* ─── Button showcase (merged: plain + with icons) ─────── */
 
-const BUTTON_VARIANTS = ["solid", "soft", "outline", "ghost"] as const;
+const BUTTON_VARIANTS = ["solid", "soft", "surface", "outline", "ghost"] as const;
 const BUTTON_INTENTS = ["primary", "neutral", "danger"] as const;
 
 const ICON_POSITION_OPTIONS = [
@@ -222,27 +213,20 @@ const ICON_POSITION_OPTIONS = [
 	{ id: "startend", label: "Start+End" },
 ];
 
-function ButtonShowcase({ tokens }: { tokens: any }) {
-	const [selectedSize, setSelectedSize] = useState("md");
+function ButtonShowcase({ tokens, globalSize }: { tokens: any; globalSize: string }) {
+	const selectedSize = globalSize;
 	const [selectedPosition, setSelectedPosition] = useState("none");
 	const isStartEnd = selectedPosition === "startend";
 	const hasIcons = selectedPosition !== "none";
 
 	return (
-		<Section id="buttons" title="Button" tokens={tokens}>
-			<div style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md), marginBlockEnd: toRem(tokens.spacing.md) }}>
-				<span style={{ fontSize: toRem(tokens.typography.caption1.fontSize), color: tokens.color.textMuted }}>Icon position:</span>
+		<Section id="buttons" title="Кнопка (Button)" tokens={tokens}>
+			<div style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md), marginBlockEnd: toRem(tokens.spacing.xl) }}>
+				<span style={{ fontSize: toRem(tokens.typography.caption1.fontSize), color: tokens.color.textMuted }}>Позиция иконки:</span>
 				<SegmentedControl
 					options={ICON_POSITION_OPTIONS}
 					selectedId={selectedPosition}
 					onSelectionChange={setSelectedPosition}
-				/>
-			</div>
-			<div style={{ marginBlockEnd: toRem(tokens.spacing.xl) }}>
-				<SegmentedControl
-					options={SIZE_OPTIONS}
-					selectedId={selectedSize}
-					onSelectionChange={setSelectedSize}
 				/>
 			</div>
 			{BUTTON_VARIANTS.map((variant) => (
@@ -316,18 +300,11 @@ function ButtonShowcase({ tokens }: { tokens: any }) {
 
 /* ─── Icon Button showcase ─────────────────────────────── */
 
-function IconButtonShowcase({ tokens }: { tokens: any }) {
-	const [selectedSize, setSelectedSize] = useState("md");
+function IconButtonShowcase({ tokens, globalSize }: { tokens: any; globalSize: string }) {
+	const selectedSize = globalSize;
 
 	return (
-		<Section id="icon-button" title="Icon Button" tokens={tokens}>
-			<div style={{ marginBlockEnd: toRem(tokens.spacing.xl) }}>
-				<SegmentedControl
-					options={SIZE_OPTIONS}
-					selectedId={selectedSize}
-					onSelectionChange={setSelectedSize}
-				/>
-			</div>
+		<Section id="icon-button" title="Кнопка-иконка (Icon Button)" tokens={tokens}>
 			{BUTTON_VARIANTS.map((variant) => (
 				<div key={variant} style={{ marginBlockEnd: toRem(tokens.spacing.xl) }}>
 					<h3 style={{ fontSize: toRem(tokens.typography.headline.fontSize), fontWeight: 600, color: tokens.color.textPrimary, marginBlockEnd: toRem(tokens.spacing.sm), textTransform: "capitalize" }}>
@@ -373,20 +350,20 @@ function IconButtonShowcase({ tokens }: { tokens: any }) {
 
 /* ─── Surface variants showcase ────────────────────────── */
 
-const SURFACE_VARIANTS = ["solid", "soft", "outline"] as const;
+const SURFACE_VARIANTS = ["solid", "soft", "surface", "outline", "ghost"] as const;
 const SURFACE_LEVELS = [0, 1, 2, 3, 4, 5] as const;
 
 const SURFACE_MODES = [
-	{ id: "default", label: "Default" },
-	{ id: "hoverable", label: "Hoverable" },
-	{ id: "clickable", label: "Clickable" },
+	{ id: "default", label: "Обычный" },
+	{ id: "hoverable", label: "По наведению" },
+	{ id: "clickable", label: "По клику" },
 ];
 
 function SurfaceShowcase({ tokens }: { tokens: any }) {
 	const [mode, setMode] = useState("default");
 
 	return (
-		<Section id="surface" title="Surface — Variant × Level" tokens={tokens}>
+		<Section id="surface" title="Поверхность (Surface) — Вариант × Уровень" tokens={tokens}>
 			<div style={{ marginBlockEnd: toRem(tokens.spacing.xl) }}>
 				<SegmentedControl
 					options={SURFACE_MODES}
@@ -407,37 +384,37 @@ function SurfaceShowcase({ tokens }: { tokens: any }) {
 						}}
 					>
 						{SURFACE_LEVELS.map((level) => (
-							<Surface
-								key={level}
-								variant={variant}
-								level={level}
-								hoverable={mode === "hoverable"}
-								clickable={mode === "clickable"}
-								onClick={mode === "clickable" ? () => {} : undefined}
-							>
-								<div style={{ padding: toRem(tokens.spacing.md), width: toRem(120) }}>
-									<span
-										style={{
-											fontSize: toRem(tokens.typography.caption1.fontSize),
-											fontWeight: 600,
-											color: tokens.color.textPrimary,
-											display: "block",
-										}}
-									>
-										Level {level}
-									</span>
-									<span
-										style={{
-											fontSize: toRem(tokens.typography.caption2.fontSize),
-											color: tokens.color.textMuted,
-											marginBlockStart: toRem(tokens.spacing.xs),
-											display: "block",
-										}}
-									>
-										{variant}
-									</span>
-								</div>
-							</Surface>
+						<Surface
+							key={level}
+							variant={variant}
+							level={level}
+							hoverable={mode === "hoverable"}
+							clickable={mode === "clickable"}
+							onClick={mode === "clickable" ? () => {} : undefined}
+						>
+									<div style={{ padding: toRem(tokens.spacing.md), width: toRem(120) }}>
+										<span
+											style={{
+												fontSize: toRem(tokens.typography.caption1.fontSize),
+												fontWeight: 600,
+												color: tokens.color.textPrimary,
+												display: "block",
+											}}
+										>
+											Уровень {level}
+										</span>
+										<span
+											style={{
+												fontSize: toRem(tokens.typography.caption2.fontSize),
+												color: tokens.color.textMuted,
+												marginBlockStart: toRem(tokens.spacing.xs),
+												display: "block",
+											}}
+										>
+											{variant}{variant === "ghost" ? " (hover)" : ""}
+										</span>
+									</div>
+								</Surface>
 						))}
 					</div>
 				</div>
@@ -450,7 +427,7 @@ function SurfaceShowcase({ tokens }: { tokens: any }) {
 
 function TextShowcase({ tokens }: { tokens: any }) {
 	return (
-		<Section id="text" title="Text Variants" tokens={tokens}>
+		<Section id="text" title="Варианты текста (Text)" tokens={tokens}>
 			<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.md) }}>
 				<Text text="Heading 1 — Заголовок" variant="h1" />
 				<Text text="Heading 2 — Подзаголовок" variant="h2" />
@@ -464,27 +441,16 @@ function TextShowcase({ tokens }: { tokens: any }) {
 
 /* ─── SegmentedControl showcase ────────────────────────── */
 
-function SegmentedControlShowcase({ tokens }: { tokens: any }) {
+function SegmentedControlShowcase({ tokens, globalSize }: { tokens: any; globalSize: string }) {
 	const [selected, setSelected] = useState("a");
-	const [selectedSize, setSelectedSize] = useState("sm");
+	const selectedSize = globalSize;
 
 	return (
-		<Section id="segmented-control" title="Segmented Control" tokens={tokens}>
+		<Section id="segmented-control" title="Сегментированный переключатель (Segmented Control)" tokens={tokens}>
 			<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.lg) }}>
-				{/* Size switcher */}
-				<div style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md) }}>
-					<span style={{ fontSize: toRem(tokens.typography.caption1.fontSize), color: tokens.color.textMuted }}>
-						Size:
-					</span>
-					<SegmentedControl
-						options={SIZE_OPTIONS}
-						selectedId={selectedSize}
-						onSelectionChange={setSelectedSize}
-					/>
-				</div>
 				<div>
 					<span style={{ fontSize: toRem(tokens.typography.footnote.fontSize), color: tokens.color.textMuted, display: "block", marginBlockEnd: toRem(tokens.spacing.xs) }}>
-						3 options
+						3 опции
 					</span>
 					<SegmentedControl
 						options={[
@@ -499,7 +465,7 @@ function SegmentedControlShowcase({ tokens }: { tokens: any }) {
 				</div>
 				<div>
 					<span style={{ fontSize: toRem(tokens.typography.footnote.fontSize), color: tokens.color.textMuted, display: "block", marginBlockEnd: toRem(tokens.spacing.xs) }}>
-						2 options
+						2 опции
 					</span>
 					<SegmentedControl
 						options={[
@@ -511,16 +477,109 @@ function SegmentedControlShowcase({ tokens }: { tokens: any }) {
 						size={selectedSize as any}
 					/>
 				</div>
+				{/* Variant showcase */}
+				<div>
+					<span style={{ fontSize: toRem(tokens.typography.footnote.fontSize), color: tokens.color.textMuted, display: "block", marginBlockEnd: toRem(tokens.spacing.xs) }}>
+						Варианты (Variants)
+					</span>
+					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.sm) }}>
+						{(["surface", "soft", "outline", "solid", "ghost"] as const).map((v) => (
+							<div key={v} style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md) }}>
+								<span style={{ fontSize: toRem(tokens.typography.caption1.fontSize), color: tokens.color.textMuted, minWidth: "4rem" }}>
+									{v}
+								</span>
+								<div style={{ flex: 1 }}>
+									<SegmentedControl
+										options={[
+											{ id: "a", label: "First" },
+											{ id: "b", label: "Second" },
+											{ id: "c", label: "Third" },
+										]}
+										selectedId={selected}
+										onSelectionChange={setSelected}
+										variant={v}
+										size={selectedSize as any}
+									/>
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+				{/* Icon positions showcase */}
+				<div>
+					<span style={{ fontSize: toRem(tokens.typography.footnote.fontSize), color: tokens.color.textMuted, display: "block", marginBlockEnd: toRem(tokens.spacing.xs) }}>
+						С иконками (Icons)
+					</span>
+					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.sm) }}>
+						{(["start", "end", "top", "bottom"] as const).map((pos) => (
+							<div key={pos} style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md) }}>
+								<span style={{ fontSize: toRem(tokens.typography.caption1.fontSize), color: tokens.color.textMuted, minWidth: "4rem" }}>
+									{pos}
+								</span>
+								<div style={{ flex: 1 }}>
+									<SegmentedControl
+										options={[
+											{ id: "search", label: "Search", icon: searchIcon },
+											{ id: "star", label: "Star", icon: starIcon },
+											{ id: "settings", label: "Settings", icon: settingsIcon },
+										]}
+										selectedId={selected}
+										onSelectionChange={setSelected}
+										iconPosition={pos}
+										size={selectedSize as any}
+									/>
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
 			</div>
 		</Section>
 	);
 }
 
+/* ─── Radius presets for global control ─────────────────── */
+
+const RADIUS_OPTIONS = [
+	{ id: "none", label: "None" },
+	{ id: "sm", label: "SM" },
+	{ id: "md", label: "MD" },
+	{ id: "lg", label: "LG" },
+	{ id: "xl", label: "XL" },
+	{ id: "full", label: "Full" },
+];
+
+const RADIUS_FRACTION_MAP: Record<string, number> = {
+	none: 0,
+	sm: 0.1,
+	md: 0.2,
+	lg: 0.35,
+	xl: 0.5,
+	full: 1.0,
+};
+
 /* ─── Main Page ────────────────────────────────────────── */
 
 export default function ComponentsPage() {
 	const router = useRouter();
-	const { tokens, dir, setDir } = useUIKitTheme();
+	const { tokens: baseTokens, dir, setDir } = useUIKitTheme();
+	const [globalSize, setGlobalSize] = useState("md");
+	const [globalRadius, setGlobalRadius] = useState("md");
+
+	const tokens: any = React.useMemo(() => {
+		const fraction = RADIUS_FRACTION_MAP[globalRadius];
+		if (fraction === baseTokens.controls.proportions.radiusFraction) return baseTokens;
+		return {
+			...baseTokens,
+			controls: {
+				...baseTokens.controls,
+				proportions: {
+					...baseTokens.controls.proportions,
+					radiusFraction: fraction,
+				},
+			},
+		};
+	}, [baseTokens, globalRadius]);
 
 	return (
 		<div
@@ -536,24 +595,34 @@ export default function ComponentsPage() {
 				style={{
 					display: "flex",
 					alignItems: "center",
-					justifyContent: "space-between",
 					padding: `${toRem(tokens.spacing.md)} ${toRem(tokens.spacing.xl)}`,
 					backgroundColor: tokens.color.surface,
+					gap: toRem(tokens.spacing.sm),
 				}}
 			>
 				<Button text="← Назад" variant="ghost" onClick={() => router.push("/")} />
-				<div style={{ display: "flex", gap: toRem(tokens.spacing.sm), alignItems: "center" }}>
-					<div style={{ width: "7.5rem" }}>
-						<SegmentedControl
-							options={DIR_OPTIONS}
-							selectedId={dir}
-							onSelectionChange={(id) => setDir(id as "ltr" | "rtl")}
-						/>
-					</div>
-					<div style={{ width: "15rem" }}>
-						<ThemeSwitcher />
-					</div>
-				</div>
+				<div style={{ flex: 1 }} />
+				<SegmentedControl
+					options={DIR_OPTIONS}
+					selectedId={dir}
+					onSelectionChange={(id) => setDir(id as "ltr" | "rtl")}
+					className="sc-fit"
+				/>
+				<span style={{ fontSize: toRem(tokens.typography.caption1.fontSize), color: tokens.color.textMuted, whiteSpace: "nowrap" }}>Размер:</span>
+				<SegmentedControl
+					options={SIZE_OPTIONS}
+					selectedId={globalSize}
+					onSelectionChange={setGlobalSize}
+					className="sc-fit"
+				/>
+				<span style={{ fontSize: toRem(tokens.typography.caption1.fontSize), color: tokens.color.textMuted, whiteSpace: "nowrap" }}>Скругление:</span>
+				<SegmentedControl
+					options={RADIUS_OPTIONS}
+					selectedId={globalRadius}
+					onSelectionChange={setGlobalRadius}
+					className="sc-fit"
+				/>
+				<ThemeSwitcher className="sc-fit" />
 			</div>
 
 			{/* Content */}
@@ -571,7 +640,7 @@ export default function ComponentsPage() {
 						textAlign: "center",
 					}}
 				>
-					<Text text="Components" variant="h1" />
+					<Text text="Компоненты (Components)" variant="h1" />
 					<p
 						style={{
 							fontSize: toRem(tokens.typography.body.fontSize),
@@ -593,12 +662,14 @@ export default function ComponentsPage() {
 						gap: toRem(tokens.spacing.xxxl),
 					}}
 				>
-					<ButtonShowcase tokens={tokens} />
-					<IconButtonShowcase tokens={tokens} />
-					<SurfaceShowcase tokens={tokens} />
-					<TextShowcase tokens={tokens} />
-					<SegmentedControlShowcase tokens={tokens} />
-					<HeightAlignmentShowcase tokens={tokens} />
+					<DesignTokensProvider tokens={tokens}>
+						<TextShowcase tokens={tokens} />
+						<ButtonShowcase tokens={tokens} globalSize={globalSize} />
+						<IconButtonShowcase tokens={tokens} globalSize={globalSize} />
+						<SurfaceShowcase tokens={tokens} />
+						<SegmentedControlShowcase tokens={tokens} globalSize={globalSize} />
+						<HeightAlignmentShowcase tokens={tokens} globalSize={globalSize} />
+					</DesignTokensProvider>
 				</div>
 			</main>
 		</div>

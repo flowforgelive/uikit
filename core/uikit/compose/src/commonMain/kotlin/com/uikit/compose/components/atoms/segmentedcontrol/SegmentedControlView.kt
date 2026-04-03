@@ -7,13 +7,17 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,12 +47,14 @@ import com.uikit.components.atoms.segmentedcontrol.SegmentedControlStyleResolver
 import com.uikit.compose.theme.LocalDesignTokens
 import com.uikit.compose.theme.LocalKeyboardNavigationMode
 import com.uikit.compose.theme.parseColor
+import com.uikit.foundation.IconPosition
 import com.uikit.foundation.Visibility
 
 @Composable
 fun SegmentedControlView(
 	config: SegmentedControlConfig,
 	onSelectionChange: (String) -> Unit = {},
+	renderIcon: (@Composable (String) -> Unit)? = null,
 	modifier: Modifier = Modifier,
 ) {
 	if (config.visibility == Visibility.Gone) return
@@ -80,6 +86,13 @@ fun SegmentedControlView(
 				.defaultMinSize(minHeight = style.sizes.height.dp)
 				.clip(shape)
 				.background(parseColor(style.colors.trackBg))
+				.then(
+					if (style.colors.border != "transparent") {
+						Modifier.border(tokens.borderWidth.dp, parseColor(style.colors.border), shape)
+					} else {
+						Modifier
+					},
+				)
 				.padding(style.sizes.trackPadding.dp)
 				.then(if (config.visibility == Visibility.Invisible) Modifier.alpha(0f) else Modifier)
 				.testTag(config.testTag ?: config.id)
@@ -156,15 +169,75 @@ fun SegmentedControlView(
 							) { onSelectionChange(option.id) },
 					contentAlignment = Alignment.Center,
 				) {
-					Text(
-						text = option.label,
-						fontSize = style.sizes.fontSize.sp,
-						color =
-							parseColor(
-								if (isActive) style.colors.textActive else style.colors.textInactive,
-							),
-						textAlign = TextAlign.Center,
+					val textColor = parseColor(
+						if (isActive) style.colors.textActive else style.colors.textInactive,
 					)
+					val hasIcon = renderIcon != null && option.iconId != null && config.iconPosition != IconPosition.None
+					if (hasIcon) {
+						val iconId = option.iconId!!
+						val isVertical = config.iconPosition == IconPosition.Top || config.iconPosition == IconPosition.Bottom
+						val iconContent: @Composable () -> Unit = {
+							androidx.compose.runtime.CompositionLocalProvider(
+								LocalContentColor provides textColor,
+							) {
+								Box(
+									modifier = Modifier.size(style.sizes.iconSize.dp),
+									contentAlignment = Alignment.Center,
+								) {
+									renderIcon(iconId)
+								}
+							}
+						}
+						val textContent: @Composable () -> Unit = {
+							Text(
+								text = option.label,
+								fontSize = style.sizes.fontSize.sp,
+								color = textColor,
+								textAlign = TextAlign.Center,
+							)
+						}
+						if (isVertical) {
+								Column(
+									horizontalAlignment = Alignment.CenterHorizontally,
+									verticalArrangement = Arrangement.spacedBy(
+									style.sizes.iconGap.dp,
+									Alignment.CenterVertically,
+								),
+								modifier = Modifier.fillMaxHeight(),
+							) {
+								if (config.iconPosition == IconPosition.Top) {
+									iconContent()
+									textContent()
+								} else {
+									textContent()
+									iconContent()
+								}
+							}
+						} else {
+							Row(
+								verticalAlignment = Alignment.CenterVertically,
+									horizontalArrangement = Arrangement.spacedBy(
+									style.sizes.iconGap.dp,
+									Alignment.CenterHorizontally,
+								),
+							) {
+								if (config.iconPosition == IconPosition.Start) {
+									iconContent()
+									textContent()
+								} else {
+									textContent()
+									iconContent()
+								}
+							}
+						}
+					} else {
+						Text(
+							text = option.label,
+							fontSize = style.sizes.fontSize.sp,
+							color = textColor,
+							textAlign = TextAlign.Center,
+						)
+					}
 				}
 			}
 		}

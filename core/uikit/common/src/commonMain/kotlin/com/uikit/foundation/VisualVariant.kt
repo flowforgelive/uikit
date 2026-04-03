@@ -12,6 +12,7 @@ import kotlin.js.JsExport
 enum class VisualVariant {
 	Solid,
 	Soft,
+	Surface,
 	Outline,
 	Ghost,
 }

@@ -13,6 +13,7 @@ import {
 const VARIANT_MAP = {
 	solid: VisualVariant.Solid,
 	soft: VisualVariant.Soft,
+	surface: VisualVariant.Surface,
 	outline: VisualVariant.Outline,
 	ghost: VisualVariant.Ghost,
 } as const;

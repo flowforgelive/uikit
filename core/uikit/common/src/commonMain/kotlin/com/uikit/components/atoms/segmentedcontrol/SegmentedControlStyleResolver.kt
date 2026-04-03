@@ -1,6 +1,7 @@
 package com.uikit.components.atoms.segmentedcontrol
 
 import com.uikit.foundation.ComponentSizeResolver
+import com.uikit.foundation.VisualVariant
 import com.uikit.tokens.DesignTokens
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
@@ -25,6 +26,8 @@ data class SegmentedControlSizes(
 	val radius: Double,
 	val thumbRadius: Double,
 	val trackPadding: Double,
+	val iconSize: Double,
+	val iconGap: Double,
 )
 
 @JsExport
@@ -46,14 +49,7 @@ object SegmentedControlStyleResolver {
 	fun resolve(config: SegmentedControlConfig, tokens: DesignTokens): ResolvedSegmentedControlStyle {
 		val scale = ComponentSizeResolver.resolve(config.size, tokens.controls, tokens.scaleFactor)
 		return ResolvedSegmentedControlStyle(
-			colors =
-				SegmentedControlColors(
-					trackBg = tokens.color.surfaceHover,
-					thumbBg = tokens.color.surface,
-					textActive = tokens.color.textPrimary,
-					textInactive = tokens.color.textSecondary,
-					border = tokens.color.border,
-				),
+			colors = resolveColors(config.variant, tokens),
 			sizes =
 				SegmentedControlSizes(
 					height = scale.height,
@@ -62,6 +58,8 @@ object SegmentedControlStyleResolver {
 					radius = scale.radius,
 					thumbRadius = scale.radius - TRACK_PADDING,
 					trackPadding = TRACK_PADDING,
+					iconSize = scale.iconSize,
+					iconGap = scale.iconGap,
 				),
 		)
 	}
@@ -77,14 +75,7 @@ object SegmentedControlStyleResolver {
 			tokens.scaleFactor,
 		)
 		return ResolvedSegmentedControlStyle(
-			colors =
-				SegmentedControlColors(
-					trackBg = tokens.color.surfaceHover,
-					thumbBg = tokens.color.surface,
-					textActive = tokens.color.textPrimary,
-					textInactive = tokens.color.textSecondary,
-					border = tokens.color.border,
-				),
+			colors = resolveColors(VisualVariant.Surface, tokens),
 			sizes =
 				SegmentedControlSizes(
 					height = scale.height,
@@ -93,7 +84,52 @@ object SegmentedControlStyleResolver {
 					radius = scale.radius,
 					thumbRadius = scale.radius - TRACK_PADDING,
 					trackPadding = TRACK_PADDING,
+					iconSize = scale.iconSize,
+					iconGap = scale.iconGap,
 				),
 		)
 	}
+
+	private fun resolveColors(variant: VisualVariant, tokens: DesignTokens): SegmentedControlColors =
+		when (variant) {
+			VisualVariant.Surface -> SegmentedControlColors(
+				trackBg = tokens.color.neutralSoft,
+				thumbBg = tokens.color.surface,
+				textActive = tokens.color.textPrimary,
+				textInactive = tokens.color.textSecondary,
+				border = tokens.color.borderSubtle,
+			)
+
+			VisualVariant.Soft -> SegmentedControlColors(
+				trackBg = tokens.color.primarySoft,
+				thumbBg = tokens.color.surface,
+				textActive = tokens.color.textPrimary,
+				textInactive = tokens.color.textSecondary,
+				border = "transparent",
+			)
+
+			VisualVariant.Outline -> SegmentedControlColors(
+				trackBg = "transparent",
+				thumbBg = tokens.color.surface,
+				textActive = tokens.color.textPrimary,
+				textInactive = tokens.color.textSecondary,
+				border = tokens.color.outlineVariant,
+			)
+
+			VisualVariant.Solid -> SegmentedControlColors(
+				trackBg = tokens.color.surfaceContainerHigh,
+				thumbBg = tokens.color.surface,
+				textActive = tokens.color.textPrimary,
+				textInactive = tokens.color.textSecondary,
+				border = "transparent",
+			)
+
+			VisualVariant.Ghost -> SegmentedControlColors(
+				trackBg = "transparent",
+				thumbBg = tokens.color.surfaceHover,
+				textActive = tokens.color.textPrimary,
+				textInactive = tokens.color.textSecondary,
+				border = "transparent",
+			)
+		}
 }

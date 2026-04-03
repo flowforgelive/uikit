@@ -34,4 +34,11 @@ data class ColorTokens(
 	val focusRing: String,
 	val dangerSoft: String,
 	val dangerSoftHover: String,
+	val primarySoft: String,
+	val primarySoftHover: String,
+	val neutralSoft: String,
+	val neutralSoftHover: String,
+	val borderSubtle: String,
+	val primaryBorder: String,
+	val primaryBorderHover: String,
 )

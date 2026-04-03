@@ -6,6 +6,7 @@ import { toRem } from "../../../utils/units";
 import {
 	SegmentedControlStyleResolver,
 	Visibility,
+	IconPosition,
 	type SegmentedControlConfig,
 	type DesignTokens,
 } from "uikit-common";
@@ -14,12 +15,13 @@ import css from "./SegmentedControlView.module.css";
 interface SegmentedControlViewProps {
 	config: SegmentedControlConfig;
 	onSelectionChange?: (id: string) => void;
+	renderIcon?: (iconId: string) => React.ReactNode;
 	tokens?: DesignTokens;
 	className?: string;
 }
 
 export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
-	React.memo(({ config, onSelectionChange, tokens: tokensProp, className }) => {
+	React.memo(({ config, onSelectionChange, renderIcon, tokens: tokensProp, className }) => {
 		const contextTokens = useDesignTokens();
 		const tokens = tokensProp ?? contextTokens;
 		const style = useMemo(
@@ -72,6 +74,10 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 
 		if (config.visibility === Visibility.Gone) return null;
 
+		const hasIcons = renderIcon && config.iconPosition !== IconPosition.None;
+		const isVertical = config.iconPosition === IconPosition.Top || config.iconPosition === IconPosition.Bottom;
+		const isReversed = config.iconPosition === IconPosition.End || config.iconPosition === IconPosition.Bottom;
+
 		return (
 			<div
 				data-testid={config.testTag ?? config.id}
@@ -83,6 +89,7 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 						"--sc-thumb-bg": style.colors.thumbBg,
 						"--sc-text-active": style.colors.textActive,
 						"--sc-text-inactive": style.colors.textInactive,
+						"--sc-border": style.colors.border,
 						"--sc-height": toRem(style.sizes.height),
 						"--sc-font-size": toRem(style.sizes.fontSize),
 						"--sc-radius": toRem(style.sizes.radius),
@@ -94,6 +101,8 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 						"--sc-easing": tokens.motion.easingStandard,
 						"--sc-focus-ring": tokens.color.focusRing,
 						"--sc-focus-ring-width": `${tokens.focusRingWidth}px`,
+						"--sc-icon-size": toRem(style.sizes.iconSize),
+						"--sc-icon-gap": toRem(style.sizes.iconGap),
 						visibility:
 							config.visibility === Visibility.Invisible ? "hidden" : undefined,
 					} as React.CSSProperties
@@ -102,6 +111,7 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 				<div className={css.thumb} />
 				{Array.from(options).map((option: any, index: number) => {
 					const isSelected = option.id === config.selectedId;
+					const iconNode = hasIcons && option.iconId ? renderIcon(option.iconId) : null;
 					return (
 						<button
 							key={option.id}
@@ -114,7 +124,14 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 							onClick={() => onSelectionChange?.(option.id)}
 							onKeyDown={(e) => handleKeyDown(e, index)}
 						>
-							{option.label}
+							{iconNode ? (
+								<span className={`${css.optionContent} ${isVertical ? css.optionContentVertical : ""} ${isReversed ? css.optionContentReversed : ""}`}>
+									<span className={css.optionIcon}>{iconNode}</span>
+									<span>{option.label}</span>
+								</span>
+							) : (
+								option.label
+							)}
 						</button>
 					);
 				})}

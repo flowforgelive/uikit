@@ -43,6 +43,21 @@ body {
 	background: rgba(26, 26, 26, 0.15);
 }
 
+/* Hidden scrollbar utility */
+.scroll-hidden {
+	overflow-x: auto;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+.scroll-hidden::-webkit-scrollbar {
+	display: none;
+}
+
+/* Auto-width SC in flex contexts (overrides track width: 100%) */
+.sc-fit {
+	width: auto !important;
+}
+
 @media (prefers-color-scheme: dark) {
 	::selection {
 		background: rgba(255, 255, 255, 0.2);

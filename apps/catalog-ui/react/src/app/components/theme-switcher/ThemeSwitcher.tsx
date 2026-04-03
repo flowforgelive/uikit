@@ -9,7 +9,7 @@ const THEME_OPTIONS = [
 	{ id: "system", label: "Система" },
 ];
 
-export function ThemeSwitcher() {
+export function ThemeSwitcher({ className }: { className?: string }) {
 	const { mode, setMode } = useUIKitTheme();
 
 	return (
@@ -17,6 +17,7 @@ export function ThemeSwitcher() {
 			options={THEME_OPTIONS}
 			selectedId={mode}
 			onSelectionChange={(id) => setMode(id as "light" | "dark" | "system")}
+			className={className}
 		/>
 	);
 }

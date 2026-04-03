@@ -7,6 +7,7 @@
 	background: var(--sc-track-bg);
 	height: var(--sc-height);
 	border-radius: var(--sc-radius);
+	border: 1px solid var(--sc-border, transparent);
 	padding: var(--sc-track-padding);
 	overflow: hidden;
 }
@@ -61,4 +62,35 @@
 
 :global([dir="rtl"]) .thumb {
 	transform: translateX(calc(-1 * var(--sc-thumb-offset, 0%)));
+}
+
+.optionContent {
+	display: flex;
+	align-items: center;
+	gap: var(--sc-icon-gap, 0.25rem);
+}
+
+.optionContentVertical {
+	flex-direction: column;
+}
+
+.optionContentReversed {
+	flex-direction: row-reverse;
+}
+
+.optionContentVertical.optionContentReversed {
+	flex-direction: column-reverse;
+}
+
+.optionIcon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--sc-icon-size, 1rem);
+	height: var(--sc-icon-size, 1rem);
+}
+
+.optionIcon > svg {
+	width: 100%;
+	height: 100%;
 }
