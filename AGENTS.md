@@ -60,16 +60,16 @@ core/uikit/
 
 ## Конвенции именования
 
-| Контекст | Стиль | Примеры |
-|----------|-------|---------|
-| Kotlin классы/enum values | PascalCase | `ButtonConfig`, `ComponentSize.Md` |
-| Kotlin свойства | camelCase | `bgHover`, `fontSize`, `letterSpacing` |
-| React компоненты | PascalCase | `Button`, `ButtonView` |
-| React props | camelCase | `onClick`, `variant`, `size` |
-| React prop string values | kebab-case | `"solid"`, `"primary"`, `"md"` |
-| CSS custom properties | `--{prefix}-{prop}` | `--btn-bg`, `--ib-size`, `--seg-height` |
-| CSS классы (modules) | camelCase | `.button`, `.content`, `.icon` |
-| Composable функции | PascalCase | `Button()`, `ButtonView()` |
+| Контекст                  | Стиль               | Примеры                                 |
+| ------------------------- | ------------------- | --------------------------------------- |
+| Kotlin классы/enum values | PascalCase          | `ButtonConfig`, `ComponentSize.Md`      |
+| Kotlin свойства           | camelCase           | `bgHover`, `fontSize`, `letterSpacing`  |
+| React компоненты          | PascalCase          | `Button`, `ButtonView`                  |
+| React props               | camelCase           | `onClick`, `variant`, `size`            |
+| React prop string values  | kebab-case          | `"solid"`, `"primary"`, `"md"`          |
+| CSS custom properties     | `--{prefix}-{prop}` | `--btn-bg`, `--ib-size`, `--seg-height` |
+| CSS классы (modules)      | camelCase           | `.button`, `.content`, `.icon`          |
+| Composable функции        | PascalCase          | `Button()`, `ButtonView()`              |
 
 Префиксы CSS переменных по компонентам: Button → `btn`, IconButton → `ib`, SegmentedControl → `seg`, Surface → `srf`.
 

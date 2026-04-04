@@ -11,6 +11,7 @@ kotlin {
 		commonMain.dependencies {
 			implementation(project(":core:uikit:common"))
 			implementation(project(":core:uikit:compose"))
+			implementation(project(":apps:catalog-ui:shared"))
 			implementation(compose.material3)
 			implementation(compose.materialIconsExtended)
 			implementation(compose.foundation)

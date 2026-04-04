@@ -24,6 +24,7 @@ data class ControlProportions(
 	val iconSizeRatio: Double,
 	val iconGapRatio: Double,
 	val radiusFraction: Double,
+	val lineHeightRatio: Double = 1.0,
 )
 
 @JsExport
@@ -37,6 +38,7 @@ data class ControlSizeScale(
 	val iconGap: Double,
 	val letterSpacing: Double,
 	val radius: Double,
+	val lineHeight: Double,
 )
 
 @JsExport

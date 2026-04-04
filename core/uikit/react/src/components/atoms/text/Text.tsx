@@ -6,11 +6,21 @@ import { useDesignTokens } from "../../../theme/useDesignTokens";
 import { TextBlockConfig, TextBlockVariant } from "uikit-common";
 
 const VARIANT_MAP = {
-	h1: TextBlockVariant.H1,
-	h2: TextBlockVariant.H2,
-	h3: TextBlockVariant.H3,
-	body: TextBlockVariant.Body,
-	caption: TextBlockVariant.Caption,
+	"display-large": TextBlockVariant.DisplayLarge,
+	"display-medium": TextBlockVariant.DisplayMedium,
+	"display-small": TextBlockVariant.DisplaySmall,
+	"headline-large": TextBlockVariant.HeadlineLarge,
+	"headline-medium": TextBlockVariant.HeadlineMedium,
+	"headline-small": TextBlockVariant.HeadlineSmall,
+	"title-large": TextBlockVariant.TitleLarge,
+	"title-medium": TextBlockVariant.TitleMedium,
+	"title-small": TextBlockVariant.TitleSmall,
+	"body-large": TextBlockVariant.BodyLarge,
+	"body-medium": TextBlockVariant.BodyMedium,
+	"body-small": TextBlockVariant.BodySmall,
+	"label-large": TextBlockVariant.LabelLarge,
+	"label-medium": TextBlockVariant.LabelMedium,
+	"label-small": TextBlockVariant.LabelSmall,
 } as const;
 
 interface TextProps {
@@ -20,7 +30,7 @@ interface TextProps {
 }
 
 export const Text: React.FC<TextProps> = React.memo(
-	({ text, variant = "body", className }) => {
+	({ text, variant = "body-large", className }) => {
 		const tokens = useDesignTokens();
 		const config = useMemo(
 			() => new TextBlockConfig(text, VARIANT_MAP[variant]),

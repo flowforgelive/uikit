@@ -30,6 +30,7 @@ data class SegmentedControlSizes(
 	val trackPadding: Double,
 	val iconSize: Double,
 	val iconGap: Double,
+	val lineHeight: Double,
 )
 
 @JsExport
@@ -64,6 +65,7 @@ object SegmentedControlStyleResolver {
 					trackPadding = trackPadding,
 					iconSize = scale.iconSize,
 					iconGap = scale.iconGap,
+					lineHeight = scale.lineHeight,
 				),
 		)
 	}
@@ -93,6 +95,7 @@ object SegmentedControlStyleResolver {
 					trackPadding = trackPadding,
 					iconSize = scale.iconSize,
 					iconGap = scale.iconGap,
+					lineHeight = scale.lineHeight,
 				),
 		)
 	}

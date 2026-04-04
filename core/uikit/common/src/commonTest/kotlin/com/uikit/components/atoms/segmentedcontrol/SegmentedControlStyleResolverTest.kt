@@ -94,6 +94,7 @@ class SegmentedControlStyleResolverTest {
 		assertEquals(scale.radius, sizes.radius, "radius")
 		assertEquals(scale.iconSize, sizes.iconSize, "iconSize")
 		assertEquals(scale.iconGap, sizes.iconGap, "iconGap")
+		assertEquals(scale.lineHeight, sizes.lineHeight, "lineHeight")
 	}
 
 	@Test

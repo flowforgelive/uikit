@@ -17,6 +17,8 @@ data class DesignTokens(
 	val shadows: ShadowTokens,
 	val state: InteractiveStateTokens,
 	val scaleFactor: Double,
+	val fontFamilyName: String = "Inter",
+	val fontVariationSettings: String = "'opsz' 14",
 	val borderWidth: Double = 1.0,
 	val focusRingWidth: Double = 2.0,
 	val spinnerStrokeWidth: Double = 2.0,
@@ -42,17 +44,21 @@ data class DesignTokens(
 
 		private val defaultTypography =
 			TypographyTokens(
-				largeTitle = TextStyle(fontSize = 34.0, fontWeight = 700, lineHeight = 41.0, letterSpacing = 0.37),
-				title1 = TextStyle(fontSize = 28.0, fontWeight = 700, lineHeight = 34.0, letterSpacing = 0.36),
-				title2 = TextStyle(fontSize = 22.0, fontWeight = 700, lineHeight = 28.0, letterSpacing = 0.35),
-				title3 = TextStyle(fontSize = 20.0, fontWeight = 600, lineHeight = 25.0, letterSpacing = 0.38),
-				headline = TextStyle(fontSize = 17.0, fontWeight = 600, lineHeight = 22.0, letterSpacing = -0.41),
-				body = TextStyle(fontSize = 17.0, fontWeight = 400, lineHeight = 22.0, letterSpacing = -0.41),
-				callout = TextStyle(fontSize = 16.0, fontWeight = 400, lineHeight = 21.0, letterSpacing = -0.32),
-				subhead = TextStyle(fontSize = 15.0, fontWeight = 400, lineHeight = 20.0, letterSpacing = -0.24),
-				footnote = TextStyle(fontSize = 13.0, fontWeight = 400, lineHeight = 18.0, letterSpacing = -0.08),
-				caption1 = TextStyle(fontSize = 12.0, fontWeight = 400, lineHeight = 16.0, letterSpacing = 0.0),
-				caption2 = TextStyle(fontSize = 11.0, fontWeight = 400, lineHeight = 13.0, letterSpacing = 0.07),
+				displayLarge = TextStyle(fontSize = 34.0, fontWeight = 700, lineHeight = 41.0, letterSpacing = 0.37),
+				displayMedium = TextStyle(fontSize = 28.0, fontWeight = 700, lineHeight = 34.0, letterSpacing = 0.36),
+				displaySmall = TextStyle(fontSize = 24.0, fontWeight = 700, lineHeight = 30.0, letterSpacing = 0.35),
+				headlineLarge = TextStyle(fontSize = 22.0, fontWeight = 700, lineHeight = 28.0, letterSpacing = 0.35),
+				headlineMedium = TextStyle(fontSize = 20.0, fontWeight = 600, lineHeight = 25.0, letterSpacing = 0.38),
+				headlineSmall = TextStyle(fontSize = 18.0, fontWeight = 600, lineHeight = 24.0, letterSpacing = -0.20),
+				titleLarge = TextStyle(fontSize = 17.0, fontWeight = 600, lineHeight = 22.0, letterSpacing = -0.41),
+				titleMedium = TextStyle(fontSize = 16.0, fontWeight = 600, lineHeight = 21.0, letterSpacing = -0.32),
+				titleSmall = TextStyle(fontSize = 15.0, fontWeight = 600, lineHeight = 20.0, letterSpacing = -0.24),
+				bodyLarge = TextStyle(fontSize = 17.0, fontWeight = 400, lineHeight = 22.0, letterSpacing = -0.41),
+				bodyMedium = TextStyle(fontSize = 15.0, fontWeight = 400, lineHeight = 20.0, letterSpacing = -0.24),
+				bodySmall = TextStyle(fontSize = 13.0, fontWeight = 400, lineHeight = 18.0, letterSpacing = -0.08),
+				labelLarge = TextStyle(fontSize = 13.0, fontWeight = 500, lineHeight = 18.0, letterSpacing = -0.08),
+				labelMedium = TextStyle(fontSize = 12.0, fontWeight = 400, lineHeight = 16.0, letterSpacing = 0.0),
+				labelSmall = TextStyle(fontSize = 11.0, fontWeight = 400, lineHeight = 13.0, letterSpacing = 0.07),
 			)
 
 		private val defaultSizing =

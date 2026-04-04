@@ -1,15 +1,21 @@
 .track {
 	position: relative;
 	display: flex;
-	width: 100%;
+	width: fit-content;
 	min-width: min-content;
 	align-items: center;
 	background: var(--sc-track-bg);
 	height: var(--sc-height);
 	border-radius: var(--sc-radius);
-	border: 1px solid var(--sc-border, transparent);
+	border-width: var(--sc-border-width, 1px);
+	border-style: solid;
+	border-color: var(--sc-border, transparent);
 	padding: var(--sc-track-padding);
 	overflow: hidden;
+}
+
+.trackFullWidth {
+	width: 100%;
 }
 
 .thumb {
@@ -35,6 +41,7 @@
 	background: none;
 	border: none;
 	cursor: pointer;
+	font-family: inherit;
 	font-size: var(--sc-font-size);
 	color: var(--sc-text-inactive);
 	padding-inline: var(--sc-padding-h);
@@ -43,7 +50,8 @@
 		opacity var(--sc-duration) var(--sc-easing);
 	font-weight: var(--sc-font-weight);
 	letter-spacing: var(--sc-letter-spacing);
-	line-height: 1;
+	font-variation-settings: var(--sc-font-variation);
+	line-height: var(--sc-line-height);
 	height: 100%;
 }
 

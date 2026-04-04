@@ -25,6 +25,7 @@ class ButtonStyleResolverContractTest {
 			assertEquals(scale.iconSize, sizes.iconSize, "iconSize mismatch for $size")
 			assertEquals(scale.iconGap, sizes.iconGap, "iconGap mismatch for $size")
 			assertEquals(scale.letterSpacing, sizes.letterSpacing, "letterSpacing mismatch for $size")
+			assertEquals(scale.lineHeight, sizes.lineHeight, "lineHeight mismatch for $size")
 		}
 	}
 }

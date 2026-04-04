@@ -19,7 +19,7 @@ export { UIKitThemeScript } from "./theme/UIKitThemeScript";
 export { useSurfaceContext, SurfaceContextProvider } from "./theme/SurfaceContext";
 
 // Utils
-export { toRem } from "./utils/units";
+export { toRem, toEm, toLineHeightRatio, textStyle, buildFontStack } from "./utils/units";
 
 // Re-exports from KMP module (ESM flat exports)
 export {

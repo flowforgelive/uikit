@@ -3,7 +3,7 @@
 import React, { useMemo, useCallback } from "react";
 import { useDesignTokens } from "../../../theme/useDesignTokens";
 import { useSurfaceContext } from "../../../theme/SurfaceContext";
-import { toRem } from "../../../utils/units";
+import { toRem, toEm, toLineHeightRatio } from "../../../utils/units";
 import {
 	ButtonStyleResolver,
 	Visibility,
@@ -107,7 +107,9 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 						"--btn-icon-size": toRem(style.sizes.iconSize),
 						"--btn-icon-gap": toRem(style.sizes.iconGap),
 						"--btn-radius": toRem(style.radius),
-						"--btn-letter-spacing": toRem(style.sizes.letterSpacing),
+						"--btn-letter-spacing": toEm(style.sizes.letterSpacing, style.sizes.fontSize),
+						"--btn-line-height": toLineHeightRatio(style.sizes.lineHeight, style.sizes.fontSize),
+						"--btn-font-variation": tokens.fontVariationSettings,
 						"--btn-duration": `${tokens.motion.durationFast}ms`,
 						"--btn-easing": tokens.motion.easingStandard,
 						"--btn-focus-ring": tokens.color.focusRing,

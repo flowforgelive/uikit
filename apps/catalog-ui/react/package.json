@@ -12,7 +12,8 @@
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
 		"@uikit/react": "file:../../../core/uikit/react",
-		"uikit-common": "file:../../../core/uikit/common/build/dist/js/productionLibrary"
+		"uikit-common": "file:../../../core/uikit/common/build/dist/js/productionLibrary",
+		"catalog-shared": "file:../shared/build/dist/js/productionLibrary"
 	},
 	"devDependencies": {
 		"@types/react": "^19.0.0",

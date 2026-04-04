@@ -21,7 +21,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalContentColor
 import com.uikit.compose.components.atoms.Spinner
-import androidx.compose.material3.Text
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -33,13 +33,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.disabled
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.material3.ripple
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uikit.components.atoms.button.ButtonConfig
 import com.uikit.components.atoms.button.ButtonStyleResolver
 import com.uikit.compose.theme.LocalDesignTokens
+import com.uikit.compose.theme.LocalFontFamily
 import com.uikit.compose.theme.LocalKeyboardNavigationMode
 import com.uikit.compose.theme.LocalSurfaceContext
 import com.uikit.compose.theme.parseColor
@@ -59,6 +60,7 @@ fun ButtonView(
 
 	val tokens = LocalDesignTokens.current
 	val surfaceContext = LocalSurfaceContext.current
+	val fontFamily = LocalFontFamily.current
 	val style = remember(config, tokens, surfaceContext) {
 		ButtonStyleResolver.resolve(config, tokens, surfaceContext)
 	}
@@ -96,7 +98,7 @@ fun ButtonView(
 				.hoverable(interactionSource)
 				.clickable(
 					interactionSource = interactionSource,
-					indication = if (config.isInteractive) ripple() else null,
+					indication = null,
 					enabled = true,
 					role = androidx.compose.ui.semantics.Role.Button,
 				) {
@@ -134,6 +136,8 @@ fun ButtonView(
 					fontSize = style.sizes.fontSize,
 					fontWeight = style.sizes.fontWeight,
 					letterSpacing = style.sizes.letterSpacing,
+					lineHeight = style.sizes.lineHeight,
+					fontFamily = fontFamily,
 					textColor = textColor,
 					iconStart = iconStart,
 					iconEnd = iconEnd,
@@ -151,17 +155,23 @@ private fun ButtonContent(
 	fontSize: Double,
 	fontWeight: Int,
 	letterSpacing: Double,
+	lineHeight: Double,
+	fontFamily: androidx.compose.ui.text.font.FontFamily,
 	textColor: androidx.compose.ui.graphics.Color,
 	iconStart: (@Composable () -> Unit)?,
 	iconEnd: (@Composable () -> Unit)?,
 ) {
 	val textContent: @Composable () -> Unit = {
-		Text(
+		BasicText(
 			text = config.text,
-			fontSize = fontSize.sp,
-			fontWeight = FontWeight(fontWeight),
-			letterSpacing = letterSpacing.sp,
-			color = textColor,
+			style = TextStyle(
+				fontSize = fontSize.sp,
+				fontWeight = FontWeight(fontWeight),
+				letterSpacing = letterSpacing.sp,
+				lineHeight = lineHeight.sp,
+				color = textColor,
+				fontFamily = fontFamily,
+			),
 		)
 	}
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { toRem } from "../../../utils/units";
+import { toRem, toEm, toLineHeightRatio, buildFontStack } from "../../../utils/units";
 import {
 	TextBlockStyleResolver,
 	TextBlockVariant,
@@ -19,14 +19,17 @@ export function TextBlockView({ config, tokens, className }: TextBlockViewProps)
 
 	const style = TextBlockStyleResolver.getInstance().resolve(config, tokens);
 
+	const variant = config.variant;
 	const Tag =
-		config.variant === TextBlockVariant.H1
+		variant === TextBlockVariant.DisplayLarge || variant === TextBlockVariant.DisplayMedium || variant === TextBlockVariant.DisplaySmall
 			? "h1"
-			: config.variant === TextBlockVariant.H2
+			: variant === TextBlockVariant.HeadlineLarge || variant === TextBlockVariant.HeadlineMedium || variant === TextBlockVariant.HeadlineSmall
 				? "h2"
-				: config.variant === TextBlockVariant.H3
+				: variant === TextBlockVariant.TitleLarge || variant === TextBlockVariant.TitleMedium || variant === TextBlockVariant.TitleSmall
 					? "h3"
-					: "p";
+					: variant === TextBlockVariant.LabelLarge || variant === TextBlockVariant.LabelMedium || variant === TextBlockVariant.LabelSmall
+						? "span"
+						: "p";
 
 	return (
 		<Tag
@@ -34,10 +37,12 @@ export function TextBlockView({ config, tokens, className }: TextBlockViewProps)
 			className={`uikit-text-block ${className ?? ""}`}
 			style={{
 				color: style.color,
+				fontFamily: buildFontStack(tokens.fontFamilyName),
 				fontSize: toRem(style.fontSize),
 				fontWeight: style.fontWeight,
-				lineHeight: toRem(style.lineHeight),
-				letterSpacing: toRem(style.letterSpacing),
+				lineHeight: toLineHeightRatio(style.lineHeight, style.fontSize),
+				letterSpacing: toEm(style.letterSpacing, style.fontSize),
+				fontVariationSettings: tokens.fontVariationSettings,
 				margin: 0,
 				visibility:
 					config.visibility === Visibility.Invisible ? "hidden" : undefined,

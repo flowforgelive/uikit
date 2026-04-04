@@ -1,5 +1,6 @@
 package com.uikit.compose.components.atoms.segmentedcontrol
 
+import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -10,15 +11,18 @@ import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.Text
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -38,6 +42,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
@@ -46,6 +51,7 @@ import androidx.compose.ui.unit.sp
 import com.uikit.components.atoms.segmentedcontrol.SegmentedControlConfig
 import com.uikit.components.atoms.segmentedcontrol.SegmentedControlStyleResolver
 import com.uikit.compose.theme.LocalDesignTokens
+import com.uikit.compose.theme.LocalFontFamily
 import com.uikit.compose.theme.LocalKeyboardNavigationMode
 import com.uikit.compose.theme.parseColor
 import com.uikit.foundation.IconPosition
@@ -61,15 +67,23 @@ fun SegmentedControlView(
 	if (config.visibility == Visibility.Gone) return
 
 	val tokens = LocalDesignTokens.current
+	val fontFamily = LocalFontFamily.current
 	val style = remember(config, tokens) { SegmentedControlStyleResolver.resolve(config, tokens) }
 	val keyboardMode = LocalKeyboardNavigationMode.current
 
 	val selectedIndex = config.options.indexOfFirst { it.id == config.selectedId }.coerceAtLeast(0)
 	val optionCount = config.options.size
 
+	val easing = remember(tokens.motion.easingStandard) {
+		val values = tokens.motion.easingStandard
+			.removePrefix("cubic-bezier(").removeSuffix(")")
+			.split(",").map { it.trim().toFloat() }
+		CubicBezierEasing(values[0], values[1], values[2], values[3])
+	}
+
 	val animatedFraction by animateFloatAsState(
 		targetValue = if (optionCount > 0) selectedIndex.toFloat() / optionCount else 0f,
-		animationSpec = tween(durationMillis = tokens.motion.durationNormal),
+		animationSpec = tween(durationMillis = tokens.motion.durationNormal, easing = easing),
 	)
 
 	val focusRequesters = remember(optionCount) { List(optionCount) { FocusRequester() } }
@@ -83,8 +97,9 @@ fun SegmentedControlView(
 	Box(
 		modifier =
 			modifier
-				.fillMaxWidth()
+				.width(IntrinsicSize.Max)
 				.defaultMinSize(minHeight = style.sizes.height.dp)
+				.height(IntrinsicSize.Max)
 				.clip(shape)
 				.background(parseColor(style.colors.trackBg))
 				.then(
@@ -115,7 +130,7 @@ fun SegmentedControlView(
 					}
 				},
 	) {
-		Row(modifier = Modifier.matchParentSize()) {
+		Row(modifier = Modifier.fillMaxSize()) {
 			config.options.forEachIndexed { index, option ->
 				val isActive = option.id == config.selectedId
 				val optionInteractionSource = remember { MutableInteractionSource() }
@@ -127,6 +142,7 @@ fun SegmentedControlView(
 						Modifier
 							.weight(1f)
 							.fillMaxHeight()
+							.padding(horizontal = style.sizes.paddingH.dp)
 							.then(
 								if (showOptionFocusRing) {
 									Modifier.border(tokens.focusRingWidth.dp, parseColor(tokens.color.focusRing), thumbShape)
@@ -190,13 +206,17 @@ fun SegmentedControlView(
 							}
 						}
 						val textContent: @Composable () -> Unit = {
-							Text(
+							BasicText(
 								text = option.label,
-								fontSize = style.sizes.fontSize.sp,
-								fontWeight = FontWeight(style.sizes.fontWeight),
-								letterSpacing = style.sizes.letterSpacing.sp,
-								color = textColor,
-								textAlign = TextAlign.Center,
+								style = TextStyle(
+									fontSize = style.sizes.fontSize.sp,
+									fontWeight = FontWeight(style.sizes.fontWeight),
+									letterSpacing = style.sizes.letterSpacing.sp,
+									lineHeight = style.sizes.lineHeight.sp,
+									color = textColor,
+									textAlign = TextAlign.Center,
+									fontFamily = fontFamily,
+								),
 							)
 						}
 						if (isVertical) {
@@ -234,13 +254,17 @@ fun SegmentedControlView(
 							}
 						}
 					} else {
-						Text(
+						BasicText(
 							text = option.label,
-							fontSize = style.sizes.fontSize.sp,
-							fontWeight = FontWeight(style.sizes.fontWeight),
-							letterSpacing = style.sizes.letterSpacing.sp,
-							color = textColor,
-							textAlign = TextAlign.Center,
+							style = TextStyle(
+								fontSize = style.sizes.fontSize.sp,
+								fontWeight = FontWeight(style.sizes.fontWeight),
+								letterSpacing = style.sizes.letterSpacing.sp,
+								lineHeight = style.sizes.lineHeight.sp,
+								color = textColor,
+								textAlign = TextAlign.Center,
+								fontFamily = fontFamily,
+							),
 						)
 					}
 				}

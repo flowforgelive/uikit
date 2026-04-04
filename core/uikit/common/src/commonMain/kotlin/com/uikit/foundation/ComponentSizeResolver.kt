@@ -29,6 +29,7 @@ object ComponentSizeResolver {
 		val iconSize = fs * p.iconSizeRatio
 		val iconGap = fs * p.iconGapRatio
 		val radius = height * p.radiusFraction
+		val lineHeight = fs * p.lineHeightRatio
 
 		return ControlSizeScale(
 			height = height * scaleFactor,
@@ -39,6 +40,7 @@ object ComponentSizeResolver {
 			iconGap = iconGap * scaleFactor,
 			letterSpacing = input.letterSpacing,
 			radius = radius * scaleFactor,
+			lineHeight = lineHeight,
 		)
 	}
 }

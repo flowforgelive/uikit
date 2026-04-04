@@ -39,10 +39,20 @@ object TextBlockStyleResolver {
 		tokens: DesignTokens,
 	): ResolvedTextBlockStyle =
 		when (config.variant) {
-			TextBlockVariant.H1 -> fromTextStyle(tokens.typography.title1, tokens.color.textPrimary)
-			TextBlockVariant.H2 -> fromTextStyle(tokens.typography.title2, tokens.color.textPrimary)
-			TextBlockVariant.H3 -> fromTextStyle(tokens.typography.title3, tokens.color.textPrimary)
-			TextBlockVariant.Body -> fromTextStyle(tokens.typography.body, tokens.color.textPrimary)
-			TextBlockVariant.Caption -> fromTextStyle(tokens.typography.caption1, tokens.color.textMuted)
+			TextBlockVariant.DisplayLarge -> fromTextStyle(tokens.typography.displayLarge, tokens.color.textPrimary)
+			TextBlockVariant.DisplayMedium -> fromTextStyle(tokens.typography.displayMedium, tokens.color.textPrimary)
+			TextBlockVariant.DisplaySmall -> fromTextStyle(tokens.typography.displaySmall, tokens.color.textPrimary)
+			TextBlockVariant.HeadlineLarge -> fromTextStyle(tokens.typography.headlineLarge, tokens.color.textPrimary)
+			TextBlockVariant.HeadlineMedium -> fromTextStyle(tokens.typography.headlineMedium, tokens.color.textPrimary)
+			TextBlockVariant.HeadlineSmall -> fromTextStyle(tokens.typography.headlineSmall, tokens.color.textPrimary)
+			TextBlockVariant.TitleLarge -> fromTextStyle(tokens.typography.titleLarge, tokens.color.textPrimary)
+			TextBlockVariant.TitleMedium -> fromTextStyle(tokens.typography.titleMedium, tokens.color.textPrimary)
+			TextBlockVariant.TitleSmall -> fromTextStyle(tokens.typography.titleSmall, tokens.color.textPrimary)
+			TextBlockVariant.BodyLarge -> fromTextStyle(tokens.typography.bodyLarge, tokens.color.textPrimary)
+			TextBlockVariant.BodyMedium -> fromTextStyle(tokens.typography.bodyMedium, tokens.color.textPrimary)
+			TextBlockVariant.BodySmall -> fromTextStyle(tokens.typography.bodySmall, tokens.color.textSecondary)
+			TextBlockVariant.LabelLarge -> fromTextStyle(tokens.typography.labelLarge, tokens.color.textSecondary)
+			TextBlockVariant.LabelMedium -> fromTextStyle(tokens.typography.labelMedium, tokens.color.textMuted)
+			TextBlockVariant.LabelSmall -> fromTextStyle(tokens.typography.labelSmall, tokens.color.textMuted)
 		}
 }

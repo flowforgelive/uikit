@@ -1,17 +1,16 @@
 "use client";
 
+import { useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Text, SegmentedControl, useUIKitTheme } from "@uikit/react";
+import { Button, Text, useUIKitTheme, toRem } from "@uikit/react";
+import { CatalogLayoutResolver } from "catalog-shared";
 import { ThemeSwitcher } from "./components/theme-switcher/ThemeSwitcher";
-
-const DIR_OPTIONS = [
-	{ id: "ltr", label: "LTR" },
-	{ id: "rtl", label: "RTL" },
-];
+import { DirSwitcher } from "./components/dir-switcher/DirSwitcher";
 
 export default function FirstPage() {
 	const router = useRouter();
-	const { tokens, dir, setDir } = useUIKitTheme();
+	const { tokens } = useUIKitTheme();
+	const layout = useMemo(() => CatalogLayoutResolver.getInstance().resolve(tokens), [tokens]);
 
 	return (
 		<main
@@ -22,7 +21,7 @@ export default function FirstPage() {
 				alignItems: "center",
 				justifyContent: "center",
 				minHeight: "100vh",
-				gap: "24px",
+				gap: toRem(layout.firstScreenGap),
 				backgroundColor: tokens.color.surface,
 				color: tokens.color.textPrimary,
 				transition: `background-color ${tokens.motion.durationNormal}ms ${tokens.motion.easingStandard}, color ${tokens.motion.durationNormal}ms ${tokens.motion.easingStandard}`,
@@ -31,25 +30,17 @@ export default function FirstPage() {
 			<div
 				style={{
 					position: "absolute",
-					top: "16px",
-					insetInlineEnd: "16px",
+					top: toRem(layout.firstScreenControlsPadding),
+					insetInlineEnd: toRem(layout.firstScreenControlsPadding),
 					display: "flex",
-					gap: "8px",
+					gap: toRem(layout.firstScreenControlsGap),
 					alignItems: "center",
 				}}
 			>
-				<div style={{ width: "7.5rem" }}>
-					<SegmentedControl
-						options={DIR_OPTIONS}
-						selectedId={dir}
-						onSelectionChange={(id) => setDir(id as "ltr" | "rtl")}
-					/>
-				</div>
-				<div style={{ width: "15rem" }}>
-					<ThemeSwitcher />
-				</div>
+				<DirSwitcher />
+				<ThemeSwitcher />
 			</div>
-			<Text text="UIKit Catalog" variant="h1" />
+			<Text text="UIKit Catalog" variant="headline-large" />
 			<Button
 				text="Foundation Tokens"
 				onClick={() => router.push("/foundation")}

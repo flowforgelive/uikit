@@ -2,7 +2,7 @@
 
 import React, { useMemo, useCallback, useRef } from "react";
 import { useDesignTokens } from "../../../theme/useDesignTokens";
-import { toRem } from "../../../utils/units";
+import { toRem, toEm, toLineHeightRatio } from "../../../utils/units";
 import {
 	SegmentedControlStyleResolver,
 	Visibility,
@@ -90,10 +90,13 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 						"--sc-text-active": style.colors.textActive,
 						"--sc-text-inactive": style.colors.textInactive,
 						"--sc-border": style.colors.border,
+						"--sc-border-width": `${tokens.borderWidth}px`,
 						"--sc-height": toRem(style.sizes.height),
 						"--sc-font-size": toRem(style.sizes.fontSize),
 						"--sc-font-weight": style.sizes.fontWeight,
-						"--sc-letter-spacing": toRem(style.sizes.letterSpacing),
+						"--sc-letter-spacing": toEm(style.sizes.letterSpacing, style.sizes.fontSize),
+						"--sc-line-height": toLineHeightRatio(style.sizes.lineHeight, style.sizes.fontSize),
+						"--sc-font-variation": tokens.fontVariationSettings,
 						"--sc-padding-h": toRem(style.sizes.paddingH),
 						"--sc-radius": toRem(style.sizes.radius),
 						"--sc-thumb-radius": toRem(style.sizes.thumbRadius),

@@ -2,12 +2,9 @@
 
 import React from "react";
 import { SegmentedControl, useUIKitTheme } from "@uikit/react";
+import { CatalogOptions } from "catalog-shared";
 
-const THEME_OPTIONS = [
-	{ id: "dark", label: "Тёмная" },
-	{ id: "light", label: "Светлая" },
-	{ id: "system", label: "Система" },
-];
+const THEME_OPTIONS = CatalogOptions.getInstance().themeOptions.map((o: any) => ({ id: o.id, label: o.label }));
 
 export function ThemeSwitcher({ className }: { className?: string }) {
 	const { mode, setMode } = useUIKitTheme();

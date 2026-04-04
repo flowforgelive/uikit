@@ -18,6 +18,7 @@ import com.uikit.tokens.DesignTokens
 val LocalDesignTokens = staticCompositionLocalOf { DesignTokens.Default }
 val LocalUIKitLayoutDirection = staticCompositionLocalOf { LayoutDirection.Ltr }
 val LocalSurfaceContext = staticCompositionLocalOf { DefaultSurfaceContext }
+val LocalFontFamily = staticCompositionLocalOf<androidx.compose.ui.text.font.FontFamily> { androidx.compose.ui.text.font.FontFamily.Default }
 
 private fun LayoutDirection.toCompose(): androidx.compose.ui.unit.LayoutDirection =
 	when (this) {
@@ -29,12 +30,14 @@ private fun LayoutDirection.toCompose(): androidx.compose.ui.unit.LayoutDirectio
 fun UIKitTheme(
 	tokens: DesignTokens = DesignTokens.Default,
 	layoutDirection: LayoutDirection = LayoutDirection.Ltr,
+	fontFamily: androidx.compose.ui.text.font.FontFamily = LocalFontFamily.current,
 	content: @Composable () -> Unit,
 ) {
 	CompositionLocalProvider(
 		LocalDesignTokens provides tokens,
 		LocalUIKitLayoutDirection provides layoutDirection,
 		LocalLayoutDirection provides layoutDirection.toCompose(),
+		LocalFontFamily provides fontFamily,
 	) {
 		KeyboardNavigationHandler {
 			content()
@@ -50,6 +53,7 @@ fun UIKitTheme(
 fun UIKitTheme(
 	themeProvider: ThemeProvider = DefaultThemeProvider,
 	layoutDirection: LayoutDirection = LayoutDirection.Ltr,
+	fontFamily: androidx.compose.ui.text.font.FontFamily = LocalFontFamily.current,
 	content: @Composable () -> Unit,
 ) {
 	val themeMode by themeProvider
@@ -70,6 +74,7 @@ fun UIKitTheme(
 		LocalDesignTokens provides tokens,
 		LocalUIKitLayoutDirection provides layoutDirection,
 		LocalLayoutDirection provides layoutDirection.toCompose(),
+		LocalFontFamily provides fontFamily,
 	) {
 		KeyboardNavigationHandler {
 			content()

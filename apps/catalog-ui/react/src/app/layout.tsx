@@ -1,7 +1,13 @@
 import { UIKitThemeProvider, UIKitThemeScript } from "@uikit/react";
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 import "./globals.css";
+
+const inter = Inter({
+	subsets: ["latin", "cyrillic"],
+	display: "swap",
+});
 
 export const metadata: Metadata = {
 	title: "UIKit Catalog",
@@ -32,7 +38,7 @@ export default async function RootLayout({
 			<head>
 				<UIKitThemeScript />
 			</head>
-			<body>
+			<body className={inter.className}>
 				<UIKitThemeProvider
 					initialTheme={initialTheme}
 					initialResolved={initialResolved}

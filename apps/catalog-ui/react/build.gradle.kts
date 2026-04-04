@@ -7,9 +7,11 @@ node {
 }
 
 val jsLibTask = ":core:uikit:common:jsBrowserProductionLibraryDistribution"
+val sharedJsLibTask = ":apps:catalog-ui:shared:jsBrowserProductionLibraryDistribution"
 
 val reactNpmInstall by tasks.registering(com.github.gradle.node.npm.task.NpmInstallTask::class) {
 	dependsOn(jsLibTask)
+	dependsOn(sharedJsLibTask)
 	dependsOn(":core:uikit:react:npmInstall")
 	workingDir.set(projectDir)
 }

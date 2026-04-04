@@ -8,7 +8,7 @@ import com.uikit.components.atoms.text.TextBlockVariant
 @Composable
 fun TextBlock(
 	text: String,
-	variant: TextBlockVariant = TextBlockVariant.Body,
+	variant: TextBlockVariant = TextBlockVariant.BodyLarge,
 	testTag: String? = null,
 	modifier: Modifier = Modifier,
 ) {

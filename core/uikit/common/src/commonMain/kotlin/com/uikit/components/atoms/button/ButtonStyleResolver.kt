@@ -42,6 +42,7 @@ data class SizeSet(
 	val iconSize: Double,
 	val iconGap: Double,
 	val letterSpacing: Double,
+	val lineHeight: Double,
 )
 
 @JsExport
@@ -88,6 +89,7 @@ object ButtonStyleResolver {
 			iconSize = scale.iconSize,
 			iconGap = scale.iconGap,
 			letterSpacing = scale.letterSpacing,
+			lineHeight = scale.lineHeight,
 		)
 
 		return ResolvedButtonStyle(
