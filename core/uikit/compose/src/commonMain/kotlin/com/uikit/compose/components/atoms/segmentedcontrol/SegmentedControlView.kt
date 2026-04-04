@@ -6,8 +6,10 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -135,6 +137,7 @@ fun SegmentedControlView(
 				val isActive = option.id == config.selectedId
 				val optionInteractionSource = remember { MutableInteractionSource() }
 				val isOptionFocused by optionInteractionSource.collectIsFocusedAsState()
+				val isOptionHovered by optionInteractionSource.collectIsHoveredAsState()
 				val showOptionFocusRing = isOptionFocused && keyboardMode.value
 
 				Box(
@@ -142,7 +145,10 @@ fun SegmentedControlView(
 						Modifier
 							.weight(1f)
 							.fillMaxHeight()
-							.padding(horizontal = style.sizes.paddingH.dp)
+							.padding(horizontal = style.sizes.paddingH.dp, vertical = style.sizes.paddingV.dp)
+							.then(
+								if (isOptionHovered && !isActive) Modifier.alpha(0.72f) else Modifier
+							)
 							.then(
 								if (showOptionFocusRing) {
 									Modifier.border(tokens.focusRingWidth.dp, parseColor(tokens.color.focusRing), thumbShape)
@@ -180,6 +186,7 @@ fun SegmentedControlView(
 									false
 								}
 							}
+							.hoverable(optionInteractionSource)
 							.clickable(
 								interactionSource = optionInteractionSource,
 								indication = null,

@@ -7,7 +7,6 @@ import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.ripple
 import com.uikit.compose.components.atoms.Spinner
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
@@ -68,11 +68,10 @@ fun ButtonView(
 
 	val interactionSource = remember { MutableInteractionSource() }
 	val isHovered by interactionSource.collectIsHoveredAsState()
-	val isPressed by interactionSource.collectIsPressedAsState()
 	val isFocused by interactionSource.collectIsFocusedAsState()
 	val keyboardMode = LocalKeyboardNavigationMode.current
 
-	val active = (isHovered || isPressed) && config.isInteractive
+	val active = isHovered && config.isInteractive
 	val focused = isFocused && keyboardMode.value
 	val currentBg = if (active) style.colors.bgHover else style.colors.bg
 	val currentBorder = when {
@@ -98,7 +97,7 @@ fun ButtonView(
 				.hoverable(interactionSource)
 				.clickable(
 					interactionSource = interactionSource,
-					indication = null,
+					indication = if (config.isInteractive) ripple() else null,
 					enabled = true,
 					role = androidx.compose.ui.semantics.Role.Button,
 				) {
@@ -116,7 +115,7 @@ fun ButtonView(
 						Modifier
 					},
 				)
-				.padding(horizontal = style.sizes.paddingH.dp)
+				.padding(horizontal = style.sizes.paddingH.dp, vertical = style.sizes.paddingV.dp)
 				.then(if (config.visibility == Visibility.Invisible) Modifier.alpha(0f) else Modifier)
 				.testTag(config.testTag ?: config.id),
 	) {

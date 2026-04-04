@@ -1,6 +1,7 @@
 package com.uikit.components.atoms.segmentedcontrol
 
 import com.uikit.foundation.ComponentSizeResolver
+import com.uikit.foundation.IconPosition
 import com.uikit.foundation.VisualVariant
 import com.uikit.tokens.DesignTokens
 import kotlinx.serialization.Serializable
@@ -22,6 +23,7 @@ data class SegmentedControlColors(
 data class SegmentedControlSizes(
 	val height: Double,
 	val paddingH: Double,
+	val paddingV: Double,
 	val fontSize: Double,
 	val fontWeight: Int,
 	val letterSpacing: Double,
@@ -51,12 +53,25 @@ object SegmentedControlStyleResolver {
 	fun resolve(config: SegmentedControlConfig, tokens: DesignTokens): ResolvedSegmentedControlStyle {
 		val scale = ComponentSizeResolver.resolve(config.size, tokens.controls, tokens.scaleFactor)
 		val trackPadding = tokens.controls.segmentedControlTrackPadding
+
+		val isVerticalLayout = config.iconPosition == IconPosition.Top || config.iconPosition == IconPosition.Bottom
+		val paddingV: Double
+		val height: Double
+		if (isVerticalLayout) {
+			paddingV = (scale.height - scale.lineHeight) / 2.0
+			height = scale.iconSize + scale.iconGap + scale.lineHeight + 2.0 * paddingV
+		} else {
+			paddingV = 0.0
+			height = scale.height
+		}
+
 		return ResolvedSegmentedControlStyle(
 			colors = resolveColors(config.variant, tokens),
 			sizes =
 				SegmentedControlSizes(
-					height = scale.height,
+					height = height,
 					paddingH = scale.paddingH,
+					paddingV = paddingV,
 					fontSize = scale.fontSize,
 					fontWeight = scale.fontWeight,
 					letterSpacing = scale.letterSpacing,
@@ -87,6 +102,7 @@ object SegmentedControlStyleResolver {
 				SegmentedControlSizes(
 					height = scale.height,
 					paddingH = scale.paddingH,
+					paddingV = 0.0,
 					fontSize = scale.fontSize,
 					fontWeight = scale.fontWeight,
 					letterSpacing = scale.letterSpacing,

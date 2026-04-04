@@ -5,7 +5,7 @@
 	min-width: min-content;
 	align-items: center;
 	background: var(--sc-track-bg);
-	height: var(--sc-height);
+	min-height: var(--sc-height);
 	border-radius: var(--sc-radius);
 	border-width: var(--sc-border-width, 1px);
 	border-style: solid;
@@ -45,6 +45,7 @@
 	font-size: var(--sc-font-size);
 	color: var(--sc-text-inactive);
 	padding-inline: var(--sc-padding-h);
+	padding-block: var(--sc-padding-v, 0);
 	white-space: nowrap;
 	transition: color var(--sc-duration) var(--sc-easing),
 		opacity var(--sc-duration) var(--sc-easing);

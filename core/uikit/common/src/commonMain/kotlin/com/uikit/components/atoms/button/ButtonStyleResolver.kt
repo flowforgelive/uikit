@@ -2,6 +2,7 @@ package com.uikit.components.atoms.button
 
 import com.uikit.foundation.ColorIntent
 import com.uikit.foundation.ComponentSizeResolver
+import com.uikit.foundation.IconPosition
 import com.uikit.foundation.SurfaceAwareColorResolver
 import com.uikit.foundation.SurfaceContext
 import com.uikit.foundation.VisualVariant
@@ -37,6 +38,7 @@ data class ColorSet(
 data class SizeSet(
 	val height: Double,
 	val paddingH: Double,
+	val paddingV: Double,
 	val fontSize: Double,
 	val fontWeight: Int,
 	val iconSize: Double,
@@ -81,9 +83,24 @@ object ButtonStyleResolver {
 
 		val scale = ComponentSizeResolver.resolve(config.size, tokens.controls, tokens.scaleFactor)
 
+		val isVerticalWithIcon = (config.iconPosition == IconPosition.Top || config.iconPosition == IconPosition.Bottom) && config.hasIcon
+		val paddingV: Double
+		val height: Double
+		if (isVerticalWithIcon) {
+			// Vertical: icon stacks above/below text — need extra height.
+			// paddingV = same implicit vertical padding as horizontal mode:
+			// (normalHeight - lineHeight) / 2
+			paddingV = (scale.height - scale.lineHeight) / 2.0
+			height = scale.iconSize + scale.iconGap + scale.lineHeight + 2.0 * paddingV
+		} else {
+			paddingV = 0.0
+			height = scale.height
+		}
+
 		val sizes = SizeSet(
-			height = scale.height,
+			height = height,
 			paddingH = scale.paddingH,
+			paddingV = paddingV,
 			fontSize = scale.fontSize,
 			fontWeight = scale.fontWeight,
 			iconSize = scale.iconSize,

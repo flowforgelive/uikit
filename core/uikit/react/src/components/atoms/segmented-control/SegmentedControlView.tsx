@@ -92,6 +92,7 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 						"--sc-border": style.colors.border,
 						"--sc-border-width": `${tokens.borderWidth}px`,
 						"--sc-height": toRem(style.sizes.height),
+						"--sc-padding-v": toRem(style.sizes.paddingV),
 						"--sc-font-size": toRem(style.sizes.fontSize),
 						"--sc-font-weight": style.sizes.fontWeight,
 						"--sc-letter-spacing": toEm(style.sizes.letterSpacing, style.sizes.fontSize),
