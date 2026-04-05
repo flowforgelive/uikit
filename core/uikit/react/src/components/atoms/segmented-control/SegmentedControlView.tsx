@@ -2,6 +2,7 @@
 
 import React, { useMemo, useCallback, useRef } from "react";
 import { useDesignTokens } from "../../../theme/useDesignTokens";
+import { useSurfaceContext } from "../../../theme/SurfaceContext";
 import { toRem, toEm, toLineHeightRatio } from "../../../utils/units";
 import {
 	SegmentedControlStyleResolver,
@@ -24,9 +25,10 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 	React.memo(({ config, onSelectionChange, renderIcon, tokens: tokensProp, className }) => {
 		const contextTokens = useDesignTokens();
 		const tokens = tokensProp ?? contextTokens;
+		const surface = useSurfaceContext();
 		const style = useMemo(
-			() => SegmentedControlStyleResolver.getInstance().resolve(config, tokens),
-			[config, tokens],
+			() => SegmentedControlStyleResolver.getInstance().resolve(config, tokens, surface),
+			[config, tokens, surface],
 		);
 
 		const options = config.options;

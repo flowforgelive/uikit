@@ -55,6 +55,7 @@ import com.uikit.components.atoms.segmentedcontrol.SegmentedControlStyleResolver
 import com.uikit.compose.theme.LocalDesignTokens
 import com.uikit.compose.theme.LocalFontFamily
 import com.uikit.compose.theme.LocalKeyboardNavigationMode
+import com.uikit.compose.theme.LocalSurfaceContext
 import com.uikit.compose.theme.parseColor
 import com.uikit.foundation.IconPosition
 import com.uikit.foundation.Visibility
@@ -70,7 +71,8 @@ fun SegmentedControlView(
 
 	val tokens = LocalDesignTokens.current
 	val fontFamily = LocalFontFamily.current
-	val style = remember(config, tokens) { SegmentedControlStyleResolver.resolve(config, tokens) }
+	val surfaceContext = LocalSurfaceContext.current
+	val style = remember(config, tokens, surfaceContext) { SegmentedControlStyleResolver.resolve(config, tokens, surfaceContext) }
 	val keyboardMode = LocalKeyboardNavigationMode.current
 
 	val selectedIndex = config.options.indexOfFirst { it.id == config.selectedId }.coerceAtLeast(0)
