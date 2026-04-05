@@ -1,24 +1,23 @@
 .track {
 	position: relative;
 	display: grid;
-	grid-auto-columns: 1fr;
+	grid-auto-columns: minmax(0, 1fr);
 	grid-auto-flow: column;
 	box-sizing: border-box;
 	width: fit-content;
 	min-width: min-content;
 	background: var(--sc-track-bg);
-	min-height: var(--sc-height);
+	min-height: calc(var(--sc-height) + 2 * var(--sc-track-padding));
 	border-radius: var(--sc-radius);
-	border-width: var(--sc-border-width, 1px);
-	border-style: solid;
-	border-color: var(--sc-border, transparent);
+	border: none;
+	box-shadow: inset 0 0 0 var(--sc-border-width, 1px) var(--sc-border, transparent);
 	padding: var(--sc-track-padding);
 	overflow: hidden;
 }
 
 .trackFullWidth {
 	width: 100%;
-	grid-auto-columns: 1fr;
+	grid-auto-columns: minmax(0, 1fr);
 }
 
 .thumb {
@@ -39,6 +38,8 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	min-width: 0;
+	overflow: hidden;
 	background: none;
 	border: none;
 	cursor: pointer;
@@ -53,7 +54,7 @@
 	font-weight: var(--sc-font-weight);
 	letter-spacing: var(--sc-letter-spacing);
 	font-variation-settings: var(--sc-font-variation);
-	line-height: var(--sc-line-height);
+	line-height: normal;
 }
 
 .option:hover {

@@ -102,7 +102,7 @@ fun SegmentedControlView(
 		modifier =
 			modifier
 				.width(IntrinsicSize.Max)
-				.defaultMinSize(minHeight = style.sizes.height.dp)
+				.defaultMinSize(minHeight = (style.sizes.height + 2 * style.sizes.trackPadding).dp)
 				.height(IntrinsicSize.Max)
 				.clip(shape)
 				.background(parseColor(style.colors.trackBg))
@@ -147,10 +147,6 @@ fun SegmentedControlView(
 						Modifier
 							.weight(1f)
 							.fillMaxHeight()
-							.padding(horizontal = style.sizes.paddingH.dp, vertical = style.sizes.paddingV.dp)
-							.then(
-								if (isOptionHovered && !isActive) Modifier.alpha(0.72f) else Modifier
-							)
 							.then(
 								if (showOptionFocusRing) {
 									Modifier.border(tokens.focusRingWidth.dp, parseColor(tokens.color.focusRing), thumbShape)
@@ -192,7 +188,9 @@ fun SegmentedControlView(
 							.clickable(
 								interactionSource = optionInteractionSource,
 								indication = null,
-							) { onSelectionChange(option.id) },
+							) { onSelectionChange(option.id) }
+							.then(if (isOptionHovered && !isActive) Modifier.alpha(0.72f) else Modifier)
+							.padding(horizontal = style.sizes.paddingH.dp, vertical = style.sizes.paddingV.dp),
 					contentAlignment = Alignment.Center,
 				) {
 					val textColor = parseColor(
@@ -226,6 +224,8 @@ fun SegmentedControlView(
 									textAlign = TextAlign.Center,
 									fontFamily = fontFamily,
 								),
+								maxLines = 1,
+								softWrap = false,
 							)
 						}
 						if (isVertical) {
@@ -274,6 +274,8 @@ fun SegmentedControlView(
 								textAlign = TextAlign.Center,
 								fontFamily = fontFamily,
 							),
+							maxLines = 1,
+							softWrap = false,
 						)
 					}
 				}
