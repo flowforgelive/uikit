@@ -112,8 +112,7 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 						"--sc-focus-ring": tokens.color.focusRing,
 						"--sc-focus-ring-width": `${tokens.focusRingWidth}px`,
 						"--sc-icon-size": toRem(style.sizes.iconSize),
-						"--sc-icon-gap": toRem(style.sizes.iconGap),
-						visibility:
+						"--sc-icon-gap": toRem(style.sizes.iconGap),					"--sc-hover-content-opacity": tokens.state.hoverContentOpacity,						visibility:
 							config.visibility === Visibility.Invisible ? "hidden" : undefined,
 					} as React.CSSProperties
 				}

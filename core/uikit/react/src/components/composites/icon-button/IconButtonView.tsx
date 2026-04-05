@@ -66,8 +66,13 @@ export const IconButtonView: React.FC<IconButtonViewProps> = React.memo(
 						"--ib-focus-ring": tokens.color.focusRing,
 						"--ib-border-width": `${tokens.borderWidth}px`,
 						"--ib-focus-ring-width": `${tokens.focusRingWidth}px`,
-						"--ib-spinner-duration": `${tokens.motion.durationSlower * 1.5}ms`,
+						"--ib-spinner-duration": `${tokens.motion.durationSpinner}ms`,
 						"--ib-spinner-stroke": `${tokens.spinnerStrokeWidth}px`,
+						"--ib-disabled-opacity": tokens.state.disabledOpacity,
+						"--ib-press-opacity": tokens.state.pressOpacity,
+						"--ib-press-brightness": tokens.state.pressBrightness,
+						"--ib-ripple-spread": `${tokens.state.rippleSpread}%`,
+						"--ib-ripple-fade-duration": `${tokens.state.rippleFadeDurationMs}ms`,
 						visibility:
 							config.visibility === Visibility.Invisible ? "hidden" : undefined,
 					} as React.CSSProperties

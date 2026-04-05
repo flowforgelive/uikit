@@ -116,8 +116,13 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 						"--btn-focus-ring": tokens.color.focusRing,
 						"--btn-border-width": `${tokens.borderWidth}px`,
 						"--btn-focus-ring-width": `${tokens.focusRingWidth}px`,
-						"--btn-spinner-duration": `${tokens.motion.durationSlower * 1.5}ms`,
+						"--btn-spinner-duration": `${tokens.motion.durationSpinner}ms`,
 						"--btn-spinner-stroke": `${tokens.spinnerStrokeWidth}px`,
+						"--btn-disabled-opacity": tokens.state.disabledOpacity,
+						"--btn-press-opacity": tokens.state.pressOpacity,
+						"--btn-press-brightness": tokens.state.pressBrightness,
+						"--btn-ripple-spread": `${tokens.state.rippleSpread}%`,
+						"--btn-ripple-fade-duration": `${tokens.state.rippleFadeDurationMs}ms`,
 						visibility:
 							config.visibility === Visibility.Invisible ? "hidden" : undefined,
 					} as React.CSSProperties

@@ -65,8 +65,7 @@ export const PanelView: React.FC<PanelViewProps> = React.memo(
 							"--panel-inset": toRem(style.insetPadding),
 							"--panel-border-width": `${style.borderWidth}px`,
 							"--panel-duration": `${style.durationMs}ms`,
-							"--panel-easing": style.easing,
-							visibility:
+							"--panel-easing": style.easing,						"--panel-toggle-duration": `${tokens.motion.durationFast}ms`,							visibility:
 								config.visibility === Visibility.Invisible ? "hidden" : undefined,
 						} as React.CSSProperties
 					}

@@ -55,11 +55,16 @@
 	border: var(--panel-border-width) solid var(--panel-border);
 }
 
-/* Remove side-specific border for inset (uses full border instead) */
+/* Remove side-specific border & height override for inset (uses full border instead) */
 .inset[data-side="left"],
-.inset[data-side="right"],
+.inset[data-side="right"] {
+	height: auto;
+	border: var(--panel-border-width) solid var(--panel-border);
+}
+
 .inset[data-side="top"],
 .inset[data-side="bottom"] {
+	height: auto;
 	border: var(--panel-border-width) solid var(--panel-border);
 }
 
@@ -111,7 +116,7 @@
 	cursor: pointer;
 	opacity: 0;
 	transition: opacity var(--panel-duration) var(--panel-easing),
-		background 150ms ease;
+		background var(--panel-toggle-duration, 150ms) ease;
 	z-index: 1;
 }
 

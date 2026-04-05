@@ -110,7 +110,7 @@ fun ButtonView(
 					if (!config.isInteractive) {
 						Modifier
 							.semantics { disabled() }
-							.alpha(0.6f)
+							.alpha(tokens.state.disabledOpacity.toFloat())
 					} else {
 						Modifier
 					},
@@ -125,7 +125,7 @@ fun ButtonView(
 					size = style.sizes.iconSize.dp,
 					color = textColor,
 					strokeWidth = tokens.spinnerStrokeWidth.dp,
-					durationMs = (tokens.motion.durationSlower * 1.5).toInt(),
+					durationMs = tokens.motion.durationSpinner,
 				)
 			} else {
 				ButtonContent(

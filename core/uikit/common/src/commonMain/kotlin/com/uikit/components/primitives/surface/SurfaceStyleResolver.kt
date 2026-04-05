@@ -68,7 +68,7 @@ object SurfaceStyleResolver {
 			border = border,
 			radius = radius,
 			shadow = shadow,
-			elevationDp = if (config.elevated) 4.0 else 0.0,
+			elevationDp = if (config.elevated) tokens.shadows.elevationDp else 0.0,
 		)
 	}
 

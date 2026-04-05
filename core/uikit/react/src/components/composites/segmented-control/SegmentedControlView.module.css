@@ -58,7 +58,7 @@
 }
 
 .option:hover {
-	opacity: 0.72;
+	opacity: var(--sc-hover-content-opacity, 0.72);
 }
 
 .option:focus-visible {

@@ -10,4 +10,6 @@ data class ShadowTokens(
 	val md: String,
 	val lg: String,
 	val xl: String,
+	/** Compose elevation in dp for elevated surfaces/panels. */
+	val elevationDp: Double = 4.0,
 )

@@ -32,6 +32,8 @@ data class MotionTokens(
 	val durationNormal: Int,
 	val durationSlow: Int,
 	val durationSlower: Int,
+	/** Spinner rotation cycle duration (ms). Slower than durationSlower for smooth visual. */
+	val durationSpinner: Int = 600,
 	val easingStandard: String,
 	val easingDecelerate: String,
 	val easingAccelerate: String,

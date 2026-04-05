@@ -85,7 +85,7 @@ fun PanelView(
 			)
 			.then(
 				if (config.elevated) {
-					Modifier.shadow(4.dp, shape)
+					Modifier.shadow(tokens.shadows.elevationDp.dp, shape)
 				} else {
 					Modifier
 				},

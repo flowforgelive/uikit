@@ -28,15 +28,15 @@ button.surface {
 	background: radial-gradient(
 		circle at var(--ripple-x, 50%) var(--ripple-y, 50%),
 		currentColor 0%,
-		transparent 70%
+		transparent var(--surface-ripple-spread, 70%)
 	);
 	opacity: 0;
-	transition: opacity 0.3s ease;
+	transition: opacity var(--surface-ripple-fade-duration, 300ms) ease;
 	pointer-events: none;
 }
 
 .clickable:active::after {
-	opacity: 0.08;
+	opacity: var(--surface-press-opacity, 0.08);
 	transition: opacity 0s;
 }
 
@@ -51,7 +51,7 @@ button.surface {
 
 .clickable:active {
 	background: var(--surface-bg-hover);
-	filter: brightness(0.92);
+	filter: brightness(var(--surface-press-brightness, 0.92));
 }
 
 .hoverable:hover {

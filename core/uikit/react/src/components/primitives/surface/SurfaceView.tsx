@@ -75,8 +75,10 @@ export const SurfaceView: React.FC<SurfaceViewProps> = React.memo(
 							"--surface-easing": tokens.motion.easingStandard,
 							"--surface-focus-ring": tokens.color.focusRing,
 							"--surface-border-width": `${tokens.borderWidth}px`,
-							"--surface-focus-ring-width": `${tokens.focusRingWidth}px`,
-							visibility:
+							"--surface-focus-ring-width": `${tokens.focusRingWidth}px`,						"--surface-press-opacity": tokens.state.hoverOpacity,
+						"--surface-press-brightness": tokens.state.pressBrightnessSurface,
+						"--surface-ripple-spread": `${tokens.state.rippleSpread}%`,
+						"--surface-ripple-fade-duration": `${tokens.state.rippleFadeDurationMs}ms`,							visibility:
 								config.visibility === Visibility.Invisible ? "hidden" : undefined,
 						} as React.CSSProperties
 					}

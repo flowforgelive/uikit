@@ -138,7 +138,7 @@ data class DesignTokens(
 			InteractiveStateTokens(
 				hoverOpacity = 0.08,
 				pressOpacity = 0.12,
-				disabledOpacity = 0.38,
+				disabledOpacity = 0.6,
 			)
 
 		val DefaultLight =
