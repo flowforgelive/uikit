@@ -1,6 +1,6 @@
 import androidx.compose.runtime.Composable
 import catalog.CatalogOptions
-import com.uikit.compose.components.atoms.segmentedcontrol.SegmentedControl
+import com.uikit.compose.components.composites.segmentedcontrol.SegmentedControl
 import com.uikit.foundation.LayoutDirection
 import com.uikit.foundation.ThemeMode
 

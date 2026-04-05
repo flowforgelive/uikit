@@ -2,8 +2,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
-import com.uikit.compose.components.atoms.text.TextBlock
-import com.uikit.components.atoms.text.TextBlockVariant
+import com.uikit.compose.components.primitives.text.TextBlock
+import com.uikit.components.primitives.text.TextBlockVariant
 import com.uikit.tokens.DesignTokens
 
 @Composable

@@ -1,16 +1,18 @@
 // Convenience API (primary)
-export { Button } from "./components/atoms/button/Button";
-export { IconButton } from "./components/atoms/icon-button/IconButton";
-export { Text } from "./components/atoms/text/Text";
-export { SegmentedControl } from "./components/atoms/segmented-control/SegmentedControl";
-export { Surface } from "./components/atoms/surface/Surface";
+export { Button } from "./components/composites/button/Button";
+export { IconButton } from "./components/composites/icon-button/IconButton";
+export { Text } from "./components/primitives/text/Text";
+export { SegmentedControl } from "./components/composites/segmented-control/SegmentedControl";
+export { Surface } from "./components/primitives/surface/Surface";
+export { Panel } from "./components/blocks/panel/Panel";
 
 // Config-based API (advanced / SDUI)
-export { ButtonView } from "./components/atoms/button/ButtonView";
-export { IconButtonView } from "./components/atoms/icon-button/IconButtonView";
-export { TextBlockView } from "./components/atoms/text/TextBlockView";
-export { SegmentedControlView } from "./components/atoms/segmented-control/SegmentedControlView";
-export { SurfaceView } from "./components/atoms/surface/SurfaceView";
+export { ButtonView } from "./components/composites/button/ButtonView";
+export { IconButtonView } from "./components/composites/icon-button/IconButtonView";
+export { TextBlockView } from "./components/primitives/text/TextBlockView";
+export { SegmentedControlView } from "./components/composites/segmented-control/SegmentedControlView";
+export { SurfaceView } from "./components/primitives/surface/SurfaceView";
+export { PanelView } from "./components/blocks/panel/PanelView";
 
 // Theme
 export { useDesignTokens, DesignTokensProvider } from "./theme/useDesignTokens";
@@ -49,4 +51,9 @@ export {
 	ShadowTokens,
 	InteractiveStateTokens,
 	Density,
+	PanelConfig,
+	PanelVariant,
+	PanelSide,
+	PanelCollapsible,
+	PanelStyleResolver,
 } from "uikit-common";

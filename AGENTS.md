@@ -10,16 +10,19 @@ core/uikit/
 ├── common/    ← KMP : Config + StyleResolver + токены
 │   ├── foundation/    ← базовые типы: ComponentSize, VisualVariant, ColorIntent
 │   ├── tokens/        ← DesignTokens, ColorTokens, InteractiveControlTokens, etc.
-│   └── components/atoms/{component}/  ← {Component}Config + {Component}StyleResolver
+│   └── components/
+│       ├── primitives/{component}/    ← неделимые: Text, Surface
+│       ├── composites/{component}/    ← составные: Button, IconButton, SegmentedControl
+│       └── blocks/{component}/        ← самодостаточные блоки: Panel
 ├── compose/   ← Compose рендереры (~30 LOC каждый)
-│   └── components/atoms/{component}/  ← {Component}.kt + {Component}View.kt
+│   └── components/{primitives|composites|blocks}/{component}/  ← {Component}.kt + {Component}View.kt
 └── react/     ← React рендереры + CSS Modules
-    ├── components/atoms/{component-name}/  ← {Component}.tsx + {Component}View.tsx + {Component}View.module.css
+    ├── components/{primitives|composites|blocks}/{component-name}/  ← {Component}.tsx + {Component}View.tsx + {Component}View.module.css
     ├── theme/     ← UIKitThemeProvider, useDesignTokens, SurfaceContext
     └── index.ts   ← реестр всех экспортов
 ```
 
-Пакеты Kotlin: `com.uikit.foundation`, `com.uikit.tokens`, `com.uikit.components.atoms.{name}`.
+Пакеты Kotlin: `com.uikit.foundation`, `com.uikit.tokens`, `com.uikit.components.{primitives|composites|blocks}.{name}`.
 Директории React: kebab-case (`segmented-control/`). Файлы React/Compose: PascalCase.
 
 ## Архитектура компонента: Config → StyleResolver → View
@@ -121,7 +124,7 @@ React: `toRem(dpValue)` для всех размеров. Compose: `value.dp` / 
 
 ## Контекст развития
 
-Текущая структура `atoms/` планируется к рефакторингу: `primitives/` → `composites/` → `blocks/`.
+Структура компонентов организована по 3-уровневой таксономии: `primitives/` (неделимые: Text, Surface) → `composites/` (составные: Button, SegmentedControl) → `blocks/` (самодостаточные: Panel).
 Полный список будущих компонентов и архитектурных решений: `docs/ROADMAP.md`.
 Все Config уже `@Serializable` — это фундамент для будущего BDUI-движка.
 

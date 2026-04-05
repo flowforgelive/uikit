@@ -1,0 +1,171 @@
+.panel {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	background: var(--panel-bg);
+	box-shadow: var(--panel-shadow, none);
+	min-width: 0;
+	overflow: hidden;
+	flex-shrink: 0;
+	transition:
+		width var(--panel-duration) var(--panel-easing),
+		height var(--panel-duration) var(--panel-easing),
+		margin var(--panel-duration) var(--panel-easing),
+		opacity var(--panel-duration) var(--panel-easing),
+		border-radius var(--panel-duration) var(--panel-easing);
+}
+
+/* Vertical panels (left/right) — fixed width, full height */
+.panel[data-side="left"],
+.panel[data-side="right"] {
+	width: var(--panel-width);
+	height: 100%;
+}
+
+/* Horizontal panels (top/bottom) — full width, fixed height */
+.panel[data-side="top"],
+.panel[data-side="bottom"] {
+	width: 100%;
+	height: var(--panel-height);
+}
+
+/* Border on the opposite edge (Pinned) */
+.panel[data-side="left"] {
+	border-right: var(--panel-border-width) solid var(--panel-border);
+}
+
+.panel[data-side="right"] {
+	border-left: var(--panel-border-width) solid var(--panel-border);
+}
+
+.panel[data-side="top"] {
+	border-bottom: var(--panel-border-width) solid var(--panel-border);
+}
+
+.panel[data-side="bottom"] {
+	border-top: var(--panel-border-width) solid var(--panel-border);
+}
+
+/* Inset variant — Apple-style with padding and rounding */
+.inset {
+	margin: var(--panel-inset);
+	border-radius: var(--panel-radius);
+	height: auto;
+	align-self: stretch;
+	border: var(--panel-border-width) solid var(--panel-border);
+}
+
+/* Remove side-specific border for inset (uses full border instead) */
+.inset[data-side="left"],
+.inset[data-side="right"],
+.inset[data-side="top"],
+.inset[data-side="bottom"] {
+	border: var(--panel-border-width) solid var(--panel-border);
+}
+
+/* Offcanvas collapsed: fully hidden */
+.panel[data-side="left"][data-state="closed"][data-collapsible="offcanvas"],
+.panel[data-side="right"][data-state="closed"][data-collapsible="offcanvas"] {
+	width: 0;
+	overflow: hidden;
+	opacity: 0;
+}
+
+.panel[data-side="top"][data-state="closed"][data-collapsible="offcanvas"],
+.panel[data-side="bottom"][data-state="closed"][data-collapsible="offcanvas"] {
+	height: 0;
+	overflow: hidden;
+	opacity: 0;
+}
+
+.panel[data-state="closed"][data-collapsible="offcanvas"] .content {
+	visibility: hidden;
+}
+
+/* Icon collapsed: narrow rail */
+.panel[data-state="closed"][data-collapsible="icon"] .content {
+	overflow: hidden;
+}
+
+/* Scrollable content area */
+.content {
+	flex: 1;
+	overflow-y: auto;
+	overflow-x: hidden;
+	display: flex;
+	flex-direction: column;
+}
+
+/* Toggle button */
+.toggle {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.25rem;
+	height: 2.5rem;
+	border: none;
+	border-radius: 0.25rem;
+	background: var(--panel-bg);
+	color: inherit;
+	cursor: pointer;
+	opacity: 0;
+	transition: opacity var(--panel-duration) var(--panel-easing),
+		background 150ms ease;
+	z-index: 1;
+}
+
+/* Position toggle on the outer edge */
+.panel[data-side="left"] .toggle {
+	right: -0.625rem;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.panel[data-side="right"] .toggle {
+	left: -0.625rem;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.panel[data-side="top"] .toggle {
+	bottom: -0.625rem;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.panel[data-side="bottom"] .toggle {
+	top: -0.625rem;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+/* Show toggle on panel hover */
+.panel:hover .toggle {
+	opacity: 1;
+}
+
+.toggle:hover {
+	background: var(--panel-border);
+}
+
+.toggle:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 1px;
+	opacity: 1;
+}
+
+/* Toggle icon rotation (chevron flips when collapsed) */
+.toggleIcon {
+	transition: transform var(--panel-duration) var(--panel-easing);
+}
+
+.toggleIconCollapsed {
+	transform: scaleX(-1);
+}
+
+/* Inset toggle adjustments */
+.inset .toggle {
+	border-radius: 0.375rem;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}

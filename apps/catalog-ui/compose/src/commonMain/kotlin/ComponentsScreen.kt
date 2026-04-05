@@ -1,21 +1,20 @@
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.ui.text.TextStyle
-import catalog.CatalogLayoutResolver
-import com.uikit.compose.components.atoms.segmentedcontrol.SegmentedControl
+import com.uikit.compose.components.composites.segmentedcontrol.SegmentedControl
 import com.uikit.compose.theme.LocalDesignTokens
 import com.uikit.compose.theme.parseColor
+import com.uikit.components.blocks.panel.PanelSide
+import com.uikit.components.blocks.panel.PanelVariant
 import com.uikit.foundation.ComponentSize
 import com.uikit.foundation.LayoutDirection
 import com.uikit.foundation.ThemeMode
@@ -32,9 +31,9 @@ internal fun ComponentsScreen(
 ) {
 	var globalSizeId by remember { mutableStateOf(ComponentSize.Md.name) }
 	var globalRadiusId by remember { mutableStateOf("md") }
+	var panelVariantId by remember { mutableStateOf("inset") }
+	var panelSideId by remember { mutableStateOf("left") }
 	val globalSize = sizeFromId(globalSizeId)
-
-	val layout = remember(tokens) { CatalogLayoutResolver.resolve(tokens) }
 
 	val modifiedTokens = remember(tokens, globalRadiusId) {
 		val fraction = RADIUS_FRACTION_MAP[globalRadiusId] ?: 0.2
@@ -48,50 +47,113 @@ internal fun ComponentsScreen(
 		)
 	}
 
+	val panelVariant = when (panelVariantId) {
+		"inset" -> PanelVariant.Inset
+		else -> PanelVariant.Pinned
+	}
+	val panelSide = when (panelSideId) {
+		"right" -> PanelSide.Right
+		"top" -> PanelSide.Top
+		"bottom" -> PanelSide.Bottom
+		else -> PanelSide.Left
+	}
+
 	CatalogPage(
 		title = "Компоненты (Components)",
 		subtitle = "Кнопки, иконки, поверхности, текст, контролы",
 		tokens = tokens,
-		topBarEnd = {
-			Row(
-				horizontalArrangement = Arrangement.spacedBy(layout.topBarGap.dp),
-				verticalAlignment = Alignment.CenterVertically,
-			) {
-				DirSwitcherControl(currentDir, onDirChange)
+		onBack = onBack,
+		panelVariant = panelVariant,
+		panelSide = panelSide,
+		panelTokens = modifiedTokens,
+		panelContent = {
+			// Direction
+			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
 				BasicText(
-					text = "Размер:",
+					text = "Направление",
 					style = TextStyle(
-						fontSize = tokens.typography.labelMedium.fontSize.sp,
-						lineHeight = tokens.typography.labelMedium.lineHeight.sp,
-						letterSpacing = tokens.typography.labelMedium.letterSpacing.sp,
+						fontSize = tokens.typography.labelSmall.fontSize.sp,
 						color = parseColor(tokens.color.textMuted),
 					),
-					softWrap = false,
+				)
+				DirSwitcherControl(currentDir, onDirChange)
+			}
+			// Size
+			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
+				BasicText(
+					text = "Размер",
+					style = TextStyle(
+						fontSize = tokens.typography.labelSmall.fontSize.sp,
+						color = parseColor(tokens.color.textMuted),
+					),
 				)
 				SegmentedControl(
 					options = SIZE_OPTIONS,
 					selectedId = globalSizeId,
 					onSelectionChange = { globalSizeId = it },
+					size = ComponentSize.Sm,
 				)
+			}
+			// Radius
+			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
 				BasicText(
-					text = "Скругление:",
+					text = "Скругление",
 					style = TextStyle(
-						fontSize = tokens.typography.labelMedium.fontSize.sp,
-						lineHeight = tokens.typography.labelMedium.lineHeight.sp,
-						letterSpacing = tokens.typography.labelMedium.letterSpacing.sp,
+						fontSize = tokens.typography.labelSmall.fontSize.sp,
 						color = parseColor(tokens.color.textMuted),
 					),
-					softWrap = false,
 				)
 				SegmentedControl(
 					options = RADIUS_OPTIONS,
 					selectedId = globalRadiusId,
 					onSelectionChange = { globalRadiusId = it },
+					size = ComponentSize.Sm,
+				)
+			}
+			// Theme
+			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
+				BasicText(
+					text = "Тема",
+					style = TextStyle(
+						fontSize = tokens.typography.labelSmall.fontSize.sp,
+						color = parseColor(tokens.color.textMuted),
+					),
 				)
 				ThemeSwitcherControl(currentMode, onThemeChange)
 			}
+			// Panel variant
+			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
+				BasicText(
+					text = "Панель: вариант",
+					style = TextStyle(
+						fontSize = tokens.typography.labelSmall.fontSize.sp,
+						color = parseColor(tokens.color.textMuted),
+					),
+				)
+				SegmentedControl(
+					options = PANEL_VARIANT_OPTIONS,
+					selectedId = panelVariantId,
+					onSelectionChange = { panelVariantId = it },
+					size = ComponentSize.Sm,
+				)
+			}
+			// Panel side
+			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
+				BasicText(
+					text = "Панель: сторона",
+					style = TextStyle(
+						fontSize = tokens.typography.labelSmall.fontSize.sp,
+						color = parseColor(tokens.color.textMuted),
+					),
+				)
+				SegmentedControl(
+					options = PANEL_SIDE_OPTIONS,
+					selectedId = panelSideId,
+					onSelectionChange = { panelSideId = it },
+					size = ComponentSize.Sm,
+				)
+			}
 		},
-		onBack = onBack,
 	) {
 		CompositionLocalProvider(LocalDesignTokens provides modifiedTokens) {
 			TextShowcase(modifiedTokens)

@@ -1,9 +1,13 @@
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import catalog.CatalogLayoutResolver
+import com.uikit.compose.theme.parseColor
 import com.uikit.foundation.LayoutDirection
 import com.uikit.foundation.ThemeMode
 import com.uikit.tokens.DesignTokens
@@ -17,19 +21,35 @@ internal fun FoundationScreen(
 	onThemeChange: (String) -> Unit,
 	onBack: () -> Unit,
 ) {
-	val layout = remember(tokens) { CatalogLayoutResolver.resolve(tokens) }
-
 	CatalogPage(
 		title = "Foundation Tokens",
 		subtitle = "Типография, цвета, отступы, размеры, радиусы, анимации, брейкпоинты",
 		tokens = tokens,
-		topBarEnd = {
-			Row(horizontalArrangement = Arrangement.spacedBy(layout.topBarGap.dp)) {
+		onBack = onBack,
+		panelContent = {
+			// Direction
+			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
+				BasicText(
+					text = "Направление",
+					style = TextStyle(
+						fontSize = tokens.typography.labelSmall.fontSize.sp,
+						color = parseColor(tokens.color.textMuted),
+					),
+				)
 				DirSwitcherControl(currentDir, onDirChange)
+			}
+			// Theme
+			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
+				BasicText(
+					text = "Тема",
+					style = TextStyle(
+						fontSize = tokens.typography.labelSmall.fontSize.sp,
+						color = parseColor(tokens.color.textMuted),
+					),
+				)
 				ThemeSwitcherControl(currentMode, onThemeChange)
 			}
 		},
-		onBack = onBack,
 	) {
 		TypographyShowcase(tokens)
 		ColorsShowcase(tokens)

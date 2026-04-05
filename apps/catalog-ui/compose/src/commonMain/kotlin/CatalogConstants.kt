@@ -1,5 +1,5 @@
 import catalog.CatalogOptions
-import com.uikit.components.atoms.button.ButtonSize
+import com.uikit.components.composites.button.ButtonSize
 import com.uikit.foundation.ComponentSize
 
 internal val SIZE_OPTIONS = CatalogOptions.sizeOptions.map { it.id to it.label }
@@ -13,3 +13,7 @@ internal fun sizeFromId(id: String): ComponentSize =
 
 internal fun buttonSizeFromComponentSize(cs: ComponentSize): ButtonSize =
 	ButtonSize.entries.first { it.name == cs.name }
+
+internal val PANEL_VARIANT_OPTIONS = CatalogOptions.panelVariantOptions.map { it.id to it.label }
+
+internal val PANEL_SIDE_OPTIONS = CatalogOptions.panelSideOptions.map { it.id to it.label }

@@ -19,10 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.ui.text.TextStyle
-import com.uikit.compose.components.atoms.segmentedcontrol.SegmentedControl
-import com.uikit.compose.components.atoms.surface.Surface
+import com.uikit.compose.components.composites.segmentedcontrol.SegmentedControl
+import com.uikit.compose.components.primitives.surface.Surface
 import com.uikit.compose.theme.parseColor
-import com.uikit.components.atoms.surface.SurfaceLevel
+import com.uikit.components.primitives.surface.SurfaceLevel
 import com.uikit.foundation.VisualVariant
 import com.uikit.tokens.DesignTokens
 

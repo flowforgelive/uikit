@@ -10,9 +10,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import catalog.CatalogLayoutResolver
-import com.uikit.compose.components.atoms.button.Button
-import com.uikit.compose.components.atoms.text.TextBlock
-import com.uikit.components.atoms.text.TextBlockVariant
+import com.uikit.compose.components.composites.button.Button
+import com.uikit.compose.components.primitives.text.TextBlock
+import com.uikit.components.primitives.text.TextBlockVariant
 import com.uikit.foundation.LayoutDirection
 import com.uikit.foundation.ThemeMode
 import com.uikit.foundation.VisualVariant

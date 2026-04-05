@@ -35,18 +35,30 @@ object CatalogOptions {
 	)
 
 	val radiusOptions: Array<CatalogOption> = arrayOf(
-		CatalogOption("none", "None"),
+		CatalogOption("none", "0"),
 		CatalogOption("sm", "SM"),
 		CatalogOption("md", "MD"),
 		CatalogOption("lg", "LG"),
 		CatalogOption("xl", "XL"),
-		CatalogOption("full", "Full"),
+		CatalogOption("full", "●"),
 	)
 
 	val themeOptions: Array<CatalogOption> = arrayOf(
 		CatalogOption("dark", "Тёмная"),
 		CatalogOption("light", "Светлая"),
 		CatalogOption("system", "Система"),
+	)
+
+	val panelVariantOptions: Array<CatalogOption> = arrayOf(
+		CatalogOption("pinned", "Pinned"),
+		CatalogOption("inset", "Inset"),
+	)
+
+	val panelSideOptions: Array<CatalogOption> = arrayOf(
+		CatalogOption("left", "Left"),
+		CatalogOption("right", "Right"),
+		CatalogOption("top", "Top"),
+		CatalogOption("bottom", "Bottom"),
 	)
 
 	fun radiusFraction(id: String): Double = when (id) {

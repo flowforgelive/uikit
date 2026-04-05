@@ -17,9 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.ui.text.TextStyle
-import com.uikit.compose.components.atoms.button.Button
-import com.uikit.compose.components.atoms.iconbutton.IconButton
-import com.uikit.compose.components.atoms.segmentedcontrol.SegmentedControl
+import com.uikit.compose.components.composites.button.Button
+import com.uikit.compose.components.composites.iconbutton.IconButton
+import com.uikit.compose.components.composites.segmentedcontrol.SegmentedControl
 import com.uikit.compose.theme.parseColor
 import com.uikit.foundation.ColorIntent
 import com.uikit.foundation.ComponentSize

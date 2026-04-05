@@ -5,12 +5,13 @@ import {
 	SegmentedControl,
 	useUIKitTheme,
 	DesignTokensProvider,
+	toRem,
 	textStyle,
 } from "@uikit/react";
 import { ThemeSwitcher } from "../components/theme-switcher/ThemeSwitcher";
 import { DirSwitcher } from "../components/dir-switcher/DirSwitcher";
 import { CatalogPage } from "../components/catalog/CatalogPage";
-import { SIZE_OPTIONS, RADIUS_OPTIONS, RADIUS_FRACTION_MAP } from "../components/catalog/CatalogConstants";
+import { SIZE_OPTIONS, RADIUS_OPTIONS, RADIUS_FRACTION_MAP, PANEL_VARIANT_OPTIONS, PANEL_SIDE_OPTIONS } from "../components/catalog/CatalogConstants";
 import { TextShowcase } from "./showcases/TextShowcase";
 import { ButtonShowcase } from "./showcases/ButtonShowcase";
 import { IconButtonShowcase } from "./showcases/IconButtonShowcase";
@@ -22,6 +23,8 @@ export default function ComponentsPage() {
 	const { tokens: baseTokens } = useUIKitTheme();
 	const [globalSize, setGlobalSize] = useState("md");
 	const [globalRadius, setGlobalRadius] = useState("md");
+	const [panelVariant, setPanelVariant] = useState<"pinned" | "inset">("inset");
+	const [panelSide, setPanelSide] = useState<"left" | "right" | "top" | "bottom">("left");
 
 	const tokens: any = React.useMemo(() => {
 		const fraction = RADIUS_FRACTION_MAP[globalRadius];
@@ -42,22 +45,35 @@ export default function ComponentsPage() {
 		<CatalogPage
 			title="Компоненты (Components)"
 			subtitle="Кнопки, иконки, поверхности, текст, контролы"
-			topBarEnd={
+			panelVariant={panelVariant}
+			panelSide={panelSide}
+			panelTokens={tokens}
+			panelContent={
 				<>
-					<DirSwitcher />
-					<span style={{ ...textStyle(tokens.typography.labelMedium, tokens), color: tokens.color.textMuted, whiteSpace: "nowrap" }}>Размер:</span>
-					<SegmentedControl
-						options={SIZE_OPTIONS}
-						selectedId={globalSize}
-						onSelectionChange={setGlobalSize}
-					/>
-					<span style={{ ...textStyle(tokens.typography.labelMedium, tokens), color: tokens.color.textMuted, whiteSpace: "nowrap" }}>Скругление:</span>
-					<SegmentedControl
-						options={RADIUS_OPTIONS}
-						selectedId={globalRadius}
-						onSelectionChange={setGlobalRadius}
-					/>
-					<ThemeSwitcher />
+					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
+						<span style={{ ...textStyle(tokens.typography.labelSmall, tokens), color: tokens.color.textMuted }}>Направление</span>
+						<DirSwitcher />
+					</div>
+					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
+						<span style={{ ...textStyle(tokens.typography.labelSmall, tokens), color: tokens.color.textMuted }}>Размер</span>
+						<SegmentedControl options={SIZE_OPTIONS} selectedId={globalSize} onSelectionChange={setGlobalSize} size="sm" />
+					</div>
+					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
+						<span style={{ ...textStyle(tokens.typography.labelSmall, tokens), color: tokens.color.textMuted }}>Скругление</span>
+						<SegmentedControl options={RADIUS_OPTIONS} selectedId={globalRadius} onSelectionChange={setGlobalRadius} size="sm" />
+					</div>
+					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
+						<span style={{ ...textStyle(tokens.typography.labelSmall, tokens), color: tokens.color.textMuted }}>Тема</span>
+						<ThemeSwitcher />
+					</div>
+					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
+						<span style={{ ...textStyle(tokens.typography.labelSmall, tokens), color: tokens.color.textMuted }}>Панель: вариант</span>
+						<SegmentedControl options={PANEL_VARIANT_OPTIONS} selectedId={panelVariant} onSelectionChange={(id) => setPanelVariant(id as any)} size="sm" />
+					</div>
+					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
+						<span style={{ ...textStyle(tokens.typography.labelSmall, tokens), color: tokens.color.textMuted }}>Панель: сторона</span>
+						<SegmentedControl options={PANEL_SIDE_OPTIONS} selectedId={panelSide} onSelectionChange={(id) => setPanelSide(id as any)} size="sm" />
+					</div>
 				</>
 			}
 		>

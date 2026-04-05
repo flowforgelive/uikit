@@ -1,6 +1,6 @@
 "use client";
 
-import { useUIKitTheme } from "@uikit/react";
+import { useUIKitTheme, toRem, textStyle } from "@uikit/react";
 import { ThemeSwitcher } from "../components/theme-switcher/ThemeSwitcher";
 import { DirSwitcher } from "../components/dir-switcher/DirSwitcher";
 import { CatalogPage } from "../components/catalog/CatalogPage";
@@ -19,10 +19,16 @@ export default function FoundationPage() {
 		<CatalogPage
 			title="Foundation Tokens"
 			subtitle="Типография, цвета, отступы, размеры, радиусы, анимации, брейкпоинты"
-			topBarEnd={
+			panelContent={
 				<>
-					<DirSwitcher />
-					<ThemeSwitcher />
+					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
+						<span style={{ ...textStyle(tokens.typography.labelSmall, tokens), color: tokens.color.textMuted }}>Направление</span>
+						<DirSwitcher />
+					</div>
+					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
+						<span style={{ ...textStyle(tokens.typography.labelSmall, tokens), color: tokens.color.textMuted }}>Тема</span>
+						<ThemeSwitcher />
+					</div>
 				</>
 			}
 		>
