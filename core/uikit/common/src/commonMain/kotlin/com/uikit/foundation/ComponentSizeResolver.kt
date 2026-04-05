@@ -1,8 +1,17 @@
 package com.uikit.foundation
 
 import com.uikit.tokens.ControlSizeScale
+import com.uikit.tokens.DesignTokens
 import com.uikit.tokens.InteractiveControlTokens
+import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
+
+@JsExport
+@Serializable
+data class VerticalLayout(
+	val height: Double,
+	val paddingV: Double,
+)
 
 /**
  * Resolves a [ComponentSize] to a [ControlSizeScale] by computing proportional dimensions
@@ -43,4 +52,20 @@ object ComponentSizeResolver {
 			lineHeight = lineHeight,
 		)
 	}
+
+	fun resolveVerticalLayout(scale: ControlSizeScale, isVertical: Boolean): VerticalLayout =
+		if (isVertical) {
+			val paddingV = (scale.height - scale.lineHeight) / 2.0
+			val height = scale.iconSize + scale.iconGap + scale.lineHeight + 2.0 * paddingV
+			VerticalLayout(height = height, paddingV = paddingV)
+		} else {
+			VerticalLayout(height = scale.height, paddingV = 0.0)
+		}
 }
+
+/**
+ * Convenience extension: resolves [ComponentSize] using tokens' controls and scaleFactor.
+ * Internal to Kotlin StyleResolvers — NOT exported to JS (extension functions are invisible to @JsExport).
+ */
+fun DesignTokens.resolveSize(size: ComponentSize): ControlSizeScale =
+	ComponentSizeResolver.resolve(size, controls, scaleFactor)

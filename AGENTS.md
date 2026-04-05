@@ -43,8 +43,11 @@ core/uikit/
 - [ ] `{Component}Config.kt` — data class с `@JsExport @Serializable`. Общие поля в конце: `id`, `testTag`, `visibility`
 - [ ] `{Component}StyleResolver.kt` — object с `fun resolve(config, tokens, surfaceContext?) → Resolved{Component}Style`
 - [ ] Выходные data classes (`ColorSet`, `{Component}Sizes`, `Resolved{Component}Style`) — `@JsExport @Serializable`
-- [ ] Размеры через `ComponentSizeResolver.resolve(config.size, tokens.controls, tokens.scaleFactor)`
-- [ ] Disabled: отдельная ветка с `tokens.color.surfaceDisabled/textDisabled/borderDisabled`
+- [ ] Размеры через `tokens.resolveSize(config.size)` (extension из `ComponentSizeResolver.kt`)
+- [ ] Цвета через `InteractiveColorResolver.resolve(variant, intent, tokens, surfaceContext)` для интерактивных компонентов
+- [ ] Disabled: `InteractiveColorResolver.resolveDisabled(tokens)`
+- [ ] Vertical layout: `ComponentSizeResolver.resolveVerticalLayout(scale, isVertical)`
+- [ ] Строковые константы: `ColorConstants.TRANSPARENT`, `ColorConstants.SHADOW_NONE`
 
 ### React
 - [ ] `{Component}.tsx` — convenience API: string props (`variant?: "solid" | "soft"`) → Config через MAP-объекты
@@ -121,3 +124,24 @@ React: `toRem(dpValue)` для всех размеров. Compose: `value.dp` / 
 Текущая структура `atoms/` планируется к рефакторингу: `primitives/` → `composites/` → `blocks/`.
 Полный список будущих компонентов и архитектурных решений: `docs/ROADMAP.md`.
 Все Config уже `@Serializable` — это фундамент для будущего BDUI-движка.
+
+## Shared Foundation Utilities
+
+| Утилита                    | Пакет                       | Назначение                                                                             |
+| -------------------------- | --------------------------- | -------------------------------------------------------------------------------------- |
+| `InteractiveColorResolver` | `foundation/`               | Shared цветовая матрица `VisualVariant × ColorIntent → ColorSet` + `resolveDisabled()` |
+| `ComponentSizeResolver`    | `foundation/`               | `resolve()` — размеры, `resolveVerticalLayout()` — vertical icon layout                |
+| `ColorConstants`           | `foundation/`               | `TRANSPARENT`, `SHADOW_NONE` — замена magic strings                                    |
+| `ColorSet`                 | `foundation/`               | Общий тип цветового контракта для всех интерактивных компонентов                       |
+| `VerticalLayout`           | `foundation/`               | Результат `resolveVerticalLayout()` — height + paddingV                                |
+| `tokens.resolveSize()`     | extension на `DesignTokens` | Convenience: `tokens.resolveSize(config.size)` (Kotlin-only, не экспортируется в JS)   |
+
+## Known KMP Trade-offs
+
+Осознанные архитектурные компромиссы из-за ограничений `@JsExport`:
+
+1. **`isInteractive` копируется в каждый Config** — `@JsExport data class` не поддерживает интерфейсы с default implementations. Каждый Config (Button, IconButton, etc.) содержит `val isInteractive: Boolean get() = !disabled && !loading`. Это 1 строка на Config — приемлемо.
+
+2. **Общие поля (`id`, `testTag`, `visibility`) повторяются** — нельзя наследовать интерфейсы, sealed classes, или использовать abstract data class с `@JsExport`. Копирование 3-6 полей в каждый Config — осознанный trade-off. При масштабировании до 50+ компонентов — рассмотреть KSP code generation.
+
+3. **Extension functions не видны из JS** — `tokens.resolveSize()` доступен только в Kotlin StyleResolvers. Это допустимо, т.к. JS-потребители вызывают `Resolver.resolve(config, tokens)`, а не работают с `ComponentSizeResolver` напрямую.

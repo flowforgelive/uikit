@@ -1,10 +1,9 @@
 package com.uikit.components.atoms.iconbutton
 
-import com.uikit.components.atoms.button.ButtonConfig
-import com.uikit.components.atoms.button.ButtonStyleResolver
-import com.uikit.components.atoms.button.ColorSet
-import com.uikit.foundation.ComponentSizeResolver
+import com.uikit.foundation.ColorSet
+import com.uikit.foundation.InteractiveColorResolver
 import com.uikit.foundation.SurfaceContext
+import com.uikit.foundation.resolveSize
 import com.uikit.tokens.DesignTokens
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
@@ -36,21 +35,17 @@ object IconButtonStyleResolver {
 		tokens: DesignTokens,
 		surfaceContext: SurfaceContext? = null,
 	): ResolvedIconButtonStyle {
-		// Reuse ButtonStyleResolver for color resolution
-		val btnConfig = ButtonConfig(
-			text = "",
-			variant = config.variant,
-			intent = config.intent,
-			size = config.size,
-			disabled = config.disabled,
-			loading = config.loading,
-		)
-		val btnStyle = ButtonStyleResolver.resolve(btnConfig, tokens, surfaceContext)
+		val colors =
+			if (config.disabled) {
+				InteractiveColorResolver.resolveDisabled(tokens)
+			} else {
+				InteractiveColorResolver.resolve(config.variant, config.intent, tokens, surfaceContext)
+			}
 
-		val scale = ComponentSizeResolver.resolve(config.size, tokens.controls, tokens.scaleFactor)
+		val scale = tokens.resolveSize(config.size)
 
 		return ResolvedIconButtonStyle(
-			colors = btnStyle.colors,
+			colors = colors,
 			sizes = IconButtonSizeSet(
 				size = scale.height,
 				iconSize = scale.iconSize,

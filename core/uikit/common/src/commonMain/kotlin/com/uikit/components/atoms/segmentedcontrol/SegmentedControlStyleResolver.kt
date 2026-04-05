@@ -1,8 +1,10 @@
 package com.uikit.components.atoms.segmentedcontrol
 
+import com.uikit.foundation.ColorConstants
 import com.uikit.foundation.ComponentSizeResolver
 import com.uikit.foundation.IconPosition
 import com.uikit.foundation.VisualVariant
+import com.uikit.foundation.resolveSize
 import com.uikit.tokens.DesignTokens
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
@@ -51,27 +53,19 @@ data class ResolvedSegmentedControlStyle(
 object SegmentedControlStyleResolver {
 
 	fun resolve(config: SegmentedControlConfig, tokens: DesignTokens): ResolvedSegmentedControlStyle {
-		val scale = ComponentSizeResolver.resolve(config.size, tokens.controls, tokens.scaleFactor)
+		val scale = tokens.resolveSize(config.size)
 		val trackPadding = tokens.controls.segmentedControlTrackPadding
 
 		val isVerticalLayout = config.iconPosition == IconPosition.Top || config.iconPosition == IconPosition.Bottom
-		val paddingV: Double
-		val height: Double
-		if (isVerticalLayout) {
-			paddingV = (scale.height - scale.lineHeight) / 2.0
-			height = scale.iconSize + scale.iconGap + scale.lineHeight + 2.0 * paddingV
-		} else {
-			paddingV = 0.0
-			height = scale.height
-		}
+		val layout = ComponentSizeResolver.resolveVerticalLayout(scale, isVerticalLayout)
 
 		return ResolvedSegmentedControlStyle(
 			colors = resolveColors(config.variant, tokens),
 			sizes =
 				SegmentedControlSizes(
-					height = height,
+					height = layout.height,
 					paddingH = scale.paddingH,
-					paddingV = paddingV,
+					paddingV = layout.paddingV,
 					fontSize = scale.fontSize,
 					fontWeight = scale.fontWeight,
 					letterSpacing = scale.letterSpacing,
@@ -89,32 +83,11 @@ object SegmentedControlStyleResolver {
 	 * Backward-compatible overload: resolves with default size (Sm).
 	 */
 	@JsName("resolveDefault")
-	fun resolve(tokens: DesignTokens): ResolvedSegmentedControlStyle {
-		val scale = ComponentSizeResolver.resolve(
-			com.uikit.foundation.ComponentSize.Sm,
-			tokens.controls,
-			tokens.scaleFactor,
+	fun resolve(tokens: DesignTokens): ResolvedSegmentedControlStyle =
+		resolve(
+			SegmentedControlConfig(options = emptyArray(), selectedId = ""),
+			tokens,
 		)
-		val trackPadding = tokens.controls.segmentedControlTrackPadding
-		return ResolvedSegmentedControlStyle(
-			colors = resolveColors(VisualVariant.Surface, tokens),
-			sizes =
-				SegmentedControlSizes(
-					height = scale.height,
-					paddingH = scale.paddingH,
-					paddingV = 0.0,
-					fontSize = scale.fontSize,
-					fontWeight = scale.fontWeight,
-					letterSpacing = scale.letterSpacing,
-					radius = scale.radius,
-					thumbRadius = scale.radius - trackPadding,
-					trackPadding = trackPadding,
-					iconSize = scale.iconSize,
-					iconGap = scale.iconGap,
-					lineHeight = scale.lineHeight,
-				),
-		)
-	}
 
 	private fun resolveColors(variant: VisualVariant, tokens: DesignTokens): SegmentedControlColors =
 		when (variant) {
@@ -131,11 +104,11 @@ object SegmentedControlStyleResolver {
 				thumbBg = tokens.color.surface,
 				textActive = tokens.color.textPrimary,
 				textInactive = tokens.color.textSecondary,
-				border = "transparent",
+				border = ColorConstants.TRANSPARENT,
 			)
 
 			VisualVariant.Outline -> SegmentedControlColors(
-				trackBg = "transparent",
+				trackBg = ColorConstants.TRANSPARENT,
 				thumbBg = tokens.color.surface,
 				textActive = tokens.color.textPrimary,
 				textInactive = tokens.color.textSecondary,
@@ -147,15 +120,15 @@ object SegmentedControlStyleResolver {
 				thumbBg = tokens.color.surface,
 				textActive = tokens.color.textPrimary,
 				textInactive = tokens.color.textSecondary,
-				border = "transparent",
+				border = ColorConstants.TRANSPARENT,
 			)
 
 			VisualVariant.Ghost -> SegmentedControlColors(
-				trackBg = "transparent",
+				trackBg = ColorConstants.TRANSPARENT,
 				thumbBg = tokens.color.surfaceHover,
 				textActive = tokens.color.textPrimary,
 				textInactive = tokens.color.textSecondary,
-				border = "transparent",
+				border = ColorConstants.TRANSPARENT,
 			)
 		}
 }

@@ -1,5 +1,6 @@
 package com.uikit.components.atoms.surface
 
+import com.uikit.foundation.ColorConstants
 import com.uikit.foundation.VisualVariant
 import com.uikit.tokens.DesignTokens
 import kotlinx.serialization.Serializable
@@ -29,7 +30,7 @@ object SurfaceStyleResolver {
 	): ResolvedSurfaceStyle {
 		val bg =
 			when (config.variant) {
-				VisualVariant.Ghost, VisualVariant.Outline -> "transparent"
+				VisualVariant.Ghost, VisualVariant.Outline -> ColorConstants.TRANSPARENT
 				VisualVariant.Soft -> resolveSoftBg(config.level, tokens)
 				else -> resolveBg(config.level, tokens) // Solid, Surface
 			}
@@ -41,14 +42,14 @@ object SurfaceStyleResolver {
 			when (config.variant) {
 				VisualVariant.Outline -> tokens.color.outlineVariant
 				VisualVariant.Surface -> tokens.color.borderSubtle
-				else -> "transparent"
+				else -> ColorConstants.TRANSPARENT
 			}
 
 		val shadow =
 			if (config.elevated) {
 				tokens.shadows.md
 			} else {
-				"none"
+				ColorConstants.SHADOW_NONE
 			}
 
 		val radius =
