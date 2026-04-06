@@ -78,7 +78,7 @@ object SegmentedControlStyleResolver {
 					thumbRadius = scale.radius - trackPadding,
 					trackPadding = trackPadding,
 					iconSize = scale.iconSize,
-					iconGap = scale.iconGap,
+					iconGap = layout.iconGap,
 					lineHeight = scale.lineHeight,
 				),
 		)

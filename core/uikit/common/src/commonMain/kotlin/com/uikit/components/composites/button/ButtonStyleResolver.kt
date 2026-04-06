@@ -70,7 +70,7 @@ object ButtonStyleResolver {
 			fontSize = scale.fontSize,
 			fontWeight = scale.fontWeight,
 			iconSize = scale.iconSize,
-			iconGap = scale.iconGap,
+			iconGap = layout.iconGap,
 			letterSpacing = scale.letterSpacing,
 			lineHeight = scale.lineHeight,
 			isIconOnly = config.isIconOnly,

@@ -11,6 +11,7 @@ import kotlin.js.JsExport
 data class VerticalLayout(
 	val height: Double,
 	val paddingV: Double,
+	val iconGap: Double,
 )
 
 /**
@@ -55,11 +56,12 @@ object ComponentSizeResolver {
 
 	fun resolveVerticalLayout(scale: ControlSizeScale, isVertical: Boolean): VerticalLayout =
 		if (isVertical) {
-			val paddingV = (scale.height - scale.lineHeight) / 2.0
-			val height = scale.iconSize + scale.iconGap + scale.lineHeight + 2.0 * paddingV
-			VerticalLayout(height = height, paddingV = paddingV)
+			val iconGap = scale.iconGap * 0.4
+			val paddingV = iconGap * 0.5
+			val height = scale.iconSize + iconGap + scale.lineHeight + 2.0 * paddingV
+			VerticalLayout(height = height, paddingV = paddingV, iconGap = iconGap)
 		} else {
-			VerticalLayout(height = scale.height, paddingV = 0.0)
+			VerticalLayout(height = scale.height, paddingV = 0.0, iconGap = scale.iconGap)
 		}
 }
 
