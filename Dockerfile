@@ -15,6 +15,12 @@ WORKDIR /app
 COPY gradlew gradlew.bat settings.gradle.kts build.gradle.kts gradle.properties ./
 COPY gradle/ gradle/
 
+# Override local Java home with container's JAVA_HOME
+RUN sed -i '/org.gradle.java.home/d' gradle.properties
+
+# Exclude Compose modules not needed for React build
+RUN sed -i '/compose/d' settings.gradle.kts
+
 # Copy source modules needed for the build
 COPY core/uikit/common/ core/uikit/common/
 COPY core/uikit/react/ core/uikit/react/
