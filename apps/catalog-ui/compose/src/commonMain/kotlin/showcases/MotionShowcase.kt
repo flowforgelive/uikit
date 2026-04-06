@@ -19,13 +19,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.text.BasicText
-import androidx.compose.ui.text.TextStyle
 import com.uikit.compose.components.composites.button.Button
+import com.uikit.compose.components.primitives.text.TextBlock
 import com.uikit.compose.theme.parseColor
+import com.uikit.components.primitives.text.TextBlockVariant
 import com.uikit.foundation.VisualVariant
 import com.uikit.tokens.DesignTokens
 
@@ -58,15 +56,9 @@ internal fun MotionShowcase(tokens: DesignTokens) {
 					verticalAlignment = Alignment.CenterVertically,
 					horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
 				) {
-					BasicText(
+					TextBlock(
 						text = "$label (${ms}ms)",
-						style = TextStyle(
-							fontSize = tokens.typography.labelMedium.fontSize.sp,
-							lineHeight = tokens.typography.labelMedium.lineHeight.sp,
-							letterSpacing = tokens.typography.labelMedium.letterSpacing.sp,
-							color = parseColor(tokens.color.textMuted),
-							textAlign = TextAlign.End,
-						),
+						variant = TextBlockVariant.LabelMedium,
 						modifier = Modifier.width(100.dp),
 					)
 					Box(

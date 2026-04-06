@@ -1,14 +1,14 @@
 import React from "react";
-import { Button, Chip, SegmentedControl, toRem } from "@uikit/react";
+import { Button, Chip, Text, SegmentedControl, toRem } from "@uikit/react";
 import { Section } from "../../components/catalog/Section";
 import { searchIcon, starIcon } from "../../components/icons";
 
 export function HeightAlignmentShowcase({ tokens, globalSize }: { tokens: any; globalSize: string }) {
 	return (
 		<Section id="height-alignment" title="Выравнивание высот (Height Alignment)" tokens={tokens}>
-			<p style={{ fontSize: toRem(tokens.typography.bodySmall.fontSize), color: tokens.color.textMuted, marginBlockEnd: toRem(tokens.spacing.md) }}>
-				Интерактивные элементы одного размера выровнены по высоте внутри своей группы
-			</p>
+			<div style={{ marginBlockEnd: toRem(tokens.spacing.md) }}>
+				<Text text="Интерактивные элементы одного размера выровнены по высоте внутри своей группы" variant="body-small" emphasis="muted" />
+			</div>
 			<div
 				style={{
 					display: "flex",

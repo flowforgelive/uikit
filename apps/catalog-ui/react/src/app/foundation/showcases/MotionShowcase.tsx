@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import { Button, toRem, textStyle } from "@uikit/react";
+import { Button, Text, toRem } from "@uikit/react";
 import { Section } from "../../components/catalog/Section";
 
 const DURATION_KEYS = [
@@ -27,9 +27,9 @@ export function MotionShowcase({ tokens }: { tokens: any }) {
 					const val = tokens.motion[key];
 					return (
 						<div key={key} style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md) }}>
-							<span style={{ ...textStyle(tokens.typography.labelMedium, tokens), color: tokens.color.textMuted, minWidth: "6rem", textAlign: "end" }}>
-								{label} ({val}ms)
-							</span>
+							<div style={{ minWidth: "6rem", textAlign: "end" }}>
+								<Text text={`${label} (${val}ms)`} variant="label-medium" />
+							</div>
 							<div
 								style={{
 									width: toRem(40),

@@ -13,13 +13,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.text.BasicText
-import androidx.compose.ui.text.TextStyle
 import com.uikit.compose.components.composites.segmentedcontrol.SegmentedControl
-import com.uikit.compose.theme.parseColor
+import com.uikit.compose.components.primitives.text.TextBlock
+import com.uikit.components.primitives.text.TextBlockVariant
 import com.uikit.foundation.ComponentSize
 import com.uikit.foundation.IconPosition
+import com.uikit.foundation.TextEmphasis
 import com.uikit.foundation.VisualVariant
 import com.uikit.tokens.DesignTokens
 import androidx.compose.material.icons.Icons
@@ -37,14 +36,10 @@ internal fun SegmentedControlShowcase(tokens: DesignTokens, globalSize: Componen
 		Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.lg.dp)) {
 
 			Column {
-				BasicText(
+				TextBlock(
 					text = "3 опции",
-					style = TextStyle(
-						fontSize = tokens.typography.bodySmall.fontSize.sp,
-						lineHeight = tokens.typography.bodySmall.lineHeight.sp,
-						letterSpacing = tokens.typography.bodySmall.letterSpacing.sp,
-						color = parseColor(tokens.color.textMuted),
-					),
+					variant = TextBlockVariant.BodySmall,
+					emphasis = TextEmphasis.Muted,
 				)
 				Spacer(Modifier.height(tokens.spacing.xs.dp))
 				SegmentedControl(
@@ -56,14 +51,10 @@ internal fun SegmentedControlShowcase(tokens: DesignTokens, globalSize: Componen
 				)
 			}
 			Column {
-				BasicText(
+				TextBlock(
 					text = "2 опции",
-					style = TextStyle(
-						fontSize = tokens.typography.bodySmall.fontSize.sp,
-						lineHeight = tokens.typography.bodySmall.lineHeight.sp,
-						letterSpacing = tokens.typography.bodySmall.letterSpacing.sp,
-						color = parseColor(tokens.color.textMuted),
-					),
+					variant = TextBlockVariant.BodySmall,
+					emphasis = TextEmphasis.Muted,
 				)
 				Spacer(Modifier.height(tokens.spacing.xs.dp))
 				SegmentedControl(
@@ -77,14 +68,10 @@ internal fun SegmentedControlShowcase(tokens: DesignTokens, globalSize: Componen
 
 			// Variant showcase
 			Column {
-				BasicText(
+				TextBlock(
 					text = "Варианты (Variants)",
-					style = TextStyle(
-						fontSize = tokens.typography.bodySmall.fontSize.sp,
-						lineHeight = tokens.typography.bodySmall.lineHeight.sp,
-						letterSpacing = tokens.typography.bodySmall.letterSpacing.sp,
-						color = parseColor(tokens.color.textMuted),
-					),
+					variant = TextBlockVariant.BodySmall,
+					emphasis = TextEmphasis.Muted,
 				)
 				Spacer(Modifier.height(tokens.spacing.xs.dp))
 				Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.sm.dp)) {
@@ -93,14 +80,9 @@ internal fun SegmentedControlShowcase(tokens: DesignTokens, globalSize: Componen
 							verticalAlignment = Alignment.CenterVertically,
 							horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
 						) {
-							BasicText(
+							TextBlock(
 								text = variant.name.lowercase(),
-								style = TextStyle(
-									fontSize = tokens.typography.labelMedium.fontSize.sp,
-									lineHeight = tokens.typography.labelMedium.lineHeight.sp,
-									letterSpacing = tokens.typography.labelMedium.letterSpacing.sp,
-									color = parseColor(tokens.color.textMuted),
-								),
+								variant = TextBlockVariant.LabelMedium,
 								modifier = Modifier.width(64.dp),
 							)
 							SegmentedControl(
@@ -116,14 +98,10 @@ internal fun SegmentedControlShowcase(tokens: DesignTokens, globalSize: Componen
 
 			// Icon positions showcase
 			Column {
-				BasicText(
+				TextBlock(
 					text = "С иконками (Icons)",
-					style = TextStyle(
-						fontSize = tokens.typography.bodySmall.fontSize.sp,
-						lineHeight = tokens.typography.bodySmall.lineHeight.sp,
-						letterSpacing = tokens.typography.bodySmall.letterSpacing.sp,
-						color = parseColor(tokens.color.textMuted),
-					),
+					variant = TextBlockVariant.BodySmall,
+					emphasis = TextEmphasis.Muted,
 				)
 				Spacer(Modifier.height(tokens.spacing.xs.dp))
 				Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.sm.dp)) {
@@ -143,14 +121,9 @@ internal fun SegmentedControlShowcase(tokens: DesignTokens, globalSize: Componen
 							verticalAlignment = Alignment.CenterVertically,
 							horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
 						) {
-							BasicText(
+							TextBlock(
 								text = label,
-								style = TextStyle(
-									fontSize = tokens.typography.labelMedium.fontSize.sp,
-									lineHeight = tokens.typography.labelMedium.lineHeight.sp,
-									letterSpacing = tokens.typography.labelMedium.letterSpacing.sp,
-									color = parseColor(tokens.color.textMuted),
-								),
+								variant = TextBlockVariant.LabelMedium,
 								modifier = Modifier.width(64.dp),
 							)
 							SegmentedControl(

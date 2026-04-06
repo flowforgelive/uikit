@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { toRem, textStyle } from "@uikit/react";
+import { Text, toRem } from "@uikit/react";
 import { CatalogLayoutResolver } from "catalog-shared";
 
 export function Section({
@@ -25,15 +25,7 @@ export function Section({
 					marginBlockEnd: toRem(layout.sectionTitleMarginBottom),
 				}}
 			>
-				<h2
-					style={{
-						...textStyle(tokens.typography.headlineMedium, tokens),
-						color: tokens.color.textPrimary,
-						whiteSpace: "nowrap",
-					}}
-				>
-					{title}
-				</h2>
+				<Text text={title} variant="headline-medium" className="uikit-section-title" />
 				<div
 					style={{
 						flex: 1,

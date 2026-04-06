@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, toRem, textStyle } from "@uikit/react";
+import { Button, Text, toRem } from "@uikit/react";
 import { Section } from "../../components/catalog/Section";
 import { SubSectionTitle } from "../../components/catalog/SubSectionTitle";
 import { starIcon, ICON_BUTTON_SAMPLES } from "../../components/icons";
@@ -17,9 +17,9 @@ export function IconButtonShowcase({ tokens, globalSize }: { tokens: any; global
 					<SubSectionTitle tokens={tokens}>{variant}</SubSectionTitle>
 					{BUTTON_INTENTS.map((intent) => (
 						<div key={intent} style={{ marginBlockEnd: toRem(tokens.spacing.md) }}>
-							<span style={{ ...textStyle(tokens.typography.labelMedium, tokens), color: tokens.color.textMuted, marginInlineEnd: toRem(tokens.spacing.sm) }}>
-								{intent.charAt(0).toUpperCase() + intent.slice(1)}:
-							</span>
+							<div style={{ marginInlineEnd: toRem(tokens.spacing.sm), marginBlockEnd: toRem(tokens.spacing.xs) }}>
+								<Text text={`${intent.charAt(0).toUpperCase() + intent.slice(1)}:`} variant="label-medium" />
+							</div>
 							<div style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md), overflowX: "auto" }}>
 								{ICON_BUTTON_SAMPLES.map((icon, i) => (
 									<Button

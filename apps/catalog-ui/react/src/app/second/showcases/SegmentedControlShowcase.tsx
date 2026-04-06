@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { SegmentedControl, toRem, textStyle } from "@uikit/react";
+import { SegmentedControl, Text, toRem } from "@uikit/react";
 import { Section } from "../../components/catalog/Section";
 import { searchIcon, starIcon, settingsIcon } from "../../components/icons";
 
@@ -13,9 +13,9 @@ export function SegmentedControlShowcase({ tokens, globalSize }: { tokens: any; 
 		<Section id="segmented-control" title="Сегментированный переключатель (Segmented Control)" tokens={tokens}>
 			<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.lg) }}>
 				<div>
-					<span style={{ ...textStyle(tokens.typography.bodySmall, tokens), color: tokens.color.textMuted, display: "block", marginBlockEnd: toRem(tokens.spacing.xs) }}>
-						3 опции
-					</span>
+					<div style={{ marginBlockEnd: toRem(tokens.spacing.xs) }}>
+						<Text text="3 опции" variant="body-small" emphasis="muted" />
+					</div>
 					<SegmentedControl
 						options={[
 							{ id: "a", label: "First" },
@@ -28,9 +28,9 @@ export function SegmentedControlShowcase({ tokens, globalSize }: { tokens: any; 
 					/>
 				</div>
 				<div>
-					<span style={{ ...textStyle(tokens.typography.bodySmall, tokens), color: tokens.color.textMuted, display: "block", marginBlockEnd: toRem(tokens.spacing.xs) }}>
-						2 опции
-					</span>
+					<div style={{ marginBlockEnd: toRem(tokens.spacing.xs) }}>
+						<Text text="2 опции" variant="body-small" emphasis="muted" />
+					</div>
 					<SegmentedControl
 						options={[
 							{ id: "on", label: "Вкл" },
@@ -43,15 +43,15 @@ export function SegmentedControlShowcase({ tokens, globalSize }: { tokens: any; 
 				</div>
 				{/* Variant showcase */}
 				<div>
-					<span style={{ ...textStyle(tokens.typography.bodySmall, tokens), color: tokens.color.textMuted, display: "block", marginBlockEnd: toRem(tokens.spacing.xs) }}>
-						Варианты (Variants)
-					</span>
+					<div style={{ marginBlockEnd: toRem(tokens.spacing.xs) }}>
+						<Text text="Варианты (Variants)" variant="body-small" emphasis="muted" />
+					</div>
 					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.sm) }}>
 						{(["surface", "soft", "outline", "solid", "ghost"] as const).map((v) => (
 							<div key={v} style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md) }}>
-								<span style={{ ...textStyle(tokens.typography.labelMedium, tokens), color: tokens.color.textMuted, minWidth: "4rem" }}>
-									{v}
-								</span>
+								<div style={{ minWidth: "4rem" }}>
+									<Text text={v} variant="label-medium" />
+								</div>
 								<div style={{ flex: 1 }}>
 									<SegmentedControl
 										options={[
@@ -71,15 +71,15 @@ export function SegmentedControlShowcase({ tokens, globalSize }: { tokens: any; 
 				</div>
 				{/* Icon positions showcase */}
 				<div>
-					<span style={{ ...textStyle(tokens.typography.bodySmall, tokens), color: tokens.color.textMuted, display: "block", marginBlockEnd: toRem(tokens.spacing.xs) }}>
-						С иконками (Icons)
-					</span>
+					<div style={{ marginBlockEnd: toRem(tokens.spacing.xs) }}>
+						<Text text="С иконками (Icons)" variant="body-small" emphasis="muted" />
+					</div>
 					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.sm) }}>
 						{(["start", "end", "top", "bottom"] as const).map((pos) => (
 							<div key={pos} style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md) }}>
-								<span style={{ ...textStyle(tokens.typography.labelMedium, tokens), color: tokens.color.textMuted, minWidth: "4rem" }}>
-									{pos}
-								</span>
+								<div style={{ minWidth: "4rem" }}>
+									<Text text={pos} variant="label-medium" />
+								</div>
 								<div style={{ flex: 1 }}>
 									<SegmentedControl
 										options={[

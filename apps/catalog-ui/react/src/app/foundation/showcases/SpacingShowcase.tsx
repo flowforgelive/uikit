@@ -1,5 +1,5 @@
 import React from "react";
-import { toRem, textStyle } from "@uikit/react";
+import { Text, toRem } from "@uikit/react";
 import { Section } from "../../components/catalog/Section";
 
 const SPACING_KEYS = [
@@ -22,9 +22,9 @@ export function SpacingShowcase({ tokens }: { tokens: any }) {
 					const val = tokens.spacing[key];
 					return (
 						<div key={key} style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md) }}>
-							<span style={{ ...textStyle(tokens.typography.labelMedium, tokens), color: tokens.color.textMuted, minWidth: "4rem", textAlign: "end" }}>
-								{label} ({val}dp)
-							</span>
+							<div style={{ minWidth: "6rem", textAlign: "end" }}>
+								<Text text={`${label} (${val}dp)`} variant="label-medium" />
+							</div>
 							<div
 								style={{
 									width: toRem(val),

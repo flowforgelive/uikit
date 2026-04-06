@@ -14,12 +14,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.text.BasicText
-import androidx.compose.ui.text.TextStyle
+import com.uikit.compose.components.primitives.text.TextBlock
 import com.uikit.compose.theme.parseColor
+import com.uikit.components.primitives.text.TextBlockVariant
+import com.uikit.foundation.TextEmphasis
 import com.uikit.tokens.DesignTokens
 
 private data class ColorEntry(val key: String, val label: String)
@@ -112,24 +111,14 @@ internal fun ColorsShowcase(tokens: DesignTokens) {
 								.background(parseColor(hex))
 								.border(1.dp, parseColor(tokens.color.outlineVariant), RoundedCornerShape(tokens.radius.md.dp)),
 					)
-					BasicText(
+					TextBlock(
 						text = entry.label,
-						style = TextStyle(
-							fontSize = tokens.typography.labelSmall.fontSize.sp,
-							fontWeight = FontWeight(600),
-							lineHeight = tokens.typography.labelSmall.lineHeight.sp,
-							letterSpacing = tokens.typography.labelSmall.letterSpacing.sp,
-							color = parseColor(tokens.color.textPrimary),
-						),
+						variant = TextBlockVariant.LabelSmall,
+						emphasis = TextEmphasis.Primary,
 					)
-					BasicText(
+					TextBlock(
 						text = hex,
-						style = TextStyle(
-							fontSize = tokens.typography.labelSmall.fontSize.sp,
-							lineHeight = tokens.typography.labelSmall.lineHeight.sp,
-							letterSpacing = tokens.typography.labelSmall.letterSpacing.sp,
-							color = parseColor(tokens.color.textMuted),
-						),
+						variant = TextBlockVariant.LabelSmall,
 					)
 				}
 			}

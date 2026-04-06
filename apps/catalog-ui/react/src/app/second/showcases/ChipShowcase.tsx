@@ -1,5 +1,5 @@
 import React from "react";
-import { Chip, toRem, textStyle } from "@uikit/react";
+import { Chip, Text, toRem } from "@uikit/react";
 import { Section } from "../../components/catalog/Section";
 import { SubSectionTitle } from "../../components/catalog/SubSectionTitle";
 import { starIcon, searchIcon, checkIcon } from "../../components/icons";
@@ -18,9 +18,9 @@ export function ChipShowcase({ tokens, globalSize }: { tokens: any; globalSize: 
 					<SubSectionTitle tokens={tokens}>{variant}</SubSectionTitle>
 					{CHIP_INTENTS.map((intent) => (
 						<div key={intent} style={{ marginBlockEnd: toRem(tokens.spacing.md) }}>
-							<span style={{ ...textStyle(tokens.typography.labelMedium, tokens), color: tokens.color.textMuted, marginInlineEnd: toRem(tokens.spacing.sm) }}>
-								{intent.charAt(0).toUpperCase() + intent.slice(1)}:
-							</span>
+							<div style={{ marginInlineEnd: toRem(tokens.spacing.sm), marginBlockEnd: toRem(tokens.spacing.xs) }}>
+								<Text text={`${intent.charAt(0).toUpperCase() + intent.slice(1)}:`} variant="label-medium" />
+							</div>
 							<div style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.sm), flexWrap: "wrap" }}>
 								<Chip
 									text="Chip"

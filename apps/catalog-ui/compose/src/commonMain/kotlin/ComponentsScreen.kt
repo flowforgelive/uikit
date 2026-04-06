@@ -7,14 +7,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.text.BasicText
-import androidx.compose.ui.text.TextStyle
 import com.uikit.compose.components.composites.segmentedcontrol.SegmentedControl
+import com.uikit.compose.components.primitives.text.TextBlock
 import com.uikit.compose.theme.LocalDesignTokens
-import com.uikit.compose.theme.parseColor
 import com.uikit.components.blocks.panel.PanelSide
 import com.uikit.components.blocks.panel.PanelVariant
+import com.uikit.components.primitives.text.TextBlockVariant
 import com.uikit.foundation.ComponentSize
 import com.uikit.foundation.LayoutDirection
 import com.uikit.foundation.ThemeMode
@@ -69,24 +67,12 @@ internal fun ComponentsScreen(
 		panelContent = {
 			// Direction
 			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
-				BasicText(
-					text = "Направление",
-					style = TextStyle(
-						fontSize = tokens.typography.labelSmall.fontSize.sp,
-						color = parseColor(tokens.color.textMuted),
-					),
-				)
+				TextBlock(text = "Направление", variant = TextBlockVariant.LabelSmall)
 				DirSwitcherControl(currentDir, onDirChange)
 			}
 			// Size
 			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
-				BasicText(
-					text = "Размер",
-					style = TextStyle(
-						fontSize = tokens.typography.labelSmall.fontSize.sp,
-						color = parseColor(tokens.color.textMuted),
-					),
-				)
+				TextBlock(text = "Размер", variant = TextBlockVariant.LabelSmall)
 				SegmentedControl(
 					options = SIZE_OPTIONS,
 					selectedId = globalSizeId,
@@ -96,13 +82,7 @@ internal fun ComponentsScreen(
 			}
 			// Radius
 			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
-				BasicText(
-					text = "Скругление",
-					style = TextStyle(
-						fontSize = tokens.typography.labelSmall.fontSize.sp,
-						color = parseColor(tokens.color.textMuted),
-					),
-				)
+				TextBlock(text = "Скругление", variant = TextBlockVariant.LabelSmall)
 				SegmentedControl(
 					options = RADIUS_OPTIONS,
 					selectedId = globalRadiusId,
@@ -112,24 +92,12 @@ internal fun ComponentsScreen(
 			}
 			// Theme
 			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
-				BasicText(
-					text = "Тема",
-					style = TextStyle(
-						fontSize = tokens.typography.labelSmall.fontSize.sp,
-						color = parseColor(tokens.color.textMuted),
-					),
-				)
+				TextBlock(text = "Тема", variant = TextBlockVariant.LabelSmall)
 				ThemeSwitcherControl(currentMode, onThemeChange)
 			}
 			// Panel variant
 			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
-				BasicText(
-					text = "Панель: вариант",
-					style = TextStyle(
-						fontSize = tokens.typography.labelSmall.fontSize.sp,
-						color = parseColor(tokens.color.textMuted),
-					),
-				)
+				TextBlock(text = "Панель: вариант", variant = TextBlockVariant.LabelSmall)
 				SegmentedControl(
 					options = PANEL_VARIANT_OPTIONS,
 					selectedId = panelVariantId,
@@ -139,13 +107,7 @@ internal fun ComponentsScreen(
 			}
 			// Panel side
 			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
-				BasicText(
-					text = "Панель: сторона",
-					style = TextStyle(
-						fontSize = tokens.typography.labelSmall.fontSize.sp,
-						color = parseColor(tokens.color.textMuted),
-					),
-				)
+				TextBlock(text = "Панель: сторона", variant = TextBlockVariant.LabelSmall)
 				SegmentedControl(
 					options = PANEL_SIDE_OPTIONS,
 					selectedId = panelSideId,

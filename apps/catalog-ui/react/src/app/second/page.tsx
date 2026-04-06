@@ -4,10 +4,10 @@ import React, { useState, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import {
 	SegmentedControl,
+	Text,
 	useUIKitTheme,
 	DesignTokensProvider,
 	toRem,
-	textStyle,
 } from "@uikit/react";
 import { ThemeSwitcher } from "../components/theme-switcher/ThemeSwitcher";
 import { DirSwitcher } from "../components/dir-switcher/DirSwitcher";
@@ -54,27 +54,27 @@ export default function ComponentsPage() {
 			panelContent={
 				<>
 					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
-						<span style={{ ...textStyle(tokens.typography.labelSmall, tokens), color: tokens.color.textSecondary }}>Направление</span>
+						<Text text="Направление" variant="label-small" emphasis="secondary" />
 						<DirSwitcher />
 					</div>
 					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
-						<span style={{ ...textStyle(tokens.typography.labelSmall, tokens), color: tokens.color.textSecondary }}>Размер</span>
+						<Text text="Размер" variant="label-small" emphasis="secondary" />
 						<SegmentedControl options={SIZE_OPTIONS} selectedId={globalSize} onSelectionChange={setGlobalSize} size="sm" />
 					</div>
 					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
-						<span style={{ ...textStyle(tokens.typography.labelSmall, tokens), color: tokens.color.textSecondary }}>Скругление</span>
+						<Text text="Скругление" variant="label-small" emphasis="secondary" />
 						<SegmentedControl options={RADIUS_OPTIONS} selectedId={globalRadius} onSelectionChange={setGlobalRadius} size="sm" />
 					</div>
 					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
-						<span style={{ ...textStyle(tokens.typography.labelSmall, tokens), color: tokens.color.textSecondary }}>Тема</span>
+						<Text text="Тема" variant="label-small" emphasis="secondary" />
 						<ThemeSwitcher />
 					</div>
 					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
-						<span style={{ ...textStyle(tokens.typography.labelSmall, tokens), color: tokens.color.textSecondary }}>Панель: вариант</span>
+						<Text text="Панель: вариант" variant="label-small" emphasis="secondary" />
 						<SegmentedControl options={PANEL_VARIANT_OPTIONS} selectedId={panelVariant} onSelectionChange={(id) => setPanelVariant(id as any)} size="sm" />
 					</div>
 					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
-						<span style={{ ...textStyle(tokens.typography.labelSmall, tokens), color: tokens.color.textSecondary }}>Панель: сторона</span>
+						<Text text="Панель: сторона" variant="label-small" emphasis="secondary" />
 						<SegmentedControl options={PANEL_SIDE_OPTIONS} selectedId={panelSide} onSelectionChange={(id) => setPanelSide(id as any)} size="sm" />
 					</div>
 				</>

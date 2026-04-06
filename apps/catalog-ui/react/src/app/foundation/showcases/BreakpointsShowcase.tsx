@@ -1,5 +1,5 @@
 import React from "react";
-import { toRem, textStyle } from "@uikit/react";
+import { Text, toRem } from "@uikit/react";
 import { Section } from "../../components/catalog/Section";
 
 export function BreakpointsShowcase({ tokens }: { tokens: any }) {
@@ -16,12 +16,10 @@ export function BreakpointsShowcase({ tokens }: { tokens: any }) {
 			<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.sm) }}>
 				{bp.map(([label, val]) => (
 					<div key={label} style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md) }}>
-					<span style={{ ...textStyle(tokens.typography.labelMedium, tokens), color: tokens.color.textMuted, minWidth: "6rem", textAlign: "end" }}>
-						{label}
-					</span>
-					<span style={{ ...textStyle(tokens.typography.bodyLarge, tokens), fontWeight: 600, color: tokens.color.textPrimary, fontFamily: "monospace" }}>
-							{val}dp
-						</span>
+						<div style={{ minWidth: "6rem", textAlign: "end" }}>
+							<Text text={label} variant="label-medium" />
+						</div>
+						<Text text={`${val}dp`} variant="body-large" emphasis="primary" className="monospace-text" />
 					</div>
 				))}
 			</div>

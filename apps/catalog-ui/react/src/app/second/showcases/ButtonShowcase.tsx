@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, SegmentedControl, toRem, textStyle } from "@uikit/react";
+import { Button, Text, SegmentedControl, toRem } from "@uikit/react";
 import { Section } from "../../components/catalog/Section";
 import { SubSectionTitle } from "../../components/catalog/SubSectionTitle";
 import {
@@ -34,7 +34,7 @@ export function ButtonShowcase({ tokens, globalSize }: { tokens: any; globalSize
 	return (
 		<Section id="buttons" title="Кнопка (Button)" tokens={tokens}>
 			<div style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md), marginBlockEnd: toRem(tokens.spacing.xl) }}>
-				<span style={{ fontSize: toRem(tokens.typography.labelMedium.fontSize), color: tokens.color.textMuted }}>Позиция иконки:</span>
+				<Text text="Позиция иконки:" variant="label-medium" />
 				<SegmentedControl
 					options={ICON_POSITION_OPTIONS}
 					selectedId={selectedPosition}
@@ -46,9 +46,9 @@ export function ButtonShowcase({ tokens, globalSize }: { tokens: any; globalSize
 					<SubSectionTitle tokens={tokens}>{variant}</SubSectionTitle>
 					{BUTTON_INTENTS.map((intent) => (
 						<div key={intent} style={{ marginBlockEnd: toRem(tokens.spacing.md) }}>
-							<span style={{ ...textStyle(tokens.typography.labelMedium, tokens), color: tokens.color.textMuted, marginInlineEnd: toRem(tokens.spacing.sm) }}>
-								{intent.charAt(0).toUpperCase() + intent.slice(1)}:
-							</span>
+							<div style={{ marginInlineEnd: toRem(tokens.spacing.sm), marginBlockEnd: toRem(tokens.spacing.xs) }}>
+								<Text text={`${intent.charAt(0).toUpperCase() + intent.slice(1)}:`} variant="label-medium" />
+							</div>
 							<div style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md), overflowX: "auto" }}>
 								{hasIcons ? (
 									<>

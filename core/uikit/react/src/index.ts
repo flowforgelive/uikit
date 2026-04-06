@@ -36,6 +36,7 @@ export {
 	IconPosition,
 	TextBlockConfig,
 	TextBlockVariant,
+	TextEmphasis,
 	SegmentedControlConfig,
 	SegmentedControlOption,
 	SegmentedControlStyleResolver,

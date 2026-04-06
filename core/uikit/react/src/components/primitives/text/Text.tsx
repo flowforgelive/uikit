@@ -3,7 +3,7 @@
 import React, { useMemo } from "react";
 import { TextBlockView } from "./TextBlockView";
 import { useDesignTokens } from "../../../theme/useDesignTokens";
-import { TextBlockConfig, TextBlockVariant } from "uikit-common";
+import { TextBlockConfig, TextBlockVariant, TextEmphasis } from "uikit-common";
 
 const VARIANT_MAP = {
 	"display-large": TextBlockVariant.DisplayLarge,
@@ -23,18 +23,27 @@ const VARIANT_MAP = {
 	"label-small": TextBlockVariant.LabelSmall,
 } as const;
 
+const EMPHASIS_MAP = {
+	"auto": TextEmphasis.Auto,
+	"primary": TextEmphasis.Primary,
+	"secondary": TextEmphasis.Secondary,
+	"muted": TextEmphasis.Muted,
+	"disabled": TextEmphasis.Disabled,
+} as const;
+
 interface TextProps {
 	text: string;
 	variant?: keyof typeof VARIANT_MAP;
+	emphasis?: keyof typeof EMPHASIS_MAP;
 	className?: string;
 }
 
 export const Text: React.FC<TextProps> = React.memo(
-	({ text, variant = "body-large", className }) => {
+	({ text, variant = "body-large", emphasis = "auto", className }) => {
 		const tokens = useDesignTokens();
 		const config = useMemo(
-			() => new TextBlockConfig(text, VARIANT_MAP[variant]),
-			[text, variant],
+			() => new TextBlockConfig(text, VARIANT_MAP[variant], EMPHASIS_MAP[emphasis]),
+			[text, variant, emphasis],
 		);
 
 		return <TextBlockView config={config} tokens={tokens} className={className} />;

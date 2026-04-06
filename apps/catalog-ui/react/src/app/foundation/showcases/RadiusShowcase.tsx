@@ -1,5 +1,5 @@
 import React from "react";
-import { toRem, textStyle } from "@uikit/react";
+import { Text, toRem } from "@uikit/react";
 import { Section } from "../../components/catalog/Section";
 
 const RADIUS_KEYS = [
@@ -27,9 +27,7 @@ export function RadiusShowcase({ tokens }: { tokens: any }) {
 									borderRadius: toRem(val),
 								}}
 							/>
-							<span style={{ ...textStyle(tokens.typography.labelMedium, tokens), color: tokens.color.textMuted }}>
-								{label} ({val}dp)
-							</span>
+							<Text text={`${label} (${val}dp)`} variant="label-medium" />
 						</div>
 					);
 				})}

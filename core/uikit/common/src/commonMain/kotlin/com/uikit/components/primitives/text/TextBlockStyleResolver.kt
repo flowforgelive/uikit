@@ -1,5 +1,6 @@
 package com.uikit.components.primitives.text
 
+import com.uikit.foundation.TextEmphasis
 import com.uikit.tokens.DesignTokens
 import com.uikit.tokens.TextStyle
 import kotlinx.serialization.Serializable
@@ -34,25 +35,57 @@ object TextBlockStyleResolver {
 			letterSpacing = style.letterSpacing,
 		)
 
+	private fun resolveAutoColor(
+		variant: TextBlockVariant,
+		tokens: DesignTokens,
+	): String =
+		when (variant) {
+			TextBlockVariant.BodySmall, TextBlockVariant.LabelLarge -> tokens.color.textSecondary
+			TextBlockVariant.LabelMedium, TextBlockVariant.LabelSmall -> tokens.color.textMuted
+			else -> tokens.color.textPrimary
+		}
+
+	private fun resolveEmphasisColor(
+		emphasis: TextEmphasis,
+		variant: TextBlockVariant,
+		tokens: DesignTokens,
+	): String =
+		when (emphasis) {
+			TextEmphasis.Auto -> resolveAutoColor(variant, tokens)
+			TextEmphasis.Primary -> tokens.color.textPrimary
+			TextEmphasis.Secondary -> tokens.color.textSecondary
+			TextEmphasis.Muted -> tokens.color.textMuted
+			TextEmphasis.Disabled -> tokens.color.textDisabled
+		}
+
+	private fun resolveTypography(
+		variant: TextBlockVariant,
+		tokens: DesignTokens,
+	): TextStyle =
+		when (variant) {
+			TextBlockVariant.DisplayLarge -> tokens.typography.displayLarge
+			TextBlockVariant.DisplayMedium -> tokens.typography.displayMedium
+			TextBlockVariant.DisplaySmall -> tokens.typography.displaySmall
+			TextBlockVariant.HeadlineLarge -> tokens.typography.headlineLarge
+			TextBlockVariant.HeadlineMedium -> tokens.typography.headlineMedium
+			TextBlockVariant.HeadlineSmall -> tokens.typography.headlineSmall
+			TextBlockVariant.TitleLarge -> tokens.typography.titleLarge
+			TextBlockVariant.TitleMedium -> tokens.typography.titleMedium
+			TextBlockVariant.TitleSmall -> tokens.typography.titleSmall
+			TextBlockVariant.BodyLarge -> tokens.typography.bodyLarge
+			TextBlockVariant.BodyMedium -> tokens.typography.bodyMedium
+			TextBlockVariant.BodySmall -> tokens.typography.bodySmall
+			TextBlockVariant.LabelLarge -> tokens.typography.labelLarge
+			TextBlockVariant.LabelMedium -> tokens.typography.labelMedium
+			TextBlockVariant.LabelSmall -> tokens.typography.labelSmall
+		}
+
 	fun resolve(
 		config: TextBlockConfig,
 		tokens: DesignTokens,
-	): ResolvedTextBlockStyle =
-		when (config.variant) {
-			TextBlockVariant.DisplayLarge -> fromTextStyle(tokens.typography.displayLarge, tokens.color.textPrimary)
-			TextBlockVariant.DisplayMedium -> fromTextStyle(tokens.typography.displayMedium, tokens.color.textPrimary)
-			TextBlockVariant.DisplaySmall -> fromTextStyle(tokens.typography.displaySmall, tokens.color.textPrimary)
-			TextBlockVariant.HeadlineLarge -> fromTextStyle(tokens.typography.headlineLarge, tokens.color.textPrimary)
-			TextBlockVariant.HeadlineMedium -> fromTextStyle(tokens.typography.headlineMedium, tokens.color.textPrimary)
-			TextBlockVariant.HeadlineSmall -> fromTextStyle(tokens.typography.headlineSmall, tokens.color.textPrimary)
-			TextBlockVariant.TitleLarge -> fromTextStyle(tokens.typography.titleLarge, tokens.color.textPrimary)
-			TextBlockVariant.TitleMedium -> fromTextStyle(tokens.typography.titleMedium, tokens.color.textPrimary)
-			TextBlockVariant.TitleSmall -> fromTextStyle(tokens.typography.titleSmall, tokens.color.textPrimary)
-			TextBlockVariant.BodyLarge -> fromTextStyle(tokens.typography.bodyLarge, tokens.color.textPrimary)
-			TextBlockVariant.BodyMedium -> fromTextStyle(tokens.typography.bodyMedium, tokens.color.textPrimary)
-			TextBlockVariant.BodySmall -> fromTextStyle(tokens.typography.bodySmall, tokens.color.textSecondary)
-			TextBlockVariant.LabelLarge -> fromTextStyle(tokens.typography.labelLarge, tokens.color.textSecondary)
-			TextBlockVariant.LabelMedium -> fromTextStyle(tokens.typography.labelMedium, tokens.color.textMuted)
-			TextBlockVariant.LabelSmall -> fromTextStyle(tokens.typography.labelSmall, tokens.color.textMuted)
-		}
+	): ResolvedTextBlockStyle {
+		val typography = resolveTypography(config.variant, tokens)
+		val color = resolveEmphasisColor(config.emphasis, config.variant, tokens)
+		return fromTextStyle(typography, color)
+	}
 }

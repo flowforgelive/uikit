@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -19,8 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.text.TextStyle
 import catalog.CatalogLayoutResolver
 import com.uikit.compose.components.blocks.panel.Panel
 import com.uikit.compose.components.composites.button.Button
@@ -31,6 +28,7 @@ import com.uikit.components.blocks.panel.PanelSide
 import com.uikit.components.blocks.panel.PanelVariant
 import com.uikit.components.primitives.text.TextBlockVariant
 import com.uikit.compose.theme.parseColor
+import com.uikit.foundation.TextEmphasis
 import com.uikit.foundation.VisualVariant
 import com.uikit.tokens.DesignTokens
 
@@ -104,14 +102,10 @@ internal fun CatalogPage(
 				) {
 					TextBlock(text = title, variant = TextBlockVariant.HeadlineLarge)
 					Spacer(Modifier.height(layout.titleSubtitleGap.dp))
-					BasicText(
+					TextBlock(
 						text = subtitle,
-						style = TextStyle(
-							fontSize = tokens.typography.bodyLarge.fontSize.sp,
-							lineHeight = tokens.typography.bodyLarge.lineHeight.sp,
-							letterSpacing = tokens.typography.bodyLarge.letterSpacing.sp,
-							color = parseColor(tokens.color.textSecondary),
-						),
+						variant = TextBlockVariant.BodyLarge,
+						emphasis = TextEmphasis.Secondary,
 					)
 				}
 

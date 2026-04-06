@@ -2,7 +2,7 @@
 
 import React, { useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Panel, Text, DesignTokensProvider, useUIKitTheme, toRem, textStyle } from "@uikit/react";
+import { Button, Panel, Text, DesignTokensProvider, useUIKitTheme, toRem } from "@uikit/react";
 import { CatalogLayoutResolver } from "catalog-shared";
 
 interface CatalogPageProps {
@@ -74,15 +74,9 @@ export function CatalogPage({ title, subtitle, panelContent, panelVariant = "ins
 					<div style={{ paddingBlock: toRem(layout.titlePaddingBlock), textAlign: "center" }}>
 						<Text text={title} variant="headline-large" />
 						{subtitle && (
-							<p
-								style={{
-									...textStyle(tokens.typography.bodyLarge, tokens),
-									color: tokens.color.textSecondary,
-									marginBlockStart: toRem(layout.titleSubtitleGap),
-								}}
-							>
-								{subtitle}
-							</p>
+							<div style={{ marginBlockStart: toRem(layout.titleSubtitleGap) }}>
+								<Text text={subtitle} variant="body-large" emphasis="secondary" />
+							</div>
 						)}
 					</div>
 

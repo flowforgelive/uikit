@@ -14,15 +14,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.text.BasicText
-import androidx.compose.ui.text.TextStyle
 import com.uikit.compose.components.composites.segmentedcontrol.SegmentedControl
 import com.uikit.compose.components.primitives.surface.Surface
-import com.uikit.compose.theme.parseColor
+import com.uikit.compose.components.primitives.text.TextBlock
 import com.uikit.components.primitives.surface.SurfaceLevel
+import com.uikit.components.primitives.text.TextBlockVariant
+import com.uikit.foundation.TextEmphasis
 import com.uikit.foundation.VisualVariant
 import com.uikit.tokens.DesignTokens
 
@@ -60,25 +58,15 @@ internal fun SurfaceShowcase(tokens: DesignTokens) {
 								modifier = Modifier.width(120.dp),
 							) {
 								Column(modifier = Modifier.padding(tokens.spacing.md.dp)) {
-									BasicText(
+									TextBlock(
 										text = "Уровень ${level.ordinal}",
-										style = TextStyle(
-											fontSize = tokens.typography.labelMedium.fontSize.sp,
-											fontWeight = FontWeight.SemiBold,
-											lineHeight = tokens.typography.labelMedium.lineHeight.sp,
-											letterSpacing = tokens.typography.labelMedium.letterSpacing.sp,
-											color = parseColor(tokens.color.textPrimary),
-										),
+										variant = TextBlockVariant.LabelMedium,
+										emphasis = TextEmphasis.Primary,
 									)
 									Spacer(Modifier.height(tokens.spacing.xs.dp))
-									BasicText(
+									TextBlock(
 										text = variant.name.lowercase() + if (variant == VisualVariant.Ghost) " (hover)" else "",
-										style = TextStyle(
-											fontSize = tokens.typography.labelSmall.fontSize.sp,
-											lineHeight = tokens.typography.labelSmall.lineHeight.sp,
-											letterSpacing = tokens.typography.labelSmall.letterSpacing.sp,
-											color = parseColor(tokens.color.textMuted),
-										),
+										variant = TextBlockVariant.LabelSmall,
 									)
 								}
 							}

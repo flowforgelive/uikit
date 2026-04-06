@@ -14,15 +14,14 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.foundation.Canvas
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.text.BasicText
-import androidx.compose.ui.text.TextStyle
 import com.uikit.compose.components.composites.button.Button
 import com.uikit.compose.components.composites.chip.Chip
 import com.uikit.compose.components.composites.segmentedcontrol.SegmentedControl
-import com.uikit.compose.theme.parseColor
+import com.uikit.compose.components.primitives.text.TextBlock
+import com.uikit.components.primitives.text.TextBlockVariant
 import com.uikit.foundation.ColorIntent
 import com.uikit.foundation.ComponentSize
+import com.uikit.foundation.TextEmphasis
 import com.uikit.foundation.VisualVariant
 import com.uikit.tokens.DesignTokens
 import androidx.compose.material.icons.Icons
@@ -41,14 +40,10 @@ internal fun HeightAlignmentShowcase(tokens: DesignTokens, globalSize: Component
 		Column(
 			verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
 		) {
-			BasicText(
+			TextBlock(
 				text = "Интерактивные элементы одного размера выровнены по высоте внутри своей группы",
-				style = TextStyle(
-					fontSize = tokens.typography.bodySmall.fontSize.sp,
-					lineHeight = tokens.typography.bodySmall.lineHeight.sp,
-					letterSpacing = tokens.typography.bodySmall.letterSpacing.sp,
-					color = parseColor(tokens.color.textMuted),
-				),
+				variant = TextBlockVariant.BodySmall,
+				emphasis = TextEmphasis.Muted,
 			)
 			Box {
 				Row(

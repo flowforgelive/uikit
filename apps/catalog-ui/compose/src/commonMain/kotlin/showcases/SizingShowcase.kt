@@ -12,16 +12,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.text.BasicText
-import androidx.compose.ui.text.TextStyle
+import com.uikit.compose.components.primitives.text.TextBlock
 import com.uikit.compose.theme.parseColor
+import com.uikit.components.primitives.text.TextBlockVariant
 import com.uikit.tokens.DesignTokens
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -73,14 +75,9 @@ internal fun SizingShowcase(tokens: DesignTokens) {
 						)
 					}
 					Spacer(Modifier.height(tokens.spacing.xs.dp))
-					BasicText(
+					TextBlock(
 						text = label,
-						style = TextStyle(
-							fontSize = tokens.typography.labelMedium.fontSize.sp,
-							lineHeight = tokens.typography.labelMedium.lineHeight.sp,
-							letterSpacing = tokens.typography.labelMedium.letterSpacing.sp,
-							color = parseColor(tokens.color.textMuted),
-						),
+						variant = TextBlockVariant.LabelMedium,
 					)
 				}
 			}
@@ -103,14 +100,9 @@ internal fun SizingShowcase(tokens: DesignTokens) {
 								.background(parseColor(tokens.color.primary)),
 					)
 					Spacer(Modifier.height(tokens.spacing.xs.dp))
-					BasicText(
+					TextBlock(
 						text = "$label (${size.toInt()}dp)",
-						style = TextStyle(
-							fontSize = tokens.typography.labelMedium.fontSize.sp,
-							lineHeight = tokens.typography.labelMedium.lineHeight.sp,
-							letterSpacing = tokens.typography.labelMedium.letterSpacing.sp,
-							color = parseColor(tokens.color.textMuted),
-						),
+						variant = TextBlockVariant.LabelMedium,
 					)
 				}
 			}
@@ -145,14 +137,9 @@ internal fun SizingShowcase(tokens: DesignTokens) {
 						),
 				)
 			}
-			BasicText(
+			TextBlock(
 				text = "Min Touch Target (Apple HIG 44dp / Material 48dp)",
-				style = TextStyle(
-					fontSize = tokens.typography.bodySmall.fontSize.sp,
-					lineHeight = tokens.typography.bodySmall.lineHeight.sp,
-					letterSpacing = tokens.typography.bodySmall.letterSpacing.sp,
-					color = parseColor(tokens.color.textSecondary),
-				),
+				variant = TextBlockVariant.BodySmall,
 			)
 		}
 	}

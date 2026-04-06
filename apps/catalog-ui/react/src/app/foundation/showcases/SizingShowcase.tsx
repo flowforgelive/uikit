@@ -1,5 +1,5 @@
 import React from "react";
-import { toRem, textStyle } from "@uikit/react";
+import { Text, toRem } from "@uikit/react";
 import { Section } from "../../components/catalog/Section";
 import { SubSectionTitle } from "../../components/catalog/SubSectionTitle";
 
@@ -42,7 +42,7 @@ export function SizingShowcase({ tokens }: { tokens: any }) {
 						>
 							{val}dp
 						</div>
-						<span style={{ ...textStyle(tokens.typography.labelMedium, tokens), color: tokens.color.textMuted }}>{label}</span>
+						<Text text={label} variant="label-medium" />
 					</div>
 				))}
 			</div>
@@ -59,7 +59,7 @@ export function SizingShowcase({ tokens }: { tokens: any }) {
 								borderRadius: toRem(tokens.radius.sm),
 							}}
 						/>
-						<span style={{ ...textStyle(tokens.typography.labelMedium, tokens), color: tokens.color.textMuted }}>{label} ({val}dp)</span>
+						<Text text={`${label} (${val}dp)`} variant="label-medium" />
 					</div>
 				))}
 			</div>
@@ -90,9 +90,7 @@ export function SizingShowcase({ tokens }: { tokens: any }) {
 				>
 					{tokens.sizing.minTouchTarget}dp
 				</div>
-				<span style={{ ...textStyle(tokens.typography.bodySmall, tokens), color: tokens.color.textSecondary }}>
-					Min Touch Target (Apple HIG 44dp / Material 48dp)
-				</span>
+				<Text text="Min Touch Target (Apple HIG 44dp / Material 48dp)" variant="body-small" />
 			</div>
 		</Section>
 	);

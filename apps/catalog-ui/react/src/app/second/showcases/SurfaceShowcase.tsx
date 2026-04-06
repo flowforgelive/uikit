@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Surface, SegmentedControl, toRem } from "@uikit/react";
+import { Surface, Text, SegmentedControl, toRem } from "@uikit/react";
 import { Section } from "../../components/catalog/Section";
 import { SubSectionTitle } from "../../components/catalog/SubSectionTitle";
 
@@ -46,26 +46,10 @@ export function SurfaceShowcase({ tokens }: { tokens: any }) {
 								onClick={mode === "clickable" ? () => {} : undefined}
 							>
 								<div style={{ padding: toRem(tokens.spacing.md), width: toRem(120) }}>
-									<span
-										style={{
-											fontSize: toRem(tokens.typography.labelMedium.fontSize),
-											fontWeight: 600,
-											color: tokens.color.textPrimary,
-											display: "block",
-										}}
-									>
-										Уровень {level}
-									</span>
-									<span
-										style={{
-											fontSize: toRem(tokens.typography.labelSmall.fontSize),
-											color: tokens.color.text,
-											marginBlockStart: toRem(tokens.spacing.xs),
-											display: "block",
-										}}
-									>
-										{variant}{variant === "ghost" ? " (hover)" : ""}
-									</span>
+									<Text text={`Уровень ${level}`} variant="label-medium" emphasis="primary" />
+									<div style={{ marginBlockStart: toRem(tokens.spacing.xs) }}>
+										<Text text={`${variant}${variant === "ghost" ? " (hover)" : ""}`} variant="label-small" />
+									</div>
 								</div>
 							</Surface>
 						))}

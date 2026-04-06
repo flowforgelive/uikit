@@ -1,5 +1,5 @@
 import React from "react";
-import { toRem, textStyle } from "@uikit/react";
+import { Text, toRem } from "@uikit/react";
 import { Section } from "../../components/catalog/Section";
 
 const COLOR_KEYS = [
@@ -55,12 +55,8 @@ export function ColorsShowcase({ tokens }: { tokens: any }) {
 									boxShadow: `inset 0 0 0 1px ${tokens.color.outlineVariant}`,
 								}}
 							/>
-						<span style={{ ...textStyle(tokens.typography.labelSmall, tokens), fontWeight: 600, color: tokens.color.textPrimary }}>
-							{label}
-						</span>
-						<span style={{ ...textStyle(tokens.typography.labelSmall, tokens), color: tokens.color.textMuted, fontFamily: "monospace" }}>
-								{hex}
-							</span>
+							<Text text={label} variant="label-small" emphasis="primary" />
+							<Text text={hex} variant="label-small" className="monospace-text" />
 						</div>
 					);
 				})}

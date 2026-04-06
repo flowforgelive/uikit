@@ -11,12 +11,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.text.BasicText
-import androidx.compose.ui.text.TextStyle
 import com.uikit.compose.components.composites.button.Button
 import com.uikit.compose.components.composites.segmentedcontrol.SegmentedControl
-import com.uikit.compose.theme.parseColor
+import com.uikit.compose.components.primitives.text.TextBlock
+import com.uikit.components.primitives.text.TextBlockVariant
 import com.uikit.foundation.ColorIntent
 import com.uikit.foundation.ComponentSize
 import com.uikit.foundation.IconPosition
@@ -62,15 +60,9 @@ internal fun ButtonShowcase(tokens: DesignTokens, globalSize: ComponentSize) {
 				verticalAlignment = Alignment.CenterVertically,
 				horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
 			) {
-				BasicText(
+				TextBlock(
 					text = "Позиция иконки:",
-					style = TextStyle(
-						fontSize = tokens.typography.labelMedium.fontSize.sp,
-						lineHeight = tokens.typography.labelMedium.lineHeight.sp,
-						letterSpacing = tokens.typography.labelMedium.letterSpacing.sp,
-						color = parseColor(tokens.color.textMuted),
-					),
-					softWrap = false,
+					variant = TextBlockVariant.LabelMedium,
 				)
 				SegmentedControl(
 					options = ICON_POSITION_OPTIONS,
@@ -85,14 +77,9 @@ internal fun ButtonShowcase(tokens: DesignTokens, globalSize: ComponentSize) {
 					SubSectionTitle(text = variant.name, tokens = tokens)
 					ColorIntent.entries.forEach { intent ->
 						Column {
-							BasicText(
+							TextBlock(
 								text = "${intent.name}:",
-								style = TextStyle(
-									fontSize = tokens.typography.labelMedium.fontSize.sp,
-									lineHeight = tokens.typography.labelMedium.lineHeight.sp,
-									letterSpacing = tokens.typography.labelMedium.letterSpacing.sp,
-									color = parseColor(tokens.color.textMuted),
-								),
+								variant = TextBlockVariant.LabelMedium,
 							)
 							Row(
 									horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
