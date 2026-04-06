@@ -68,62 +68,25 @@ object InteractiveColorResolver {
 			)
 		}
 
-	private fun softColors(intent: ColorIntent, tokens: DesignTokens, surfaceContext: SurfaceContext?): ColorSet =
+	private fun softColors(intent: ColorIntent, tokens: DesignTokens, surfaceContext: SurfaceContext?): ColorSet {
+		val depth = surfaceContext?.nestingDepth ?: 0
+		val pair = NestingColorStrategy.resolveSoftBg(intent, depth, tokens)
+		val textColors = softTextColors(intent, tokens)
+		return ColorSet(
+			bg = pair.bg,
+			bgHover = pair.bgHover,
+			text = textColors.first,
+			textHover = textColors.second,
+			border = ColorConstants.TRANSPARENT,
+			borderHover = ColorConstants.TRANSPARENT,
+		)
+	}
+
+	private fun softTextColors(intent: ColorIntent, tokens: DesignTokens): Pair<String, String> =
 		when (intent) {
-			ColorIntent.Primary -> {
-				val surfaceBg = surfaceContext?.backgroundColor
-				if (surfaceBg != null && surfaceBg == tokens.color.primarySoft) {
-					ColorSet(
-						bg = tokens.color.primarySoftHover,
-						bgHover = tokens.color.surfaceHover,
-						text = tokens.color.textPrimary,
-						textHover = tokens.color.textPrimary,
-						border = ColorConstants.TRANSPARENT,
-						borderHover = ColorConstants.TRANSPARENT,
-					)
-				} else {
-					ColorSet(
-						bg = tokens.color.primarySoft,
-						bgHover = tokens.color.primarySoftHover,
-						text = tokens.color.textPrimary,
-						textHover = tokens.color.textPrimary,
-						border = ColorConstants.TRANSPARENT,
-						borderHover = ColorConstants.TRANSPARENT,
-					)
-				}
-			}
-
-			ColorIntent.Neutral -> {
-				val surfaceBg = surfaceContext?.backgroundColor
-				if (surfaceBg != null && surfaceBg == tokens.color.neutralSoft) {
-					ColorSet(
-						bg = tokens.color.neutralSoftHover,
-						bgHover = tokens.color.surfaceHover,
-						text = tokens.color.textSecondary,
-						textHover = tokens.color.textPrimary,
-						border = ColorConstants.TRANSPARENT,
-						borderHover = ColorConstants.TRANSPARENT,
-					)
-				} else {
-					ColorSet(
-						bg = tokens.color.neutralSoft,
-						bgHover = tokens.color.neutralSoftHover,
-						text = tokens.color.textSecondary,
-						textHover = tokens.color.textPrimary,
-						border = ColorConstants.TRANSPARENT,
-						borderHover = ColorConstants.TRANSPARENT,
-					)
-				}
-			}
-
-			ColorIntent.Danger -> ColorSet(
-				bg = tokens.color.dangerSoft,
-				bgHover = tokens.color.dangerSoftHover,
-				text = tokens.color.danger,
-				textHover = tokens.color.danger,
-				border = ColorConstants.TRANSPARENT,
-				borderHover = ColorConstants.TRANSPARENT,
-			)
+			ColorIntent.Primary -> tokens.color.textPrimary to tokens.color.textPrimary
+			ColorIntent.Neutral -> tokens.color.textSecondary to tokens.color.textPrimary
+			ColorIntent.Danger -> tokens.color.danger to tokens.color.danger
 		}
 
 	private fun surfaceColors(intent: ColorIntent, tokens: DesignTokens): ColorSet =

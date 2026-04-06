@@ -22,6 +22,7 @@ data class SizeSet(
 	val iconGap: Double,
 	val letterSpacing: Double,
 	val lineHeight: Double,
+	val isIconOnly: Boolean = false,
 )
 
 @JsExport
@@ -56,9 +57,15 @@ object ButtonStyleResolver {
 		val isVerticalWithIcon = (config.iconPosition == IconPosition.Top || config.iconPosition == IconPosition.Bottom) && config.hasIcon
 		val layout = ComponentSizeResolver.resolveVerticalLayout(scale, isVerticalWithIcon)
 
+		val effectivePaddingH = if (config.isIconOnly) {
+			(scale.height - scale.iconSize) / 2.0
+		} else {
+			scale.paddingH
+		}
+
 		val sizes = SizeSet(
 			height = layout.height,
-			paddingH = scale.paddingH,
+			paddingH = effectivePaddingH,
 			paddingV = layout.paddingV,
 			fontSize = scale.fontSize,
 			fontWeight = scale.fontWeight,
@@ -66,6 +73,7 @@ object ButtonStyleResolver {
 			iconGap = scale.iconGap,
 			letterSpacing = scale.letterSpacing,
 			lineHeight = scale.lineHeight,
+			isIconOnly = config.isIconOnly,
 		)
 
 		return ResolvedButtonStyle(

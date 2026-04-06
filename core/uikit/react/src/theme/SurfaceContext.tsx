@@ -3,7 +3,7 @@
 import React, { createContext, useContext, type ReactNode } from "react";
 import { SurfaceContext } from "uikit-common";
 
-const defaultSurfaceContext = new SurfaceContext(0, "transparent");
+const defaultSurfaceContext = new SurfaceContext(0, "transparent", 0);
 
 const SurfaceContextReact = createContext<SurfaceContext>(defaultSurfaceContext);
 

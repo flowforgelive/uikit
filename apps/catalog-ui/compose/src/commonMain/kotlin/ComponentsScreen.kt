@@ -159,6 +159,7 @@ internal fun ComponentsScreen(
 			TextShowcase(modifiedTokens)
 			ButtonShowcase(modifiedTokens, globalSize)
 			IconButtonShowcase(modifiedTokens, globalSize)
+			ChipShowcase(modifiedTokens, globalSize)
 			SurfaceShowcase(modifiedTokens)
 			SegmentedControlShowcase(modifiedTokens, globalSize)
 			HeightAlignmentShowcase(modifiedTokens, globalSize)

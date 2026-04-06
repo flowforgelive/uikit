@@ -18,12 +18,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.ui.text.TextStyle
 import com.uikit.compose.components.composites.button.Button
-import com.uikit.compose.components.composites.iconbutton.IconButton
+import com.uikit.compose.components.composites.chip.Chip
 import com.uikit.compose.components.composites.segmentedcontrol.SegmentedControl
 import com.uikit.compose.theme.parseColor
 import com.uikit.foundation.ColorIntent
 import com.uikit.foundation.ComponentSize
-import com.uikit.foundation.IconPosition
 import com.uikit.foundation.VisualVariant
 import com.uikit.tokens.DesignTokens
 import androidx.compose.material.icons.Icons
@@ -43,7 +42,7 @@ internal fun HeightAlignmentShowcase(tokens: DesignTokens, globalSize: Component
 			verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
 		) {
 			BasicText(
-				text = "Все интерактивные элементы одного размера имеют одинаковую высоту",
+				text = "Интерактивные элементы одного размера выровнены по высоте внутри своей группы",
 				style = TextStyle(
 					fontSize = tokens.typography.bodySmall.fontSize.sp,
 					lineHeight = tokens.typography.bodySmall.lineHeight.sp,
@@ -62,20 +61,35 @@ internal fun HeightAlignmentShowcase(tokens: DesignTokens, globalSize: Component
 						variant = VisualVariant.Solid,
 						intent = ColorIntent.Primary,
 						size = btnSize,
-						iconPosition = IconPosition.Start,
-						iconStart = { Icon(Icons.Filled.Search, contentDescription = null) },
+						icon = { Icon(Icons.Filled.Search, contentDescription = null) },
 					)
-					IconButton(
+					Button(
 						icon = { Icon(Icons.Filled.Star, contentDescription = null) },
 						variant = VisualVariant.Solid,
 						intent = ColorIntent.Primary,
-						size = selectedSize,
+						size = btnSize,
+						ariaLabel = "Star",
 					)
 					SegmentedControl(
 						options = listOf("a" to "Abc", "b" to "Def"),
 						selectedId = "a",
 						onSelectionChange = {},
 						size = selectedSize,
+					)
+					Chip(
+						text = "Chip",
+						size = selectedSize,
+					)
+					Chip(
+						text = "С иконкой",
+						size = selectedSize,
+						leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
+					)
+					Chip(
+						text = "Dismiss",
+						size = selectedSize,
+						dismissible = true,
+						onDismiss = {},
 					)
 				}
 				Canvas(modifier = Modifier.matchParentSize()) {

@@ -15,6 +15,7 @@ import { SIZE_OPTIONS, RADIUS_OPTIONS, RADIUS_FRACTION_MAP, PANEL_VARIANT_OPTION
 import { TextShowcase } from "./showcases/TextShowcase";
 import { ButtonShowcase } from "./showcases/ButtonShowcase";
 import { IconButtonShowcase } from "./showcases/IconButtonShowcase";
+import { ChipShowcase } from "./showcases/ChipShowcase";
 import { SurfaceShowcase } from "./showcases/SurfaceShowcase";
 import { SegmentedControlShowcase } from "./showcases/SegmentedControlShowcase";
 import { HeightAlignmentShowcase } from "./showcases/HeightAlignmentShowcase";
@@ -81,6 +82,7 @@ export default function ComponentsPage() {
 				<TextShowcase tokens={tokens} />
 				<ButtonShowcase tokens={tokens} globalSize={globalSize} />
 				<IconButtonShowcase tokens={tokens} globalSize={globalSize} />
+				<ChipShowcase tokens={tokens} globalSize={globalSize} />
 				<SurfaceShowcase tokens={tokens} />
 				<SegmentedControlShowcase tokens={tokens} globalSize={globalSize} />
 				<HeightAlignmentShowcase tokens={tokens} globalSize={globalSize} />

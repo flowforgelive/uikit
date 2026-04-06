@@ -10,79 +10,94 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.ui.text.TextStyle
-import com.uikit.compose.components.composites.button.Button
+import com.uikit.compose.components.composites.chip.Chip
 import com.uikit.compose.theme.parseColor
 import com.uikit.foundation.ColorIntent
 import com.uikit.foundation.ComponentSize
 import com.uikit.foundation.VisualVariant
 import com.uikit.tokens.DesignTokens
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 
-private val ICON_BUTTON_SAMPLES: List<@Composable () -> Unit> = listOf(
-	{ Icon(Icons.Filled.Search, contentDescription = null) },
-	{ Icon(Icons.Filled.Add, contentDescription = null) },
-	{ Icon(Icons.Filled.Star, contentDescription = null) },
-	{ Icon(Icons.Filled.Settings, contentDescription = null) },
-	{ Icon(Icons.Filled.Close, contentDescription = null) },
-	{ Icon(Icons.Filled.Check, contentDescription = null) },
-)
+private val CHIP_VARIANTS = listOf(VisualVariant.Soft, VisualVariant.Outline, VisualVariant.Ghost)
 
 @Composable
-internal fun IconButtonShowcase(tokens: DesignTokens, globalSize: ComponentSize) {
+internal fun ChipShowcase(tokens: DesignTokens, globalSize: ComponentSize) {
 	val selectedSize = globalSize
 
-	ShowcaseSection("Кнопка-иконка (Button icon-only)", tokens) {
+	ShowcaseSection("Чип (Chip)", tokens) {
 		Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xl.dp)) {
 
-			VisualVariant.entries.forEach { variant ->
+			CHIP_VARIANTS.forEach { variant ->
 				Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
 					SubSectionTitle(text = variant.name, tokens = tokens)
 					ColorIntent.entries.forEach { intent ->
 						Column {
-						BasicText(
-							text = "${intent.name}:",
-							style = TextStyle(
-								fontSize = tokens.typography.labelMedium.fontSize.sp,
-								lineHeight = tokens.typography.labelMedium.lineHeight.sp,
-								letterSpacing = tokens.typography.labelMedium.letterSpacing.sp,
-								color = parseColor(tokens.color.textMuted),
-							),
+							BasicText(
+								text = "${intent.name}:",
+								style = TextStyle(
+									fontSize = tokens.typography.labelMedium.fontSize.sp,
+									lineHeight = tokens.typography.labelMedium.lineHeight.sp,
+									letterSpacing = tokens.typography.labelMedium.letterSpacing.sp,
+									color = parseColor(tokens.color.textMuted),
+								),
 							)
 							Row(
 								horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
 								verticalAlignment = Alignment.CenterVertically,
 								modifier = Modifier.horizontalScroll(rememberScrollState()),
 							) {
-								ICON_BUTTON_SAMPLES.forEach { iconSlot ->
-									Button(
-										icon = iconSlot,
-										variant = variant,
-										intent = intent,
-										size = selectedSize,
-										ariaLabel = "Icon button",
-									)
-								}
-								Button(
-									icon = { Icon(Icons.Filled.Star, contentDescription = null) },
+								Chip(
+									text = "Chip",
 									variant = variant,
 									intent = intent,
 									size = selectedSize,
-									ariaLabel = "Disabled",
+								)
+								Chip(
+									text = "С иконкой",
+									variant = variant,
+									intent = intent,
+									size = selectedSize,
+									leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
+								)
+								Chip(
+									text = "Dismissible",
+									variant = variant,
+									intent = intent,
+									size = selectedSize,
+									dismissible = true,
+									onDismiss = {},
+								)
+								Chip(
+									text = "Icon + Dismiss",
+									variant = variant,
+									intent = intent,
+									size = selectedSize,
+									leadingIcon = { Icon(Icons.Filled.Star, contentDescription = null) },
+									dismissible = true,
+									onDismiss = {},
+								)
+								Chip(
+									text = "Selected",
+									variant = variant,
+									intent = intent,
+									size = selectedSize,
+									selected = true,
+								)
+								Chip(
+									text = "Disabled",
+									variant = variant,
+									intent = intent,
+									size = selectedSize,
 									disabled = true,
 								)
-								Button(
-									icon = { Icon(Icons.Filled.Star, contentDescription = null) },
+								Chip(
+									text = "Loading",
 									variant = variant,
 									intent = intent,
 									size = selectedSize,
-									ariaLabel = "Loading",
 									loading = true,
 								)
 							}

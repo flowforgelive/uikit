@@ -59,6 +59,11 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 				return <span className={css.spinner} />;
 			}
 
+			if (config.isIconOnly) {
+				const icon = iconStart ?? iconEnd;
+				return icon ? renderIcon(icon) : null;
+			}
+
 			if (!hasIcon) {
 				return config.text;
 			}
@@ -90,8 +95,10 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 			<button
 				onClick={handleClick}
 				aria-disabled={!config.isInteractive || undefined}
+				aria-label={config.ariaLabel ?? undefined}
+				data-interactive={config.isInteractive || undefined}
 				data-testid={config.testTag ?? config.id}
-				className={`${css.button} ${className ?? ""}`}
+				className={`${css.button} ${config.isIconOnly ? css.iconOnly : ""} ${className ?? ""}`}
 				style={
 					{
 						"--btn-bg": style.colors.bg,

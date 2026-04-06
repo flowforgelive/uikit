@@ -1,5 +1,5 @@
 import React from "react";
-import { IconButton, toRem, textStyle } from "@uikit/react";
+import { Button, toRem, textStyle } from "@uikit/react";
 import { Section } from "../../components/catalog/Section";
 import { SubSectionTitle } from "../../components/catalog/SubSectionTitle";
 import { starIcon, ICON_BUTTON_SAMPLES } from "../../components/icons";
@@ -11,7 +11,7 @@ export function IconButtonShowcase({ tokens, globalSize }: { tokens: any; global
 	const selectedSize = globalSize;
 
 	return (
-		<Section id="icon-button" title="Кнопка-иконка (Icon Button)" tokens={tokens}>
+		<Section id="icon-only-button" title="Кнопка-иконка (Button icon-only)" tokens={tokens}>
 			{BUTTON_VARIANTS.map((variant) => (
 				<div key={variant} style={{ marginBlockEnd: toRem(tokens.spacing.xl) }}>
 					<SubSectionTitle tokens={tokens}>{variant}</SubSectionTitle>
@@ -22,26 +22,29 @@ export function IconButtonShowcase({ tokens, globalSize }: { tokens: any; global
 							</span>
 							<div style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md), overflowX: "auto" }}>
 								{ICON_BUTTON_SAMPLES.map((icon, i) => (
-									<IconButton
+									<Button
 										key={i}
 										icon={icon}
 										variant={variant}
 										intent={intent}
 										size={selectedSize as any}
+										ariaLabel="Icon button"
 									/>
 								))}
-								<IconButton
+								<Button
 									icon={starIcon}
 									variant={variant}
 									intent={intent}
 									size={selectedSize as any}
+									ariaLabel="Disabled"
 									disabled
 								/>
-								<IconButton
+								<Button
 									icon={starIcon}
 									variant={variant}
 									intent={intent}
 									size={selectedSize as any}
+									ariaLabel="Loading"
 									loading
 								/>
 							</div>

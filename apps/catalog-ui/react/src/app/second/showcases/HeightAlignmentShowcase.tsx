@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, IconButton, SegmentedControl, toRem } from "@uikit/react";
+import { Button, Chip, SegmentedControl, toRem } from "@uikit/react";
 import { Section } from "../../components/catalog/Section";
 import { searchIcon, starIcon } from "../../components/icons";
 
@@ -7,20 +7,21 @@ export function HeightAlignmentShowcase({ tokens, globalSize }: { tokens: any; g
 	return (
 		<Section id="height-alignment" title="Выравнивание высот (Height Alignment)" tokens={tokens}>
 			<p style={{ fontSize: toRem(tokens.typography.bodySmall.fontSize), color: tokens.color.textMuted, marginBlockEnd: toRem(tokens.spacing.md) }}>
-				Все интерактивные элементы одного размера имеют одинаковую высоту
+				Интерактивные элементы одного размера выровнены по высоте внутри своей группы
 			</p>
 			<div
 				style={{
 					display: "flex",
 					alignItems: "center",
 					gap: toRem(tokens.spacing.md),
+					flexWrap: "wrap",
 					borderTop: "1px dashed silver",
 					borderBottom: "1px dashed silver",
 					paddingBlock: toRem(tokens.spacing.xs),
 				}}
 			>
-				<Button text="Button" size={globalSize as any} iconPosition="start" iconStart={searchIcon} />
-				<IconButton icon={starIcon} size={globalSize as any} />
+				<Button text="Button" size={globalSize as any} icon={searchIcon} />
+				<Button icon={starIcon} size={globalSize as any} ariaLabel="Star" />
 				<SegmentedControl
 					options={[
 						{ id: "a", label: "Abc" },
@@ -30,6 +31,9 @@ export function HeightAlignmentShowcase({ tokens, globalSize }: { tokens: any; g
 					onSelectionChange={() => {}}
 					size={globalSize as any}
 				/>
+				<Chip text="Chip" size={globalSize as any} />
+				<Chip text="С иконкой" size={globalSize as any} leadingIcon={searchIcon} />
+				<Chip text="Dismiss" size={globalSize as any} dismissible onDismiss={() => {}} />
 			</div>
 		</Section>
 	);

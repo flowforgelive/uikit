@@ -16,7 +16,7 @@ typealias ButtonSize = ComponentSize
 @JsExport
 @Serializable
 data class ButtonConfig(
-	val text: String,
+	val text: String = "",
 	val variant: VisualVariant = VisualVariant.Solid,
 	val intent: ColorIntent = ColorIntent.Primary,
 	val size: ComponentSize = ComponentSize.Md,
@@ -29,9 +29,13 @@ data class ButtonConfig(
 	val actionRoute: String? = null,
 	val testTag: String? = null,
 	val visibility: Visibility = Visibility.Visible,
+	val ariaLabel: String? = null,
 ) {
 	val isInteractive: Boolean get() = !disabled && !loading
 
 	/** True when at least one icon should be rendered. */
 	val hasIcon: Boolean get() = iconPosition != IconPosition.None && (hasIconStart || hasIconEnd)
+
+	/** True when button is icon-only (no text, has icon). Renders as a square. */
+	val isIconOnly: Boolean get() = text.isEmpty() && (hasIconStart || hasIconEnd)
 }

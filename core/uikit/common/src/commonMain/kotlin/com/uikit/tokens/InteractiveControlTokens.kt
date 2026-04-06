@@ -25,6 +25,10 @@ data class ControlProportions(
 	val iconGapRatio: Double,
 	val radiusFraction: Double,
 	val lineHeightRatio: Double = 1.0,
+	/** Dismiss button size as fraction of control height (used in Chip, Tag, etc.). */
+	val dismissButtonRatio: Double = 0.70,
+	/** Dismiss icon (×) size as fraction of dismiss button size. */
+	val dismissIconRatio: Double = 0.50,
 )
 
 @JsExport

@@ -56,8 +56,9 @@ fun SurfaceView(
 	val focusBorder = if (showFocusRing) tokens.color.focusRing else style.border
 	val borderWidth = if (showFocusRing) tokens.focusRingWidth.dp else tokens.borderWidth.dp
 
-	val surfaceContext = remember(config.level, style.bg) {
-		SurfaceContext(level = config.level.ordinal, backgroundColor = style.bg)
+	val parentSurfaceContext = LocalSurfaceContext.current
+	val surfaceContext = remember(config.level, style.bg, parentSurfaceContext.nestingDepth) {
+		SurfaceContext(level = config.level.ordinal, backgroundColor = style.bg, nestingDepth = parentSurfaceContext.nestingDepth)
 	}
 
 	Box(

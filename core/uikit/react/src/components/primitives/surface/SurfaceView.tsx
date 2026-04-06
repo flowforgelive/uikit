@@ -11,6 +11,7 @@ import {
 	type SurfaceConfig,
 	type DesignTokens,
 } from "uikit-common";
+import { useSurfaceContext } from "../../../theme/SurfaceContext";
 import css from "./SurfaceView.module.css";
 
 interface SurfaceViewProps {
@@ -25,6 +26,7 @@ export const SurfaceView: React.FC<SurfaceViewProps> = React.memo(
 	({ config, onClick, tokens: tokensProp, className, children }) => {
 		const contextTokens = useDesignTokens();
 		const tokens = tokensProp ?? contextTokens;
+		const parentSurface = useSurfaceContext();
 		const style = useMemo(
 			() => SurfaceStyleResolver.getInstance().resolve(config, tokens),
 			[config, tokens],
@@ -49,8 +51,8 @@ export const SurfaceView: React.FC<SurfaceViewProps> = React.memo(
 		);
 
 		const surfaceContext = useMemo(
-			() => new SurfaceContext(config.level.ordinal, style.bg),
-			[config.level, style.bg],
+			() => new SurfaceContext(config.level.ordinal, style.bg, parentSurface.nestingDepth),
+			[config.level, style.bg, parentSurface.nestingDepth],
 		);
 
 		if (config.visibility === Visibility.Gone) return null;

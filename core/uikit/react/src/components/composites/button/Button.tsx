@@ -41,33 +41,41 @@ const ICON_POSITION_MAP = {
 } as const;
 
 interface ButtonProps {
-	text: string;
+	text?: string;
 	onClick?: () => void;
 	variant?: keyof typeof VARIANT_MAP;
 	intent?: keyof typeof INTENT_MAP;
 	size?: keyof typeof SIZE_MAP;
+	icon?: React.ReactNode;
 	iconPosition?: keyof typeof ICON_POSITION_MAP;
 	iconStart?: React.ReactNode;
 	iconEnd?: React.ReactNode;
 	disabled?: boolean;
 	loading?: boolean;
+	ariaLabel?: string;
 	className?: string;
 }
 
 export const Button: React.FC<ButtonProps> = React.memo(
 	({
-		text,
+		text = "",
 		onClick,
 		variant = "solid",
 		intent = "primary",
 		size = "md",
+		icon,
 		iconPosition = "none",
 		iconStart,
 		iconEnd,
 		disabled = false,
 		loading = false,
+		ariaLabel,
 		className,
 	}) => {
+		const effectivePosition = icon && iconPosition === "none" ? "start" : iconPosition;
+		const effectiveIconStart = icon && effectivePosition !== "end" ? icon : iconStart;
+		const effectiveIconEnd = icon && effectivePosition === "end" ? icon : iconEnd;
+
 		const config = useMemo(
 			() =>
 				new ButtonConfig(
@@ -75,17 +83,22 @@ export const Button: React.FC<ButtonProps> = React.memo(
 					VARIANT_MAP[variant],
 					INTENT_MAP[intent],
 					SIZE_MAP[size],
-					ICON_POSITION_MAP[iconPosition],
-					!!iconStart,
-					!!iconEnd,
+					ICON_POSITION_MAP[effectivePosition],
+					!!effectiveIconStart,
+					!!effectiveIconEnd,
 					disabled,
 					loading,
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					ariaLabel,
 				),
-			[text, variant, intent, size, iconPosition, !!iconStart, !!iconEnd, disabled, loading],
+			[text, variant, intent, size, effectivePosition, !!effectiveIconStart, !!effectiveIconEnd, disabled, loading, ariaLabel],
 		);
 
 		return (
-			<ButtonView config={config} iconStart={iconStart} iconEnd={iconEnd} onClick={onClick} className={className} />
+			<ButtonView config={config} iconStart={effectiveIconStart} iconEnd={effectiveIconEnd} onClick={onClick} className={className} />
 		);
 	},
 );

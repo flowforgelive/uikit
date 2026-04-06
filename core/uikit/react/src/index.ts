@@ -1,18 +1,20 @@
 // Convenience API (primary)
 export { Button } from "./components/composites/button/Button";
-export { IconButton } from "./components/composites/icon-button/IconButton";
+export { Icon } from "./components/primitives/icon/Icon";
 export { Text } from "./components/primitives/text/Text";
 export { SegmentedControl } from "./components/composites/segmented-control/SegmentedControl";
 export { Surface } from "./components/primitives/surface/Surface";
 export { Panel } from "./components/blocks/panel/Panel";
+export { Chip } from "./components/composites/chip/Chip";
 
 // Config-based API (advanced / SDUI)
 export { ButtonView } from "./components/composites/button/ButtonView";
-export { IconButtonView } from "./components/composites/icon-button/IconButtonView";
+export { IconView } from "./components/primitives/icon/IconView";
 export { TextBlockView } from "./components/primitives/text/TextBlockView";
 export { SegmentedControlView } from "./components/composites/segmented-control/SegmentedControlView";
 export { SurfaceView } from "./components/primitives/surface/SurfaceView";
 export { PanelView } from "./components/blocks/panel/PanelView";
+export { ChipView } from "./components/composites/chip/ChipView";
 
 // Theme
 export { useDesignTokens, DesignTokensProvider } from "./theme/useDesignTokens";
@@ -32,8 +34,6 @@ export {
 	ColorIntent,
 	VisualVariant,
 	IconPosition,
-	IconButtonConfig,
-	IconButtonStyleResolver,
 	TextBlockConfig,
 	TextBlockVariant,
 	SegmentedControlConfig,
@@ -56,4 +56,8 @@ export {
 	PanelSide,
 	PanelCollapsible,
 	PanelStyleResolver,
+	IconConfig,
+	IconStyleResolver,
+	ChipConfig,
+	ChipStyleResolver,
 } from "uikit-common";

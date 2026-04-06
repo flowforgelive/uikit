@@ -1,4 +1,4 @@
-package com.uikit.components.composites.iconbutton
+package com.uikit.components.composites.chip
 
 import com.uikit.foundation.ColorIntent
 import com.uikit.foundation.ComponentSize
@@ -9,17 +9,20 @@ import kotlin.js.JsExport
 
 @JsExport
 @Serializable
-data class IconButtonConfig(
-	val variant: VisualVariant = VisualVariant.Solid,
-	val intent: ColorIntent = ColorIntent.Primary,
+data class ChipConfig(
+	val text: String,
+	val variant: VisualVariant = VisualVariant.Soft,
+	val intent: ColorIntent = ColorIntent.Neutral,
 	val size: ComponentSize = ComponentSize.Md,
+	val hasLeadingIcon: Boolean = false,
+	val dismissible: Boolean = false,
+	val selected: Boolean = false,
 	val disabled: Boolean = false,
 	val loading: Boolean = false,
 	val id: String = "",
 	val actionRoute: String? = null,
 	val testTag: String? = null,
 	val visibility: Visibility = Visibility.Visible,
-	val ariaLabel: String? = null,
 ) {
 	val isInteractive: Boolean get() = !disabled && !loading
 }

@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { IconButtonView } from "./IconButtonView";
+import { ChipView } from "./ChipView";
 import {
-	IconButtonConfig,
+	ChipConfig,
 	ComponentSize,
 	ColorIntent,
 	VisualVariant,
@@ -12,7 +12,6 @@ import {
 const VARIANT_MAP = {
 	solid: VisualVariant.Solid,
 	soft: VisualVariant.Soft,
-	surface: VisualVariant.Surface,
 	outline: VisualVariant.Outline,
 	ghost: VisualVariant.Ghost,
 } as const;
@@ -31,56 +30,62 @@ const SIZE_MAP = {
 	xl: ComponentSize.Xl,
 } as const;
 
-interface IconButtonProps {
-	icon: React.ReactNode;
+interface ChipProps {
+	text: string;
 	onClick?: () => void;
+	onDismiss?: () => void;
 	variant?: keyof typeof VARIANT_MAP;
 	intent?: keyof typeof INTENT_MAP;
 	size?: keyof typeof SIZE_MAP;
+	leadingIcon?: React.ReactNode;
+	dismissible?: boolean;
+	selected?: boolean;
 	disabled?: boolean;
 	loading?: boolean;
-	ariaLabel?: string;
 	className?: string;
 }
 
-export const IconButton: React.FC<IconButtonProps> = React.memo(
+export const Chip: React.FC<ChipProps> = React.memo(
 	({
-		icon,
+		text,
 		onClick,
-		variant = "solid",
-		intent = "primary",
+		onDismiss,
+		variant = "soft",
+		intent = "neutral",
 		size = "md",
+		leadingIcon,
+		dismissible = false,
+		selected = false,
 		disabled = false,
 		loading = false,
-		ariaLabel,
 		className,
 	}) => {
 		const config = useMemo(
 			() =>
-				new IconButtonConfig(
+				new ChipConfig(
+					text,
 					VARIANT_MAP[variant],
 					INTENT_MAP[intent],
 					SIZE_MAP[size],
+					!!leadingIcon,
+					dismissible,
+					selected,
 					disabled,
 					loading,
-					undefined,
-					undefined,
-					undefined,
-					undefined,
-					ariaLabel,
 				),
-			[variant, intent, size, disabled, loading, ariaLabel],
+			[text, variant, intent, size, !!leadingIcon, dismissible, selected, disabled, loading],
 		);
 
 		return (
-			<IconButtonView
+			<ChipView
 				config={config}
-				icon={icon}
+				leadingIcon={leadingIcon}
 				onClick={onClick}
+				onDismiss={onDismiss}
 				className={className}
 			/>
 		);
 	},
 );
 
-IconButton.displayName = "IconButton";
+Chip.displayName = "Chip";

@@ -10,19 +10,25 @@ import com.uikit.foundation.VisualVariant
 
 @Composable
 fun Button(
-	text: String,
+	text: String = "",
 	onClick: () -> Unit = {},
 	variant: VisualVariant = VisualVariant.Solid,
 	intent: ColorIntent = ColorIntent.Primary,
 	size: ButtonSize = ButtonSize.Md,
+	icon: (@Composable () -> Unit)? = null,
 	iconPosition: IconPosition = IconPosition.None,
 	iconStart: (@Composable () -> Unit)? = null,
 	iconEnd: (@Composable () -> Unit)? = null,
 	disabled: Boolean = false,
 	loading: Boolean = false,
+	ariaLabel: String? = null,
 	testTag: String? = null,
 	modifier: Modifier = Modifier,
 ) {
+	val effectivePosition = if (icon != null && iconPosition == IconPosition.None) IconPosition.Start else iconPosition
+	val effectiveIconStart = if (icon != null && effectivePosition != IconPosition.End) icon else iconStart
+	val effectiveIconEnd = if (icon != null && effectivePosition == IconPosition.End) icon else iconEnd
+
 	ButtonView(
 		config =
 			ButtonConfig(
@@ -30,16 +36,17 @@ fun Button(
 				variant = variant,
 				intent = intent,
 				size = size,
-				iconPosition = iconPosition,
-				hasIconStart = iconStart != null,
-				hasIconEnd = iconEnd != null,
+				iconPosition = effectivePosition,
+				hasIconStart = effectiveIconStart != null,
+				hasIconEnd = effectiveIconEnd != null,
 				disabled = disabled,
 				loading = loading,
 				testTag = testTag,
+				ariaLabel = ariaLabel,
 			),
 		onClick = onClick,
-		iconStart = iconStart,
-		iconEnd = iconEnd,
+		iconStart = effectiveIconStart,
+		iconEnd = effectiveIconEnd,
 		modifier = modifier,
 	)
 }
