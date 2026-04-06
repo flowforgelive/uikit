@@ -42,7 +42,7 @@ export const ChipView: React.FC<ChipViewProps> = React.memo(
 		}, [config.isInteractive, config.actionRoute, onAction, onClick]);
 
 		const handleDismiss = useCallback(
-			(e: React.MouseEvent) => {
+			(e: React.MouseEvent | React.KeyboardEvent) => {
 				e.stopPropagation();
 				if (config.isInteractive) {
 					onDismiss?.();
@@ -51,12 +51,22 @@ export const ChipView: React.FC<ChipViewProps> = React.memo(
 			[config.isInteractive, onDismiss],
 		);
 
+		const handleDismissKeyDown = useCallback(
+			(e: React.KeyboardEvent) => {
+				if (e.key === "Enter" || e.key === " ") {
+					e.preventDefault();
+					handleDismiss(e);
+				}
+			},
+			[handleDismiss],
+		);
+
 		if (config.visibility === Visibility.Gone) return null;
 
 		return (
 			<button
 				onClick={handleClick}
-				aria-disabled={!config.isInteractive || undefined}
+				aria-disabled={!config.isInteractive ? "true" : undefined}
 				aria-selected={config.selected || undefined}
 				data-interactive={config.isInteractive || undefined}
 				data-testid={config.testTag ?? config.id}
@@ -108,10 +118,11 @@ export const ChipView: React.FC<ChipViewProps> = React.memo(
 						)}
 						<span className={css.label}>{config.text}</span>
 						{config.dismissible && (
-							<button
-								type="button"
+							<span
+								role="button"
 								className={css.closeButton}
 								onClick={handleDismiss}
+								onKeyDown={handleDismissKeyDown}
 								data-interactive
 								aria-label="Dismiss"
 								tabIndex={-1}
@@ -127,7 +138,7 @@ export const ChipView: React.FC<ChipViewProps> = React.memo(
 									<line x1="4" y1="4" x2="12" y2="12" />
 									<line x1="12" y1="4" x2="4" y2="12" />
 								</svg>
-							</button>
+							</span>
 						)}
 					</>
 				)}

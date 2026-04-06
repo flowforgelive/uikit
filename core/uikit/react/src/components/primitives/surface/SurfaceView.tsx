@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo, useCallback, useRef } from "react";
 import { useDesignTokens } from "../../../theme/useDesignTokens";
 import { SurfaceContextProvider } from "../../../theme/SurfaceContext";
 import { toRem } from "../../../utils/units";
@@ -32,6 +32,8 @@ export const SurfaceView: React.FC<SurfaceViewProps> = React.memo(
 			[config, tokens],
 		);
 
+		const elementRef = useRef<HTMLElement>(null);
+
 		const handleClick = useCallback(() => {
 			if (config.clickable) {
 				onClick?.();
@@ -40,12 +42,12 @@ export const SurfaceView: React.FC<SurfaceViewProps> = React.memo(
 
 		const handlePointerDown = useCallback(
 			(e: React.PointerEvent<HTMLElement>) => {
-				if (!config.clickable) return;
-				const rect = e.currentTarget.getBoundingClientRect();
+				if (!config.clickable || !elementRef.current) return;
+				const rect = elementRef.current.getBoundingClientRect();
 				const x = ((e.clientX - rect.left) / rect.width) * 100;
 				const y = ((e.clientY - rect.top) / rect.height) * 100;
-				e.currentTarget.style.setProperty("--ripple-x", `${x}%`);
-				e.currentTarget.style.setProperty("--ripple-y", `${y}%`);
+				elementRef.current.style.setProperty("--ripple-x", `${x}%`);
+				elementRef.current.style.setProperty("--ripple-y", `${y}%`);
 			},
 			[config.clickable],
 		);
@@ -62,6 +64,7 @@ export const SurfaceView: React.FC<SurfaceViewProps> = React.memo(
 		return (
 			<SurfaceContextProvider value={surfaceContext}>
 				<Tag
+					ref={elementRef as React.RefObject<HTMLButtonElement & HTMLDivElement>}
 					onClick={config.clickable ? handleClick : undefined}
 					onPointerDown={config.clickable ? handlePointerDown : undefined}
 					data-testid={config.testTag ?? config.id}

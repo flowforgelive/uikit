@@ -87,7 +87,7 @@ export const PanelView: React.FC<PanelViewProps> = React.memo(
 								viewBox="0 0 16 16"
 								fill="none"
 								className={`${css.toggleIcon} ${!isOpen ? css.toggleIconCollapsed : ""}`}
-								style={{ transform: sideName === "right" ? "scaleX(-1)" : sideName === "bottom" ? "rotate(90deg)" : sideName === "top" ? "rotate(-90deg)" : undefined }}
+
 							>
 								<path
 									d="M10.5 3L5.5 8L10.5 13"

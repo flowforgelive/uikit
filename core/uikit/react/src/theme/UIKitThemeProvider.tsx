@@ -176,7 +176,9 @@ export function UIKitThemeProvider({
 
 	// Sync data-theme and dir attributes on <html>
 	useEffect(() => {
-		document.documentElement.setAttribute("data-theme", resolvedMode);
+		if (document.documentElement.getAttribute("data-theme") !== resolvedMode) {
+			document.documentElement.setAttribute("data-theme", resolvedMode);
+		}
 	}, [resolvedMode]);
 
 	useEffect(() => {

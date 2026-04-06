@@ -94,7 +94,7 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 		return (
 			<button
 				onClick={handleClick}
-				aria-disabled={!config.isInteractive || undefined}
+				aria-disabled={!config.isInteractive ? "true" : undefined}
 				aria-label={config.ariaLabel ?? undefined}
 				data-interactive={config.isInteractive || undefined}
 				data-testid={config.testTag ?? config.id}

@@ -9,6 +9,7 @@ import {
 	Visibility,
 	IconPosition,
 	type SegmentedControlConfig,
+	type SegmentedControlOption,
 	type DesignTokens,
 } from "uikit-common";
 import css from "./SegmentedControlView.module.css";
@@ -34,7 +35,7 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 		const options = config.options;
 		const selectedIndex = Math.max(
 			0,
-			options.findIndex((o: any) => o.id === config.selectedId),
+			options.findIndex((o: SegmentedControlOption) => o.id === config.selectedId),
 		);
 
 		const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -61,13 +62,13 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 					case "Enter":
 					case " ":
 						e.preventDefault();
-						onSelectionChange?.((options as any)[index].id);
+						onSelectionChange?.(options[index].id);
 						return;
 					default:
 						return;
 				}
 				e.preventDefault();
-				const opt = (options as any)[next];
+				const opt = options[next];
 				onSelectionChange?.(opt.id);
 				optionRefs.current[next]?.focus();
 			},
@@ -75,6 +76,7 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 		);
 
 		if (config.visibility === Visibility.Gone) return null;
+		if (!options || options.length === 0) return null;
 
 		const hasIcons = renderIcon && config.iconPosition !== IconPosition.None;
 		const isVertical = config.iconPosition === IconPosition.Top || config.iconPosition === IconPosition.Bottom;
@@ -84,6 +86,7 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 			<div
 				data-testid={config.testTag ?? config.id}
 				role="radiogroup"
+				aria-label={config.id || "Segmented control"}
 				className={`${css.track} ${className ?? ""}`}
 				style={
 					{
@@ -118,7 +121,7 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 				}
 			>
 				<div className={css.thumb} />
-				{Array.from(options).map((option: any, index: number) => {
+				{Array.from(options).map((option: SegmentedControlOption, index: number) => {
 					const isSelected = option.id === config.selectedId;
 					const iconNode = hasIcons && option.iconId ? renderIcon(option.iconId) : null;
 					return (
@@ -128,7 +131,7 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 							type="button"
 							role="radio"
 							aria-checked={isSelected}
-							tabIndex={0}
+							tabIndex={isSelected ? 0 : -1}
 							className={`${css.option} ${isSelected ? css.optionActive : ""}`}
 							onClick={() => onSelectionChange?.(option.id)}
 							onKeyDown={(e) => handleKeyDown(e, index)}

@@ -174,3 +174,16 @@
 	border-radius: 0.375rem;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
+
+/* Toggle icon direction by panel side */
+.panel[data-side="right"] .toggleIcon {
+	transform: scaleX(-1);
+}
+
+.panel[data-side="bottom"] .toggleIcon {
+	transform: rotate(90deg);
+}
+
+.panel[data-side="top"] .toggleIcon {
+	transform: rotate(-90deg);
+}

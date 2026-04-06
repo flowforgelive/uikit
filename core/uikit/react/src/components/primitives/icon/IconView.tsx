@@ -33,6 +33,7 @@ export const IconView: React.FC<IconViewProps> = React.memo(
 			<span
 				role={config.ariaHidden ? "presentation" : "img"}
 				aria-hidden={config.ariaHidden || undefined}
+				aria-label={!config.ariaHidden ? (config.name || undefined) : undefined}
 				data-testid={config.testTag ?? (config.id || undefined)}
 				className={`${css.icon} ${className ?? ""}`}
 				style={

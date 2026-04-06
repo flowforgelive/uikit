@@ -101,6 +101,12 @@
 	background: color-mix(in srgb, currentColor 12%, transparent);
 }
 
+.closeButton:active {
+	opacity: 1;
+	background: color-mix(in srgb, currentColor 12%, transparent);
+	filter: brightness(var(--chip-press-brightness, 0.88));
+}
+
 .closeIcon {
 	display: block;
 	width: var(--chip-close-icon-size);
