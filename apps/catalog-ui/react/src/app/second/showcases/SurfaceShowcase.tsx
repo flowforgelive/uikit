@@ -59,7 +59,7 @@ export function SurfaceShowcase({ tokens }: { tokens: any }) {
 									<span
 										style={{
 											fontSize: toRem(tokens.typography.labelSmall.fontSize),
-											color: tokens.color.textMuted,
+									color: tokens.color.textSecondary,
 											marginBlockStart: toRem(tokens.spacing.xs),
 											display: "block",
 										}}
