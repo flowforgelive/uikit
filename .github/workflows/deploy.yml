@@ -1,0 +1,43 @@
+name: Deploy UIKit Catalog
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          command_timeout: 20m
+          script: |
+            set -e
+
+            REPO_DIR=/opt/uikit
+            COMPOSE_DIR=/opt/flowforgelive
+
+            # Clone or pull
+            if [ ! -d "$REPO_DIR" ]; then
+              git clone https://github.com/flowforgelive/uikit.git "$REPO_DIR"
+            else
+              cd "$REPO_DIR"
+              git fetch origin master
+              git reset --hard origin/master
+            fi
+
+            # Build Docker image
+            cd "$REPO_DIR"
+            docker build -t uikit-catalog:latest .
+
+            # Restart service
+            cd "$COMPOSE_DIR"
+            docker compose up -d uikit-catalog
+            docker image prune -f
+
+            echo "Deploy complete"

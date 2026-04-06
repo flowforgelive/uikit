@@ -1,0 +1,15 @@
+.gradle
+.kotlin
+build
+.idea
+*.iml
+.git
+node_modules
+.next
+*.class
+*.jar
+*.log
+.DS_Store
+docs
+docs-old
+NESTED_INTERACTIVE_COLORS_GUIDE.md
