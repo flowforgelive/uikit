@@ -67,7 +67,9 @@ export const ChipView: React.FC<ChipViewProps> = React.memo(
 			<button
 				onClick={handleClick}
 				aria-disabled={!config.isInteractive ? "true" : undefined}
-				aria-selected={config.selected || undefined}
+				aria-pressed={config.selected || undefined}
+				aria-label={config.loading ? config.text : undefined}
+				aria-busy={config.loading || undefined}
 				data-interactive={config.isInteractive || undefined}
 				data-testid={config.testTag ?? config.id}
 				className={`${css.chip} ${className ?? ""}`}

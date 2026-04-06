@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import dynamic from "next/dynamic";
 import {
 	SegmentedControl,
 	useUIKitTheme,
@@ -14,11 +15,12 @@ import { CatalogPage } from "../components/catalog/CatalogPage";
 import { SIZE_OPTIONS, RADIUS_OPTIONS, RADIUS_FRACTION_MAP, PANEL_VARIANT_OPTIONS, PANEL_SIDE_OPTIONS } from "../components/catalog/CatalogConstants";
 import { TextShowcase } from "./showcases/TextShowcase";
 import { ButtonShowcase } from "./showcases/ButtonShowcase";
-import { IconButtonShowcase } from "./showcases/IconButtonShowcase";
-import { ChipShowcase } from "./showcases/ChipShowcase";
-import { SurfaceShowcase } from "./showcases/SurfaceShowcase";
-import { SegmentedControlShowcase } from "./showcases/SegmentedControlShowcase";
-import { HeightAlignmentShowcase } from "./showcases/HeightAlignmentShowcase";
+
+const IconButtonShowcase = dynamic(() => import("./showcases/IconButtonShowcase").then(m => ({ default: m.IconButtonShowcase })), { ssr: false });
+const ChipShowcase = dynamic(() => import("./showcases/ChipShowcase").then(m => ({ default: m.ChipShowcase })), { ssr: false });
+const SurfaceShowcase = dynamic(() => import("./showcases/SurfaceShowcase").then(m => ({ default: m.SurfaceShowcase })), { ssr: false });
+const SegmentedControlShowcase = dynamic(() => import("./showcases/SegmentedControlShowcase").then(m => ({ default: m.SegmentedControlShowcase })), { ssr: false });
+const HeightAlignmentShowcase = dynamic(() => import("./showcases/HeightAlignmentShowcase").then(m => ({ default: m.HeightAlignmentShowcase })), { ssr: false });
 
 export default function ComponentsPage() {
 	const { tokens: baseTokens } = useUIKitTheme();
