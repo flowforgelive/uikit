@@ -2,43 +2,8 @@
 
 import React, { useMemo } from "react";
 import { ButtonView } from "./ButtonView";
-import {
-	ButtonConfig,
-	ComponentSize,
-	ColorIntent,
-	VisualVariant,
-	IconPosition,
-} from "uikit-common";
-
-const VARIANT_MAP = {
-	solid: VisualVariant.Solid,
-	soft: VisualVariant.Soft,
-	surface: VisualVariant.Surface,
-	outline: VisualVariant.Outline,
-	ghost: VisualVariant.Ghost,
-} as const;
-
-const INTENT_MAP = {
-	primary: ColorIntent.Primary,
-	neutral: ColorIntent.Neutral,
-	danger: ColorIntent.Danger,
-} as const;
-
-const SIZE_MAP = {
-	xs: ComponentSize.Xs,
-	sm: ComponentSize.Sm,
-	md: ComponentSize.Md,
-	lg: ComponentSize.Lg,
-	xl: ComponentSize.Xl,
-} as const;
-
-const ICON_POSITION_MAP = {
-	none: IconPosition.None,
-	start: IconPosition.Start,
-	end: IconPosition.End,
-	top: IconPosition.Top,
-	bottom: IconPosition.Bottom,
-} as const;
+import { ButtonConfig } from "uikit-common";
+import { VARIANT_MAP, INTENT_MAP, SIZE_MAP, ICON_POSITION_MAP } from "../../../utils/enumMaps";
 
 interface ButtonProps {
 	text?: string;

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useState, useCallback, useEffect } from "react";
-import { useDesignTokens } from "../../../theme/useDesignTokens";
+import { useResolvedStyle } from "../../../hooks/useResolvedStyle";
 import { toRem } from "../../../utils/units";
 import {
 	ImageStyleResolver,
@@ -20,11 +20,10 @@ interface ImageViewProps {
 
 export const ImageView: React.FC<ImageViewProps> = React.memo(
 	({ config, tokens: tokensProp, className }) => {
-		const contextTokens = useDesignTokens();
-		const tokens = tokensProp ?? contextTokens;
-		const style = useMemo(
-			() => ImageStyleResolver.getInstance().resolve(config, tokens),
-			[config, tokens],
+		const { style, tokens } = useResolvedStyle(
+			config,
+			(c, t) => ImageStyleResolver.getInstance().resolve(c, t),
+			tokensProp,
 		);
 
 		const [isLoading, setIsLoading] = useState(true);

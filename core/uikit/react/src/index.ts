@@ -30,6 +30,12 @@ export { useSurfaceContext, SurfaceContextProvider } from "./theme/SurfaceContex
 
 // Utils
 export { toRem, toEm, toLineHeightRatio, textStyle, buildFontStack } from "./utils/units";
+export { VARIANT_MAP, INTENT_MAP, SIZE_MAP, ICON_POSITION_MAP } from "./utils/enumMaps";
+export { buildInteractiveStyleVars, buildSpinnerStyleVars } from "./utils/interactiveStyleVars";
+
+// Hooks
+export { useResolvedStyle } from "./hooks/useResolvedStyle";
+export { useInteractiveHandler } from "./hooks/useInteractiveHandler";
 
 // Re-exports from KMP module (ESM flat exports)
 export {
@@ -58,6 +64,8 @@ export {
 	ShadowTokens,
 	InteractiveStateTokens,
 	Density,
+	scaleDesignTokens,
+	withControlProportions,
 	PanelConfig,
 	PanelVariant,
 	PanelSide,

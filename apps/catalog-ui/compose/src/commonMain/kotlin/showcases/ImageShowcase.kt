@@ -16,6 +16,7 @@ import com.uikit.foundation.ComponentSize
 import com.uikit.foundation.TextEmphasis
 import com.uikit.foundation.VisualVariant
 import com.uikit.tokens.DesignTokens
+import catalog.CatalogOptions
 
 // picsum.photos — random photos from Unsplash, /id/{N}/{W}/{H}.jpg for stable results
 private const val PHOTO_1 = "https://picsum.photos/id/10/400/300.jpg"
@@ -28,7 +29,9 @@ private const val PHOTO_LARGE_2 = "https://picsum.photos/id/47/1600/1200.jpg"
 private const val PHOTO_LARGE_3 = "https://picsum.photos/id/76/1600/1200.jpg"
 
 @Composable
-internal fun ImageShowcase(tokens: DesignTokens) {
+internal fun ImageShowcase(tokens: DesignTokens, globalSize: ComponentSize) {
+	val s = remember(globalSize) { CatalogOptions.scaleFactor(globalSize.name) }
+
 	ShowcaseSection("Изображение (Image)", tokens) {
 		Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xl.dp)) {
 
@@ -47,10 +50,10 @@ internal fun ImageShowcase(tokens: DesignTokens) {
 					emphasis = TextEmphasis.Muted,
 				)
 				Row(horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
-					Image(src = PHOTO_SQ, width = 80.0, height = 80.0, showBorder = true)
-					Image(src = PHOTO_1, width = 120.0, height = 80.0, showBorder = true)
-					Image(src = PHOTO_2, width = 200.0, height = 140.0, showBorder = true)
-					Image(src = PHOTO_SQ, width = 120.0, height = 120.0, showBorder = true)
+					Image(src = PHOTO_SQ, width = 80.0 * s, height = 80.0 * s, showBorder = true)
+					Image(src = PHOTO_1, width = 120.0 * s, height = 80.0 * s, showBorder = true)
+					Image(src = PHOTO_2, width = 200.0 * s, height = 140.0 * s, showBorder = true)
+					Image(src = PHOTO_SQ, width = 120.0 * s, height = 120.0 * s, showBorder = true)
 				}
 			}
 
@@ -64,15 +67,15 @@ internal fun ImageShowcase(tokens: DesignTokens) {
 				)
 				Row(horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
 					Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
-						Image(src = PHOTO_SQ, width = 80.0, height = 80.0, cornerRadius = 40.0, showBorder = true)
+						Image(src = PHOTO_SQ, width = 80.0 * s, height = 80.0 * s, cornerRadius = 40.0 * s, showBorder = true)
 						TextBlock(text = "Circle (avatar)", variant = TextBlockVariant.LabelSmall)
 					}
 					Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
-						Image(src = PHOTO_1, width = 160.0, height = 60.0, cornerRadius = 30.0, showBorder = true)
+						Image(src = PHOTO_1, width = 160.0 * s, height = 60.0 * s, cornerRadius = 30.0 * s, showBorder = true)
 						TextBlock(text = "Pill (banner)", variant = TextBlockVariant.LabelSmall)
 					}
 					Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
-						Image(src = PHOTO_2, width = 120.0, height = 80.0, cornerRadius = 0.0, showBorder = true)
+						Image(src = PHOTO_2, width = 120.0 * s, height = 80.0 * s, cornerRadius = 0.0, showBorder = true)
 						TextBlock(text = "Sharp (0)", variant = TextBlockVariant.LabelSmall)
 					}
 				}
@@ -88,11 +91,11 @@ internal fun ImageShowcase(tokens: DesignTokens) {
 				)
 				Row(horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
 					Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
-						Image(src = PHOTO_1, width = 200.0, height = 140.0, showBorder = true)
+						Image(src = PHOTO_1, width = 200.0 * s, height = 140.0 * s, showBorder = true)
 						TextBlock(text = "Adaptive (с cap)", variant = TextBlockVariant.LabelSmall, emphasis = TextEmphasis.Muted)
 					}
 					Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
-						Image(src = PHOTO_1, width = 200.0, height = 140.0, cornerRadius = 70.0, showBorder = true)
+						Image(src = PHOTO_1, width = 200.0 * s, height = 140.0 * s, cornerRadius = 70.0 * s, showBorder = true)
 						TextBlock(text = "Explicit 70dp (без cap)", variant = TextBlockVariant.LabelSmall, emphasis = TextEmphasis.Muted)
 					}
 				}
@@ -102,9 +105,9 @@ internal fun ImageShowcase(tokens: DesignTokens) {
 			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
 				SubSectionTitle(text = "Subtle border (showBorder)", tokens = tokens)
 				Row(horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
-					Image(src = PHOTO_SQ, width = 80.0, height = 80.0, cornerRadius = 8.0, showBorder = true)
-					Image(src = PHOTO_SQ, width = 80.0, height = 80.0, cornerRadius = 40.0, showBorder = true)
-					Image(src = PHOTO_2, width = 120.0, height = 80.0, cornerRadius = 12.0)
+					Image(src = PHOTO_SQ, width = 80.0 * s, height = 80.0 * s, showBorder = true)
+					Image(src = PHOTO_SQ, width = 80.0 * s, height = 80.0 * s, cornerRadius = 40.0 * s, showBorder = true)
+					Image(src = PHOTO_2, width = 120.0 * s, height = 80.0 * s)
 				}
 			}
 
@@ -116,8 +119,8 @@ internal fun ImageShowcase(tokens: DesignTokens) {
 						Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
 							Image(
 								src = PHOTO_1,
-								width = 80.0,
-								height = 80.0,
+								width = 80.0 * s,
+								height = 80.0 * s,
 								objectFit = fit,
 								showBorder = true,
 							)
@@ -147,23 +150,23 @@ internal fun ImageShowcase(tokens: DesignTokens) {
 					Row(horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
 						Image(
 							src = "$PHOTO_LARGE_1?v=$reloadKey",
-							width = 200.0,
-							height = 140.0,
-							cornerRadius = 12.0,
+							width = 200.0 * s,
+							height = 140.0 * s,
+							cornerRadius = 12.0 * s,
 							showBorder = true,
 						)
 						Image(
 							src = "$PHOTO_LARGE_2?v=$reloadKey",
-							width = 140.0,
-							height = 140.0,
-							cornerRadius = 70.0,
+							width = 140.0 * s,
+							height = 140.0 * s,
+							cornerRadius = 70.0 * s,
 							showBorder = true,
 						)
 						Image(
 							src = "$PHOTO_LARGE_3?v=$reloadKey",
-							width = 180.0,
-							height = 120.0,
-							cornerRadius = 8.0,
+							width = 180.0 * s,
+							height = 120.0 * s,
+							cornerRadius = 8.0 * s,
 							showBorder = true,
 						)
 					}
@@ -177,9 +180,8 @@ internal fun ImageShowcase(tokens: DesignTokens) {
 					Image(
 						src = "https://invalid.url/broken.jpg",
 						fallback = PHOTO_SQ,
-						width = 100.0,
-						height = 100.0,
-						cornerRadius = 8.0,
+						width = 100.0 * s,
+						height = 100.0 * s,
 						showBorder = true,
 					)
 				}

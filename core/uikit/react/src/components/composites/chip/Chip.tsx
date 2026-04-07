@@ -2,39 +2,14 @@
 
 import React, { useMemo } from "react";
 import { ChipView } from "./ChipView";
-import {
-	ChipConfig,
-	ComponentSize,
-	ColorIntent,
-	VisualVariant,
-} from "uikit-common";
-
-const VARIANT_MAP = {
-	solid: VisualVariant.Solid,
-	soft: VisualVariant.Soft,
-	outline: VisualVariant.Outline,
-	ghost: VisualVariant.Ghost,
-} as const;
-
-const INTENT_MAP = {
-	primary: ColorIntent.Primary,
-	neutral: ColorIntent.Neutral,
-	danger: ColorIntent.Danger,
-} as const;
-
-const SIZE_MAP = {
-	xs: ComponentSize.Xs,
-	sm: ComponentSize.Sm,
-	md: ComponentSize.Md,
-	lg: ComponentSize.Lg,
-	xl: ComponentSize.Xl,
-} as const;
+import { ChipConfig } from "uikit-common";
+import { VARIANT_MAP, INTENT_MAP, SIZE_MAP } from "../../../utils/enumMaps";
 
 interface ChipProps {
 	text: string;
 	onClick?: () => void;
 	onDismiss?: () => void;
-	variant?: keyof typeof VARIANT_MAP;
+	variant?: "solid" | "soft" | "outline" | "ghost";
 	intent?: keyof typeof INTENT_MAP;
 	size?: keyof typeof SIZE_MAP;
 	leadingIcon?: React.ReactNode;

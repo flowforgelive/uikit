@@ -8,11 +8,13 @@ import {
 	useUIKitTheme,
 	DesignTokensProvider,
 	toRem,
+	scaleDesignTokens,
+	withControlProportions,
 } from "@uikit/react";
 import { ThemeSwitcher } from "../components/theme-switcher/ThemeSwitcher";
 import { DirSwitcher } from "../components/dir-switcher/DirSwitcher";
 import { CatalogPage } from "../components/catalog/CatalogPage";
-import { SIZE_OPTIONS, RADIUS_OPTIONS, RADIUS_FRACTION_MAP, MAX_CONTAINER_RADIUS_MAP, PANEL_VARIANT_OPTIONS, PANEL_SIDE_OPTIONS } from "../components/catalog/CatalogConstants";
+import { SIZE_OPTIONS, RADIUS_OPTIONS, RADIUS_FRACTION_MAP, MAX_CONTAINER_RADIUS_MAP, SCALE_FACTOR_MAP, PANEL_VARIANT_OPTIONS, PANEL_SIDE_OPTIONS } from "../components/catalog/CatalogConstants";
 import { TextShowcase } from "./showcases/TextShowcase";
 import { ButtonShowcase } from "./showcases/ButtonShowcase";
 
@@ -34,22 +36,19 @@ export default function ComponentsPage() {
 	const [panelSide, setPanelSide] = useState<"left" | "right" | "top" | "bottom">("left");
 
 	const tokens: any = React.useMemo(() => {
+		let t: any = baseTokens;
 		const fraction = RADIUS_FRACTION_MAP[globalRadius];
 		const maxCR = MAX_CONTAINER_RADIUS_MAP[globalRadius];
-		if (fraction === baseTokens.controls.proportions.radiusFraction &&
-			maxCR === baseTokens.controls.proportions.maxContainerRadius) return baseTokens;
-		return {
-			...baseTokens,
-			controls: {
-				...baseTokens.controls,
-				proportions: {
-					...baseTokens.controls.proportions,
-					radiusFraction: fraction,
-					maxContainerRadius: maxCR,
-				},
-			},
-		};
-	}, [baseTokens, globalRadius]);
+		if (fraction !== t.controls.proportions.radiusFraction ||
+			maxCR !== t.controls.proportions.maxContainerRadius) {
+			t = withControlProportions(t, fraction, maxCR);
+		}
+		const sf = SCALE_FACTOR_MAP[globalSize] ?? 1.0;
+		if (sf !== 1.0) {
+			t = scaleDesignTokens(t, sf);
+		}
+		return t;
+	}, [baseTokens, globalRadius, globalSize]);
 
 	return (
 		<CatalogPage
@@ -91,10 +90,10 @@ export default function ComponentsPage() {
 				<HeightAlignmentShowcase tokens={tokens} globalSize={globalSize} />
 				{/* Primitives */}
 				<TextShowcase tokens={tokens} />
-				<IconShowcase tokens={tokens} />
+				<IconShowcase tokens={tokens} globalSize={globalSize} />
 				<DividerShowcase tokens={tokens} />
-				<ImageShowcase tokens={tokens} />
-				<SkeletonShowcase tokens={tokens} />
+				<ImageShowcase tokens={tokens} globalSize={globalSize} />
+				<SkeletonShowcase tokens={tokens} globalSize={globalSize} />
 				<SurfaceShowcase tokens={tokens} />
 				{/* Composites */}
 				<ButtonShowcase tokens={tokens} globalSize={globalSize} />

@@ -16,3 +16,11 @@ data class SpacingTokens(
 	val xxxl: Double,
 	val xxxxl: Double,
 )
+
+fun SpacingTokens.scaled(factor: Double): SpacingTokens =
+	if (factor == 1.0) this
+	else copy(
+		xxs = xxs * factor, xs = xs * factor, sm = sm * factor,
+		md = md * factor, lg = lg * factor, xl = xl * factor,
+		xxl = xxl * factor, xxxl = xxxl * factor, xxxxl = xxxxl * factor,
+	)

@@ -40,7 +40,7 @@ export function DividerShowcase({ tokens }: { tokens: any }) {
 
 				{/* Custom thickness */}
 				<div>
-					<SubSectionTitle tokens={tokens}>Толщина 3px</SubSectionTitle>
+					<SubSectionTitle tokens={tokens}>Толщина 3dp</SubSectionTitle>
 					<Divider thickness={3} />
 				</div>
 			</div>

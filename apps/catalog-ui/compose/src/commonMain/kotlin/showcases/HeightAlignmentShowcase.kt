@@ -35,7 +35,7 @@ internal fun HeightAlignmentShowcase(tokens: DesignTokens, globalSize: Component
 	val btnSize = buttonSizeFromComponentSize(selectedSize)
 	val lineColor = parseColor(tokens.color.outlineVariant)
 
-	ShowcaseSection("Проверка выравнивания высот (Height Alignment)", tokens) {
+	ShowcaseSection("Выравнивание высот (Height Alignment)", tokens) {
 		Column(
 			verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
 		) {

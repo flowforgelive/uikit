@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useMemo, useCallback } from "react";
-import { useDesignTokens } from "../../../theme/useDesignTokens";
-import { useSurfaceContext } from "../../../theme/SurfaceContext";
+import { useResolvedStyle } from "../../../hooks/useResolvedStyle";
+import { useInteractiveHandler } from "../../../hooks/useInteractiveHandler";
+import { buildInteractiveStyleVars, buildSpinnerStyleVars } from "../../../utils/interactiveStyleVars";
 import { toRem, toEm, toLineHeightRatio } from "../../../utils/units";
 import {
 	ButtonStyleResolver,
@@ -25,22 +26,13 @@ interface ButtonViewProps {
 
 export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 	({ config, iconStart, iconEnd, onAction, onClick, tokens: tokensProp, className }) => {
-		const contextTokens = useDesignTokens();
-		const tokens = tokensProp ?? contextTokens;
-		const surface = useSurfaceContext();
-		const style = useMemo(
-			() => ButtonStyleResolver.getInstance().resolve(config, tokens, surface),
-			[config, tokens, surface],
+		const { style, tokens } = useResolvedStyle(
+			config,
+			(c, t, s) => ButtonStyleResolver.getInstance().resolve(c, t, s),
+			tokensProp,
 		);
 
-		const handleClick = useCallback(() => {
-			if (config.isInteractive) {
-				onClick?.();
-				if (config.actionRoute) {
-					onAction?.(config.actionRoute!);
-				}
-			}
-		}, [config.isInteractive, config.actionRoute, onAction, onClick]);
+		const handleClick = useInteractiveHandler(config.isInteractive, config.actionRoute, onClick, onAction);
 
 		if (config.visibility === Visibility.Gone) return null;
 
@@ -112,25 +104,15 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 						"--btn-padding-h": toRem(style.sizes.paddingH),
 						"--btn-padding-v": toRem(style.sizes.paddingV),
 						"--btn-font-size": toRem(style.sizes.fontSize),
-						"--btn-font-weight": style.sizes.fontWeight,
+						"--btn-font-weight": String(style.sizes.fontWeight),
 						"--btn-icon-size": toRem(style.sizes.iconSize),
 						"--btn-icon-gap": toRem(style.sizes.iconGap),
 						"--btn-radius": toRem(style.radius),
 						"--btn-letter-spacing": toEm(style.sizes.letterSpacing, style.sizes.fontSize),
-						"--btn-line-height": toLineHeightRatio(style.sizes.lineHeight, style.sizes.fontSize),
+						"--btn-line-height": String(toLineHeightRatio(style.sizes.lineHeight, style.sizes.fontSize)),
 						"--btn-font-variation": tokens.fontVariationSettings,
-						"--btn-duration": `${tokens.motion.durationFast}ms`,
-						"--btn-easing": tokens.motion.easingStandard,
-						"--btn-focus-ring": tokens.color.focusRing,
-						"--btn-border-width": `${tokens.borderWidth}px`,
-						"--btn-focus-ring-width": `${tokens.focusRingWidth}px`,
-						"--btn-spinner-duration": `${tokens.motion.durationSpinner}ms`,
-						"--btn-spinner-stroke": `${tokens.spinnerStrokeWidth}px`,
-						"--btn-disabled-opacity": tokens.state.disabledOpacity,
-						"--btn-press-opacity": tokens.state.pressOpacity,
-						"--btn-press-brightness": tokens.state.pressBrightness,
-						"--btn-ripple-spread": `${tokens.state.rippleSpread}%`,
-						"--btn-ripple-fade-duration": `${tokens.state.rippleFadeDurationMs}ms`,
+						...buildInteractiveStyleVars(tokens, "btn"),
+						...buildSpinnerStyleVars(tokens, "btn"),
 						visibility:
 							config.visibility === Visibility.Invisible ? "hidden" : undefined,
 					} as React.CSSProperties

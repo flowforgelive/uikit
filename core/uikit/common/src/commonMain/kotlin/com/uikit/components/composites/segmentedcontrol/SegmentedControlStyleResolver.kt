@@ -4,6 +4,7 @@ import com.uikit.foundation.ColorConstants
 import com.uikit.foundation.ComponentSizeResolver
 import com.uikit.foundation.IconPosition
 import com.uikit.foundation.SurfaceContext
+import com.uikit.foundation.SurfaceLevelResolver
 import com.uikit.foundation.VisualVariant
 import com.uikit.foundation.resolveSize
 import com.uikit.tokens.DesignTokens
@@ -157,7 +158,7 @@ object SegmentedControlStyleResolver {
 	 */
 	private fun resolveThumbBg(tokens: DesignTokens, level: Int): String =
 		if (isDarkScheme(tokens)) {
-			containerForLevel((level + 4).coerceAtMost(5), tokens)
+			SurfaceLevelResolver.resolveColor((level + 4).coerceAtMost(5), tokens)
 		} else {
 			tokens.color.surface
 		}
@@ -173,18 +174,8 @@ object SegmentedControlStyleResolver {
 		if (level <= 0) {
 			tokens.color.neutralSoft
 		} else {
-			containerForLevel((level + 1).coerceAtMost(5), tokens)
+			SurfaceLevelResolver.resolveColor((level + 1).coerceAtMost(5), tokens)
 		}
-
-	private fun containerForLevel(level: Int, tokens: DesignTokens): String = when (level) {
-		0 -> tokens.color.surface
-		1 -> tokens.color.surfaceContainerLowest
-		2 -> tokens.color.surfaceContainerLow
-		3 -> tokens.color.surfaceContainer
-		4 -> tokens.color.surfaceContainerHigh
-		5 -> tokens.color.surfaceContainerHighest
-		else -> tokens.color.surfaceContainerHighest
-	}
 
 	/**
 	 * Detects dark scheme by comparing surface brightness to neutralSoft.

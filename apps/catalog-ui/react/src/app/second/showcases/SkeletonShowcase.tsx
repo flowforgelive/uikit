@@ -2,8 +2,11 @@ import React from "react";
 import { Skeleton, Text, toRem } from "@uikit/react";
 import { Section } from "../../components/catalog/Section";
 import { SubSectionTitle } from "../../components/catalog/SubSectionTitle";
+import { SCALE_FACTOR_MAP } from "../../components/catalog/CatalogConstants";
 
-export function SkeletonShowcase({ tokens }: { tokens: any }) {
+export function SkeletonShowcase({ tokens, globalSize }: { tokens: any; globalSize: string }) {
+	const s = SCALE_FACTOR_MAP[globalSize] ?? 1.0;
+
 	return (
 		<Section id="skeleton" title="Скелетон (Skeleton)" tokens={tokens}>
 			<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xl) }}>
@@ -17,9 +20,9 @@ export function SkeletonShowcase({ tokens }: { tokens: any }) {
 						emphasis="muted"
 					/>
 					<div style={{ display: "flex", gap: toRem(tokens.spacing.md), marginTop: toRem(tokens.spacing.sm) }}>
-						<Skeleton width={80} height={60} />
-						<Skeleton width={200} height={120} />
-						<Skeleton width={300} height={200} />
+						<Skeleton width={80 * s} height={60 * s} />
+						<Skeleton width={200 * s} height={120 * s} />
+						<Skeleton width={300 * s} height={200 * s} />
 					</div>
 				</div>
 
@@ -33,11 +36,11 @@ export function SkeletonShowcase({ tokens }: { tokens: any }) {
 					/>
 					<div style={{ display: "flex", gap: toRem(tokens.spacing.md), marginTop: toRem(tokens.spacing.sm) }}>
 						<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
-							<Skeleton width={200} height={120} cornerRadius={30} />
+							<Skeleton width={200 * s} height={120 * s} cornerRadius={30 * s} />
 							<Text text="30dp" variant="label-small" />
 						</div>
 						<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
-							<Skeleton width={200} height={120} cornerRadius={60} />
+							<Skeleton width={200 * s} height={120 * s} cornerRadius={60 * s} />
 							<Text text="60dp (pill)" variant="label-small" />
 						</div>
 					</div>
@@ -46,22 +49,22 @@ export function SkeletonShowcase({ tokens }: { tokens: any }) {
 				{/* Rectangle — full width */}
 				<div>
 					<SubSectionTitle tokens={tokens}>Rectangle (full width)</SubSectionTitle>
-					<Skeleton height={120} />
+					<Skeleton height={120 * s} />
 				</div>
 
 				{/* Rectangle — fixed size */}
 				<div>
 					<SubSectionTitle tokens={tokens}>Rectangle (Fixed size)</SubSectionTitle>
-					<Skeleton width={200} height={80} cornerRadius={12} />
+					<Skeleton width={200 * s} height={80 * s} />
 				</div>
 
 				{/* Circle */}
 				<div>
 					<SubSectionTitle tokens={tokens}>Circle</SubSectionTitle>
 					<div style={{ display: "flex", gap: toRem(tokens.spacing.md) }}>
-						<Skeleton shape="circle" width={40} />
-						<Skeleton shape="circle" width={56} />
-						<Skeleton shape="circle" width={72} />
+						<Skeleton shape="circle" width={40 * s} />
+						<Skeleton shape="circle" width={56 * s} />
+						<Skeleton shape="circle" width={72 * s} />
 					</div>
 				</div>
 
@@ -83,9 +86,9 @@ export function SkeletonShowcase({ tokens }: { tokens: any }) {
 				<div>
 					<SubSectionTitle tokens={tokens}>Card placeholder</SubSectionTitle>
 					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.sm) }}>
-						<Skeleton height={160} cornerRadius={12} />
+						<Skeleton height={160 * s} />
 						<div style={{ display: "flex", gap: toRem(tokens.spacing.sm), alignItems: "center" }}>
-							<Skeleton shape="circle" width={40} />
+							<Skeleton shape="circle" width={40 * s} />
 							<div style={{ flex: 1, display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
 								<Skeleton shape="text-line" />
 								<div style={{ width: "60%" }}>
@@ -99,7 +102,7 @@ export function SkeletonShowcase({ tokens }: { tokens: any }) {
 				{/* Static — no animation */}
 				<div>
 					<SubSectionTitle tokens={tokens}>Без анимации</SubSectionTitle>
-					<Skeleton height={48} animate={false} />
+					<Skeleton height={48 * s} animate={false} />
 				</div>
 			</div>
 		</Section>

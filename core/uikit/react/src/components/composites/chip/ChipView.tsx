@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useMemo, useCallback } from "react";
-import { useDesignTokens } from "../../../theme/useDesignTokens";
-import { useSurfaceContext } from "../../../theme/SurfaceContext";
+import { useResolvedStyle } from "../../../hooks/useResolvedStyle";
+import { useInteractiveHandler } from "../../../hooks/useInteractiveHandler";
+import { buildInteractiveStyleVars, buildSpinnerStyleVars } from "../../../utils/interactiveStyleVars";
 import { toRem, toEm, toLineHeightRatio } from "../../../utils/units";
 import {
 	ChipStyleResolver,
@@ -24,22 +25,13 @@ interface ChipViewProps {
 
 export const ChipView: React.FC<ChipViewProps> = React.memo(
 	({ config, leadingIcon, onAction, onClick, onDismiss, tokens: tokensProp, className }) => {
-		const contextTokens = useDesignTokens();
-		const tokens = tokensProp ?? contextTokens;
-		const surface = useSurfaceContext();
-		const style = useMemo(
-			() => ChipStyleResolver.getInstance().resolve(config, tokens, surface),
-			[config, tokens, surface],
+		const { style, tokens } = useResolvedStyle(
+			config,
+			(c, t, s) => ChipStyleResolver.getInstance().resolve(c, t, s),
+			tokensProp,
 		);
 
-		const handleClick = useCallback(() => {
-			if (config.isInteractive) {
-				onClick?.();
-				if (config.actionRoute) {
-					onAction?.(config.actionRoute!);
-				}
-			}
-		}, [config.isInteractive, config.actionRoute, onAction, onClick]);
+		const handleClick = useInteractiveHandler(config.isInteractive, config.actionRoute, onClick, onAction);
 
 		const handleDismiss = useCallback(
 			(e: React.MouseEvent | React.KeyboardEvent) => {
@@ -85,27 +77,18 @@ export const ChipView: React.FC<ChipViewProps> = React.memo(
 						"--chip-padding-start": toRem(style.sizes.paddingStart),
 						"--chip-padding-end": toRem(style.sizes.paddingEnd),
 						"--chip-font-size": toRem(style.sizes.fontSize),
-						"--chip-font-weight": style.sizes.fontWeight,
+						"--chip-font-weight": String(style.sizes.fontWeight),
 						"--chip-icon-size": toRem(style.sizes.iconSize),
 						"--chip-icon-gap": toRem(style.sizes.iconGap),
 						"--chip-close-size": toRem(style.sizes.closeButtonSize),
 					"--chip-close-icon-size": toRem(style.sizes.closeIconSize),
 						"--chip-radius": toRem(style.radius),
 						"--chip-letter-spacing": toEm(style.sizes.letterSpacing, style.sizes.fontSize),
-						"--chip-line-height": toLineHeightRatio(style.sizes.lineHeight, style.sizes.fontSize),
+						"--chip-line-height": String(toLineHeightRatio(style.sizes.lineHeight, style.sizes.fontSize)),
 						"--chip-font-variation": tokens.fontVariationSettings,
-						"--chip-duration": `${tokens.motion.durationFast}ms`,
-						"--chip-easing": tokens.motion.easingStandard,
-						"--chip-focus-ring": tokens.color.focusRing,
-						"--chip-border-width": `${tokens.borderWidth}px`,
-						"--chip-focus-ring-width": `${tokens.focusRingWidth}px`,
-						"--chip-spinner-duration": `${tokens.motion.durationSpinner}ms`,
-						"--chip-spinner-stroke": `${tokens.spinnerStrokeWidth}px`,
-						"--chip-disabled-opacity": tokens.state.disabledOpacity,
-						"--chip-press-opacity": tokens.state.pressOpacity,
-						"--chip-press-brightness": tokens.state.pressBrightness,
-						"--chip-ripple-spread": `${tokens.state.rippleSpread}%`,
-						"--chip-ripple-fade-duration": `${tokens.state.rippleFadeDurationMs}ms`,
+						...buildInteractiveStyleVars(tokens, "chip"),
+						...buildSpinnerStyleVars(tokens, "chip"),
+						"--chip-hover-content-opacity": String(tokens.state.hoverContentOpacity),
 						visibility:
 							config.visibility === Visibility.Invisible ? "hidden" : undefined,
 					} as React.CSSProperties

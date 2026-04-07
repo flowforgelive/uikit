@@ -9,5 +9,8 @@ export const RADIUS_FRACTION_MAP: Record<string, number> = Object.fromEntries(
 export const MAX_CONTAINER_RADIUS_MAP: Record<string, number> = Object.fromEntries(
 	CatalogOptions.getInstance().radiusOptions.map((o: any) => [o.id, CatalogOptions.getInstance().maxContainerRadius(o.id)]),
 );
+export const SCALE_FACTOR_MAP: Record<string, number> = Object.fromEntries(
+	CatalogOptions.getInstance().sizeOptions.map((o: any) => [o.id.toLowerCase(), CatalogOptions.getInstance().scaleFactor(o.id)]),
+);
 export const PANEL_VARIANT_OPTIONS = CatalogOptions.getInstance().panelVariantOptions.map((o: any) => ({ id: o.id, label: o.label }));
 export const PANEL_SIDE_OPTIONS = CatalogOptions.getInstance().panelSideOptions.map((o: any) => ({ id: o.id, label: o.label }));

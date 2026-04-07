@@ -2,15 +2,8 @@
 
 import React, { useMemo } from "react";
 import { SurfaceView } from "./SurfaceView";
-import { SurfaceConfig, VisualVariant, SurfaceLevel, SurfaceShape } from "uikit-common";
-
-const VARIANT_MAP = {
-	solid: VisualVariant.Solid,
-	soft: VisualVariant.Soft,
-	surface: VisualVariant.Surface,
-	outline: VisualVariant.Outline,
-	ghost: VisualVariant.Ghost,
-} as const;
+import { SurfaceConfig, SurfaceLevel, SurfaceShape } from "uikit-common";
+import { VARIANT_MAP } from "../../../utils/enumMaps";
 
 const LEVEL_MAP = {
 	0: SurfaceLevel.Level0,

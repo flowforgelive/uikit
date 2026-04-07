@@ -21,7 +21,7 @@ export function ChipShowcase({ tokens, globalSize }: { tokens: any; globalSize: 
 							<div style={{ marginInlineEnd: toRem(tokens.spacing.sm), marginBlockEnd: toRem(tokens.spacing.xs) }}>
 								<Text text={`${intent.charAt(0).toUpperCase() + intent.slice(1)}:`} variant="label-medium" />
 							</div>
-							<div style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.sm), flexWrap: "wrap" }}>
+							<div style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md), flexWrap: "wrap" }}>
 								<Chip
 									text="Chip"
 									variant={variant}

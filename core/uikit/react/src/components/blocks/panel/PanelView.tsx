@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useCallback } from "react";
-import { useDesignTokens } from "../../../theme/useDesignTokens";
+import { useResolvedStyle } from "../../../hooks/useResolvedStyle";
 import { SurfaceContextProvider } from "../../../theme/SurfaceContext";
 import { toRem } from "../../../utils/units";
 import {
@@ -23,11 +23,10 @@ interface PanelViewProps {
 
 export const PanelView: React.FC<PanelViewProps> = React.memo(
 	({ config, onToggle, tokens: tokensProp, className, children }) => {
-		const contextTokens = useDesignTokens();
-		const tokens = tokensProp ?? contextTokens;
-		const style = useMemo(
-			() => PanelStyleResolver.getInstance().resolve(config, tokens),
-			[config, tokens],
+		const { style, tokens } = useResolvedStyle(
+			config,
+			(c, t) => PanelStyleResolver.getInstance().resolve(c, t),
+			tokensProp,
 		);
 
 		const surfaceContext = useMemo(

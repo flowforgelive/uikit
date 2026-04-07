@@ -1,6 +1,7 @@
 package com.uikit.components.primitives.surface
 
 import com.uikit.foundation.ColorConstants
+import com.uikit.foundation.SurfaceLevelResolver
 import com.uikit.foundation.VisualVariant
 import com.uikit.tokens.DesignTokens
 import kotlinx.serialization.Serializable
@@ -31,8 +32,8 @@ object SurfaceStyleResolver {
 		val bg =
 			when (config.variant) {
 				VisualVariant.Ghost, VisualVariant.Outline -> ColorConstants.TRANSPARENT
-				VisualVariant.Soft -> resolveSoftBg(config.level, tokens)
-				else -> resolveBg(config.level, tokens) // Solid, Surface
+				VisualVariant.Soft -> SurfaceLevelResolver.resolveSoftColor(config.level, tokens)
+				else -> SurfaceLevelResolver.resolveColor(config.level, tokens) // Solid, Surface
 			}
 
 		val bgHover =
@@ -72,27 +73,4 @@ object SurfaceStyleResolver {
 		)
 	}
 
-	private fun resolveBg(level: SurfaceLevel, tokens: DesignTokens): String =
-		when (level) {
-			SurfaceLevel.Level0 -> tokens.color.surface
-			SurfaceLevel.Level1 -> tokens.color.surfaceContainerLowest
-			SurfaceLevel.Level2 -> tokens.color.surfaceContainerLow
-			SurfaceLevel.Level3 -> tokens.color.surfaceContainer
-			SurfaceLevel.Level4 -> tokens.color.surfaceContainerHigh
-			SurfaceLevel.Level5 -> tokens.color.surfaceContainerHighest
-		}
-
-	/**
-	 * Soft variant uses one level lighter than the requested level,
-	 * ensuring visual distinction from Solid at the same level.
-	 */
-	private fun resolveSoftBg(level: SurfaceLevel, tokens: DesignTokens): String =
-		when (level) {
-			SurfaceLevel.Level0 -> tokens.color.surface
-			SurfaceLevel.Level1 -> tokens.color.surface
-			SurfaceLevel.Level2 -> tokens.color.surfaceContainerLowest
-			SurfaceLevel.Level3 -> tokens.color.surfaceContainerLow
-			SurfaceLevel.Level4 -> tokens.color.surfaceContainer
-			SurfaceLevel.Level5 -> tokens.color.surfaceContainerHigh
-		}
 }

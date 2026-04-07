@@ -128,7 +128,7 @@ internal fun ButtonShowcase(tokens: DesignTokens, globalSize: ComponentSize) {
 									)
 								} else {
 									Button(
-										text = "${variant.name} ${selectedSize.name}",
+										text = "Кнопка",
 										variant = variant,
 										intent = intent,
 										size = selectedSize,

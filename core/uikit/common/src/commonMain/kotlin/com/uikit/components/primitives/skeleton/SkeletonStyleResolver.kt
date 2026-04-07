@@ -1,5 +1,6 @@
 package com.uikit.components.primitives.skeleton
 
+import com.uikit.foundation.AdaptiveRadiusResolver
 import com.uikit.tokens.DesignTokens
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
@@ -33,14 +34,17 @@ object SkeletonStyleResolver {
 			else -> 0.0
 		}
 
-		val cornerRadius = config.cornerRadius ?: when (config.shape) {
-			SkeletonShape.Circle -> height / 2.0
-			SkeletonShape.TextLine -> tokens.radius.xs
-			SkeletonShape.Rectangle ->
-				if (height > 0.0) {
-					val adaptive = height * tokens.controls.proportions.radiusFraction
-					minOf(adaptive, tokens.controls.proportions.maxContainerRadius)
-				} else tokens.radius.sm
+		val cornerRadius = when {
+			config.cornerRadius != null -> config.cornerRadius
+			config.shape == SkeletonShape.Circle -> height / 2.0
+			config.shape == SkeletonShape.TextLine -> tokens.radius.xs
+			else -> if (height > 0.0) {
+				AdaptiveRadiusResolver.resolve(
+					explicitRadius = null,
+					containerDimension = height,
+					proportions = tokens.controls.proportions,
+				)
+			} else tokens.radius.sm
 		}
 
 		return ResolvedSkeletonStyle(

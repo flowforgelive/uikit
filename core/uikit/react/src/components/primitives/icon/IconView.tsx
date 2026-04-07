@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { useDesignTokens } from "../../../theme/useDesignTokens";
+import { useResolvedStyle } from "../../../hooks/useResolvedStyle";
 import { toRem } from "../../../utils/units";
 import {
 	IconStyleResolver,
@@ -20,11 +20,10 @@ interface IconViewProps {
 
 export const IconView: React.FC<IconViewProps> = React.memo(
 	({ config, tokens: tokensProp, className, children }) => {
-		const contextTokens = useDesignTokens();
-		const tokens = tokensProp ?? contextTokens;
-		const style = useMemo(
-			() => IconStyleResolver.getInstance().resolve(config, tokens),
-			[config, tokens],
+		const { style } = useResolvedStyle(
+			config,
+			(c, t) => IconStyleResolver.getInstance().resolve(c, t),
+			tokensProp,
 		);
 
 		if (config.visibility === Visibility.Gone) return null;

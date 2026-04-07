@@ -17,6 +17,8 @@ import com.uikit.foundation.ComponentSize
 import com.uikit.foundation.LayoutDirection
 import com.uikit.foundation.ThemeMode
 import com.uikit.tokens.DesignTokens
+import com.uikit.tokens.scaled
+import catalog.CatalogOptions
 
 @Composable
 internal fun ComponentsScreen(
@@ -33,20 +35,23 @@ internal fun ComponentsScreen(
 	var panelSideId by remember { mutableStateOf("left") }
 	val globalSize = sizeFromId(globalSizeId)
 
-	val modifiedTokens = remember(tokens, globalRadiusId) {
+	val modifiedTokens = remember(tokens, globalRadiusId, globalSizeId) {
+		var t = tokens
 		val fraction = RADIUS_FRACTION_MAP[globalRadiusId] ?: 0.2
 		val maxCR = MAX_CONTAINER_RADIUS_MAP[globalRadiusId] ?: 24.0
-		if (fraction == tokens.controls.proportions.radiusFraction &&
-			maxCR == tokens.controls.proportions.maxContainerRadius
-		) tokens
-		else tokens.copy(
-			controls = tokens.controls.copy(
-				proportions = tokens.controls.proportions.copy(
-					radiusFraction = fraction,
-					maxContainerRadius = maxCR,
+		if (fraction != t.controls.proportions.radiusFraction ||
+			maxCR != t.controls.proportions.maxContainerRadius
+		) {
+			t = t.copy(
+				controls = t.controls.copy(
+					proportions = t.controls.proportions.copy(
+						radiusFraction = fraction,
+						maxContainerRadius = maxCR,
+					),
 				),
-			),
-		)
+			)
+		}
+		t.scaled(CatalogOptions.scaleFactor(globalSizeId))
 	}
 
 	val panelVariant = when (panelVariantId) {
@@ -63,7 +68,7 @@ internal fun ComponentsScreen(
 	CatalogPage(
 		title = "Компоненты (Components)",
 		subtitle = "Кнопки, иконки, поверхности, текст, контролы",
-		tokens = tokens,
+		tokens = modifiedTokens,
 		onBack = onBack,
 		panelVariant = panelVariant,
 		panelSide = panelSide,
@@ -125,10 +130,10 @@ internal fun ComponentsScreen(
 			HeightAlignmentShowcase(modifiedTokens, globalSize)
 			// Primitives
 			TextShowcase(modifiedTokens)
-			IconShowcase(modifiedTokens)
+			IconShowcase(modifiedTokens, globalSize)
 			DividerShowcase(modifiedTokens)
-			ImageShowcase(modifiedTokens)
-			SkeletonShowcase(modifiedTokens)
+			ImageShowcase(modifiedTokens, globalSize)
+			SkeletonShowcase(modifiedTokens, globalSize)
 			SurfaceShowcase(modifiedTokens)
 			// Composites
 			ButtonShowcase(modifiedTokens, globalSize)

@@ -18,3 +18,15 @@ data class SizingTokens(
 	val iconXl: Double,
 	val minTouchTarget: Double,
 )
+
+fun SizingTokens.scaled(factor: Double): SizingTokens =
+	if (factor == 1.0) this
+	else copy(
+		controlXs = controlXs * factor, controlSm = controlSm * factor,
+		controlMd = controlMd * factor, controlLg = controlLg * factor,
+		controlXl = controlXl * factor,
+		iconXs = iconXs * factor, iconSm = iconSm * factor,
+		iconMd = iconMd * factor, iconLg = iconLg * factor,
+		iconXl = iconXl * factor,
+		minTouchTarget = minTouchTarget * factor,
+	)

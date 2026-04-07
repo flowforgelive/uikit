@@ -91,7 +91,7 @@
 	cursor: pointer;
 	padding: 0;
 	border-radius: 50%;
-	opacity: 0.7;
+	opacity: var(--chip-hover-content-opacity, 0.72);
 	transition: opacity var(--chip-duration) var(--chip-easing),
 		background var(--chip-duration) var(--chip-easing);
 }

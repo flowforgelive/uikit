@@ -5,26 +5,9 @@ import { SegmentedControlView } from "./SegmentedControlView";
 import {
 	SegmentedControlConfig,
 	SegmentedControlOption,
-	ComponentSize,
-	VisualVariant,
 	IconPosition,
 } from "uikit-common";
-
-const VARIANT_MAP = {
-	surface: VisualVariant.Surface,
-	soft: VisualVariant.Soft,
-	outline: VisualVariant.Outline,
-	solid: VisualVariant.Solid,
-	ghost: VisualVariant.Ghost,
-} as const;
-
-const ICON_POSITION_MAP = {
-	none: IconPosition.None,
-	start: IconPosition.Start,
-	end: IconPosition.End,
-	top: IconPosition.Top,
-	bottom: IconPosition.Bottom,
-} as const;
+import { VARIANT_MAP, SIZE_MAP, ICON_POSITION_MAP } from "../../../utils/enumMaps";
 
 interface SegmentedControlOptionProp {
 	id: string;
@@ -37,18 +20,10 @@ interface SegmentedControlProps {
 	selectedId: string;
 	onSelectionChange?: (id: string) => void;
 	variant?: keyof typeof VARIANT_MAP;
-	size?: "xs" | "sm" | "md" | "lg" | "xl";
+	size?: keyof typeof SIZE_MAP;
 	iconPosition?: keyof typeof ICON_POSITION_MAP;
 	className?: string;
 }
-
-const SIZE_MAP: Record<string, any> = {
-	xs: ComponentSize.Xs,
-	sm: ComponentSize.Sm,
-	md: ComponentSize.Md,
-	lg: ComponentSize.Lg,
-	xl: ComponentSize.Xl,
-};
 
 export const SegmentedControl: React.FC<SegmentedControlProps> = React.memo(
 	({ options, selectedId, onSelectionChange, variant = "surface", size = "sm", iconPosition = "none", className }) => {

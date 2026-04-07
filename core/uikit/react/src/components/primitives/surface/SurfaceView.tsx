@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useMemo, useCallback, useRef } from "react";
-import { useDesignTokens } from "../../../theme/useDesignTokens";
+import { useResolvedStyle } from "../../../hooks/useResolvedStyle";
+import { buildInteractiveStyleVars } from "../../../utils/interactiveStyleVars";
 import { SurfaceContextProvider } from "../../../theme/SurfaceContext";
 import { toRem } from "../../../utils/units";
 import {
@@ -24,13 +25,12 @@ interface SurfaceViewProps {
 
 export const SurfaceView: React.FC<SurfaceViewProps> = React.memo(
 	({ config, onClick, tokens: tokensProp, className, children }) => {
-		const contextTokens = useDesignTokens();
-		const tokens = tokensProp ?? contextTokens;
-		const parentSurface = useSurfaceContext();
-		const style = useMemo(
-			() => SurfaceStyleResolver.getInstance().resolve(config, tokens),
-			[config, tokens],
+		const { style, tokens } = useResolvedStyle(
+			config,
+			(c, t) => SurfaceStyleResolver.getInstance().resolve(c, t),
+			tokensProp,
 		);
+		const parentSurface = useSurfaceContext();
 
 		const elementRef = useRef<HTMLElement>(null);
 
@@ -76,14 +76,10 @@ export const SurfaceView: React.FC<SurfaceViewProps> = React.memo(
 							"--surface-border": style.border,
 							"--surface-radius": toRem(style.radius),
 							"--surface-shadow": style.shadow,
-							"--surface-duration": `${tokens.motion.durationFast}ms`,
-							"--surface-easing": tokens.motion.easingStandard,
-							"--surface-focus-ring": tokens.color.focusRing,
-							"--surface-border-width": `${tokens.borderWidth}px`,
-							"--surface-focus-ring-width": `${tokens.focusRingWidth}px`,						"--surface-press-opacity": tokens.state.hoverOpacity,
-						"--surface-press-brightness": tokens.state.pressBrightnessSurface,
-						"--surface-ripple-spread": `${tokens.state.rippleSpread}%`,
-						"--surface-ripple-fade-duration": `${tokens.state.rippleFadeDurationMs}ms`,							visibility:
+							...buildInteractiveStyleVars(tokens, "surface"),
+							"--surface-press-opacity": String(tokens.state.hoverOpacity),
+							"--surface-press-brightness": String(tokens.state.pressBrightnessSurface),
+							visibility:
 								config.visibility === Visibility.Invisible ? "hidden" : undefined,
 						} as React.CSSProperties
 					}

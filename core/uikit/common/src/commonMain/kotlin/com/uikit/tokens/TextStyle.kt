@@ -11,3 +11,10 @@ data class TextStyle(
 	val lineHeight: Double,
 	val letterSpacing: Double,
 )
+
+fun TextStyle.scaled(factor: Double): TextStyle =
+	if (factor == 1.0) this
+	else copy(
+		fontSize = fontSize * factor,
+		lineHeight = lineHeight * factor,
+	)

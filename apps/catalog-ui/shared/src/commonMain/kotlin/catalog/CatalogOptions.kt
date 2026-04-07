@@ -80,4 +80,13 @@ object CatalogOptions {
 		"full" -> 48.0
 		else -> 24.0
 	}
+
+	fun scaleFactor(sizeId: String): Double = when (sizeId.lowercase()) {
+		"xs" -> 0.733
+		"sm" -> 0.867
+		"md" -> 1.0
+		"lg" -> 1.133
+		"xl" -> 1.333
+		else -> 1.0
+	}
 }

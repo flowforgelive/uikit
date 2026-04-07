@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { useDesignTokens } from "../../../theme/useDesignTokens";
+import { useResolvedStyle } from "../../../hooks/useResolvedStyle";
 import { toRem } from "../../../utils/units";
 import {
 	SkeletonStyleResolver,
@@ -19,11 +19,10 @@ interface SkeletonViewProps {
 
 export const SkeletonView: React.FC<SkeletonViewProps> = React.memo(
 	({ config, tokens: tokensProp, className }) => {
-		const contextTokens = useDesignTokens();
-		const tokens = tokensProp ?? contextTokens;
-		const style = useMemo(
-			() => SkeletonStyleResolver.getInstance().resolve(config, tokens),
-			[config, tokens],
+		const { style } = useResolvedStyle(
+			config,
+			(c, t) => SkeletonStyleResolver.getInstance().resolve(c, t),
+			tokensProp,
 		);
 
 		if (config.visibility === Visibility.Gone) return null;

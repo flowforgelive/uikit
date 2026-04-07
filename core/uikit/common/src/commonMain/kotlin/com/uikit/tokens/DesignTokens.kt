@@ -248,3 +248,29 @@ data class DesignTokens(
 		val Default = DefaultDark
 	}
 }
+
+fun DesignTokens.scaled(factor: Double): DesignTokens =
+	if (factor == 1.0) this
+	else copy(
+		spacing = spacing.scaled(factor),
+		typography = typography.scaled(factor),
+		sizing = sizing.scaled(factor),
+		controls = controls.scaled(factor),
+		borderWidth = borderWidth * factor,
+		focusRingWidth = focusRingWidth * factor,
+		spinnerStrokeWidth = spinnerStrokeWidth * factor,
+	)
+
+@JsExport
+fun scaleDesignTokens(tokens: DesignTokens, factor: Double): DesignTokens = tokens.scaled(factor)
+
+@JsExport
+fun withControlProportions(tokens: DesignTokens, radiusFraction: Double, maxContainerRadius: Double): DesignTokens =
+	tokens.copy(
+		controls = tokens.controls.copy(
+			proportions = tokens.controls.proportions.copy(
+				radiusFraction = radiusFraction,
+				maxContainerRadius = maxContainerRadius,
+			),
+		),
+	)

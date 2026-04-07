@@ -1,13 +1,9 @@
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import com.uikit.compose.components.primitives.icon.Icon
-import com.uikit.compose.components.primitives.text.TextBlock
-import com.uikit.components.primitives.text.TextBlockVariant
 import com.uikit.foundation.ComponentSize
 import com.uikit.tokens.DesignTokens
 import androidx.compose.material.icons.Icons
@@ -28,20 +24,17 @@ private val ICON_SAMPLES: List<Pair<String, @Composable () -> Unit>> = listOf(
 )
 
 @Composable
-internal fun IconShowcase(tokens: DesignTokens) {
+internal fun IconShowcase(tokens: DesignTokens, globalSize: ComponentSize) {
 	ShowcaseSection("Иконки (Icon)", tokens) {
 		Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xl.dp)) {
 
-			// Size variants
-			ComponentSize.entries.forEach { size ->
-				Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
-					SubSectionTitle(text = size.name, tokens = tokens)
-					Row(
-						horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
-					) {
-						ICON_SAMPLES.forEach { (_, content) ->
-							Icon(size = size) { content() }
-						}
+			// Size variant (follows global toggle)
+			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
+				Row(
+					horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
+				) {
+					ICON_SAMPLES.forEach { (_, content) ->
+						Icon(size = globalSize) { content() }
 					}
 				}
 			}

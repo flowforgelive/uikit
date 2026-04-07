@@ -2,6 +2,7 @@ package com.uikit.components.blocks.panel
 
 import com.uikit.components.primitives.surface.SurfaceLevel
 import com.uikit.foundation.ColorConstants
+import com.uikit.foundation.SurfaceLevelResolver
 import com.uikit.tokens.DesignTokens
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
@@ -35,7 +36,7 @@ object PanelStyleResolver {
 		config: PanelConfig,
 		tokens: DesignTokens,
 	): ResolvedPanelStyle {
-		val bg = resolveBg(config.surfaceLevel, tokens)
+		val bg = SurfaceLevelResolver.resolveColor(config.surfaceLevel, tokens)
 
 		val border = if (config.showBorder) {
 			tokens.color.borderSubtle
@@ -52,7 +53,10 @@ object PanelStyleResolver {
 		val radiusScale = tokens.controls.proportions.radiusFraction / DEFAULT_RADIUS_FRACTION
 		val radius = when (config.variant) {
 			PanelVariant.Pinned -> 0.0
-			PanelVariant.Inset -> tokens.radius.lg * radiusScale
+			PanelVariant.Inset -> minOf(
+				tokens.radius.lg * radiusScale,
+				tokens.controls.proportions.maxContainerRadius,
+			)
 		}
 
 		val insetPadding = when (config.variant) {
@@ -75,13 +79,4 @@ object PanelStyleResolver {
 		)
 	}
 
-	private fun resolveBg(level: SurfaceLevel, tokens: DesignTokens): String =
-		when (level) {
-			SurfaceLevel.Level0 -> tokens.color.surface
-			SurfaceLevel.Level1 -> tokens.color.surfaceContainerLowest
-			SurfaceLevel.Level2 -> tokens.color.surfaceContainerLow
-			SurfaceLevel.Level3 -> tokens.color.surfaceContainer
-			SurfaceLevel.Level4 -> tokens.color.surfaceContainerHigh
-			SurfaceLevel.Level5 -> tokens.color.surfaceContainerHighest
-		}
 }

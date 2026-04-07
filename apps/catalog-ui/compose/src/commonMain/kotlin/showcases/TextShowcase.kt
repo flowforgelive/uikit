@@ -10,14 +10,14 @@ import com.uikit.tokens.DesignTokens
 internal fun TextShowcase(tokens: DesignTokens) {
 	ShowcaseSection("Варианты текста (Text)", tokens) {
 		Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
-			TextBlock(text = "Heading 1 — Заголовок", variant = TextBlockVariant.HeadlineLarge)
-			TextBlock(text = "Heading 2 — Подзаголовок", variant = TextBlockVariant.HeadlineMedium)
-			TextBlock(text = "Heading 3 — Секция", variant = TextBlockVariant.HeadlineSmall)
+			TextBlock(text = "Headline Large — Заголовок", variant = TextBlockVariant.HeadlineLarge)
+			TextBlock(text = "Headline Medium — Подзаголовок", variant = TextBlockVariant.HeadlineMedium)
+			TextBlock(text = "Title Large — Секция", variant = TextBlockVariant.TitleLarge)
 			TextBlock(
-				text = "Body — Основной текст для чтения. The quick brown fox jumps over the lazy dog. مرحبا بالعالم. 你好世界",
+				text = "Body Large — Основной текст для чтения. The quick brown fox jumps over the lazy dog. مرحبا بالعالم. 你好世界",
 				variant = TextBlockVariant.BodyLarge,
 			)
-			TextBlock(text = "Caption — Подпись к элементам", variant = TextBlockVariant.LabelMedium)
+			TextBlock(text = "Label Medium — Подпись к элементам", variant = TextBlockVariant.LabelMedium)
 		}
 	}
 }

@@ -10,9 +10,7 @@ import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
@@ -20,11 +18,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -44,18 +40,18 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.uikit.components.composites.segmentedcontrol.SegmentedControlConfig
 import com.uikit.components.composites.segmentedcontrol.SegmentedControlStyleResolver
 import com.uikit.compose.theme.LocalDesignTokens
 import com.uikit.compose.theme.LocalFontFamily
 import com.uikit.compose.theme.LocalKeyboardNavigationMode
 import com.uikit.compose.theme.LocalSurfaceContext
+import com.uikit.compose.theme.StyledText
+import com.uikit.compose.theme.IconSlot
+import com.uikit.compose.theme.IconTextLayout
 import com.uikit.compose.theme.parseColor
 import com.uikit.foundation.IconPosition
 import com.uikit.foundation.Visibility
@@ -199,83 +195,50 @@ fun SegmentedControlView(
 					val hasIcon = renderIcon != null && option.iconId != null && config.iconPosition != IconPosition.None
 					if (hasIcon) {
 						val iconId = option.iconId!!
-						val isVertical = config.iconPosition == IconPosition.Top || config.iconPosition == IconPosition.Bottom
 						val iconContent: @Composable () -> Unit = {
 							androidx.compose.runtime.CompositionLocalProvider(
 								LocalContentColor provides textColor,
 							) {
-								Box(
-									modifier = Modifier.size(style.sizes.iconSize.dp),
-									contentAlignment = Alignment.Center,
-								) {
+								IconSlot(size = style.sizes.iconSize.dp) {
 									renderIcon(iconId)
 								}
 							}
 						}
 						val textContent: @Composable () -> Unit = {
-							BasicText(
+							StyledText(
 								text = option.label,
-								style = TextStyle(
-									fontSize = style.sizes.fontSize.sp,
-									fontWeight = FontWeight(style.sizes.fontWeight),
-									letterSpacing = style.sizes.letterSpacing.sp,
-									lineHeight = style.sizes.lineHeight.sp,
-									color = textColor,
-									textAlign = TextAlign.Center,
-									fontFamily = fontFamily,
-								),
+								fontSize = style.sizes.fontSize,
+								fontWeight = style.sizes.fontWeight,
+								letterSpacing = style.sizes.letterSpacing,
+								lineHeight = style.sizes.lineHeight,
+								color = textColor,
+								fontFamily = fontFamily,
+								textAlign = TextAlign.Center,
 								maxLines = 1,
-								softWrap = false,
 							)
 						}
-						if (isVertical) {
-								Column(
-									horizontalAlignment = Alignment.CenterHorizontally,
-									verticalArrangement = Arrangement.spacedBy(
-									style.sizes.iconGap.dp,
-									Alignment.CenterVertically,
-								),
-								modifier = Modifier.fillMaxHeight(),
-							) {
-								if (config.iconPosition == IconPosition.Top) {
-									iconContent()
-									textContent()
-								} else {
-									textContent()
-									iconContent()
-								}
-							}
-						} else {
-							Row(
-								verticalAlignment = Alignment.CenterVertically,
-									horizontalArrangement = Arrangement.spacedBy(
-									style.sizes.iconGap.dp,
-									Alignment.CenterHorizontally,
-								),
-							) {
-								if (config.iconPosition == IconPosition.Start) {
-									iconContent()
-									textContent()
-								} else {
-									textContent()
-									iconContent()
-								}
-							}
-						}
+						IconTextLayout(
+							iconPosition = config.iconPosition,
+							iconGap = style.sizes.iconGap.dp,
+							icon = iconContent,
+							text = textContent,
+							modifier = if (config.iconPosition == IconPosition.Top || config.iconPosition == IconPosition.Bottom) {
+								Modifier.fillMaxHeight()
+							} else {
+								Modifier
+							},
+						)
 					} else {
-						BasicText(
+						StyledText(
 							text = option.label,
-							style = TextStyle(
-								fontSize = style.sizes.fontSize.sp,
-								fontWeight = FontWeight(style.sizes.fontWeight),
-								letterSpacing = style.sizes.letterSpacing.sp,
-								lineHeight = style.sizes.lineHeight.sp,
-								color = textColor,
-								textAlign = TextAlign.Center,
-								fontFamily = fontFamily,
-							),
+							fontSize = style.sizes.fontSize,
+							fontWeight = style.sizes.fontWeight,
+							letterSpacing = style.sizes.letterSpacing,
+							lineHeight = style.sizes.lineHeight,
+							color = textColor,
+							fontFamily = fontFamily,
+							textAlign = TextAlign.Center,
 							maxLines = 1,
-							softWrap = false,
 						)
 					}
 				}

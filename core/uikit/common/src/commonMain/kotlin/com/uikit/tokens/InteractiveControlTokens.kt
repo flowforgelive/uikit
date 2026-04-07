@@ -59,3 +59,18 @@ data class InteractiveControlTokens(
 	val xl: ControlSizeInput,
 	val segmentedControlTrackPadding: Double = 2.0,
 )
+
+fun ControlSizeInput.scaled(factor: Double): ControlSizeInput =
+	if (factor == 1.0) this
+	else copy(fontSize = fontSize * factor)
+
+fun InteractiveControlTokens.scaled(factor: Double): InteractiveControlTokens =
+	if (factor == 1.0) this
+	else copy(
+		xs = xs.scaled(factor),
+		sm = sm.scaled(factor),
+		md = md.scaled(factor),
+		lg = lg.scaled(factor),
+		xl = xl.scaled(factor),
+		segmentedControlTrackPadding = segmentedControlTrackPadding * factor,
+	)

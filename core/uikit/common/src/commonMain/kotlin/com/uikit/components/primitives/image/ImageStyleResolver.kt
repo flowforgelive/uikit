@@ -1,5 +1,6 @@
 package com.uikit.components.primitives.image
 
+import com.uikit.foundation.AdaptiveRadiusResolver
 import com.uikit.tokens.DesignTokens
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
@@ -34,13 +35,11 @@ object ImageStyleResolver {
 			ImageFit.ScaleDown -> "scale-down"
 		}
 
-		val cornerRadius = config.cornerRadius ?: run {
-			val minDim = minOf(config.width, config.height)
-			if (minDim > 0.0) {
-				val adaptive = minDim * tokens.controls.proportions.radiusFraction
-				minOf(adaptive, tokens.controls.proportions.maxContainerRadius)
-			} else 0.0
-		}
+		val cornerRadius = AdaptiveRadiusResolver.resolve(
+			explicitRadius = config.cornerRadius,
+			containerDimension = minOf(config.width, config.height),
+			proportions = tokens.controls.proportions,
+		)
 
 		return ResolvedImageStyle(
 			width = config.width,

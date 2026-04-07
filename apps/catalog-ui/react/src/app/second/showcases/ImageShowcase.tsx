@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Image, Text, Button, toRem } from "@uikit/react";
 import { Section } from "../../components/catalog/Section";
 import { SubSectionTitle } from "../../components/catalog/SubSectionTitle";
+import { SCALE_FACTOR_MAP } from "../../components/catalog/CatalogConstants";
 
 // picsum.photos — random photos from Unsplash, /id/{N}/{W}/{H}.jpg for stable results
 const PHOTO_1 = "https://picsum.photos/id/10/400/300.jpg";   // forest
@@ -15,8 +16,10 @@ const PHOTO_LARGE_3 = "https://picsum.photos/id/76/1600/1200.jpg";
 
 const FITS = ["cover", "contain", "fill", "none", "scale-down"] as const;
 
-export function ImageShowcase({ tokens }: { tokens: any }) {
+export function ImageShowcase({ tokens, globalSize }: { tokens: any; globalSize: string }) {
 	const [reloadKey, setReloadKey] = useState(0);
+
+	const s = SCALE_FACTOR_MAP[globalSize] ?? 1.0;
 
 	return (
 		<Section id="image" title="Изображение (Image)" tokens={tokens}>
@@ -37,10 +40,10 @@ export function ImageShowcase({ tokens }: { tokens: any }) {
 						emphasis="muted"
 					/>
 					<div style={{ display: "flex", alignItems: "flex-start", gap: toRem(tokens.spacing.md), marginTop: toRem(tokens.spacing.sm) }}>
-						<Image src={PHOTO_SQ} alt="Square adaptive" width={80} height={80} showBorder />
-						<Image src={PHOTO_1} alt="Landscape adaptive" width={120} height={80} showBorder />
-						<Image src={PHOTO_2} alt="Wide adaptive" width={200} height={140} showBorder />
-						<Image src={PHOTO_SQ} alt="Large adaptive" width={120} height={120} showBorder />
+						<Image src={PHOTO_SQ} alt="Square adaptive" width={80 * s} height={80 * s} showBorder />
+						<Image src={PHOTO_1} alt="Landscape adaptive" width={120 * s} height={80 * s} showBorder />
+						<Image src={PHOTO_2} alt="Wide adaptive" width={200 * s} height={140 * s} showBorder />
+						<Image src={PHOTO_SQ} alt="Large adaptive" width={120 * s} height={120 * s} showBorder />
 					</div>
 				</div>
 
@@ -54,15 +57,15 @@ export function ImageShowcase({ tokens }: { tokens: any }) {
 					/>
 					<div style={{ display: "flex", alignItems: "flex-start", gap: toRem(tokens.spacing.md), marginTop: toRem(tokens.spacing.sm) }}>
 						<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
-							<Image src={PHOTO_SQ} alt="Circle avatar" width={80} height={80} cornerRadius={40} showBorder />
+							<Image src={PHOTO_SQ} alt="Circle avatar" width={80 * s} height={80 * s} cornerRadius={40 * s} showBorder />
 							<Text text="Circle (avatar)" variant="label-small" />
 						</div>
 						<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
-							<Image src={PHOTO_1} alt="Pill banner" width={160} height={60} cornerRadius={30} showBorder />
+							<Image src={PHOTO_1} alt="Pill banner" width={160 * s} height={60 * s} cornerRadius={30 * s} showBorder />
 							<Text text="Pill (banner)" variant="label-small" />
 						</div>
 						<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
-							<Image src={PHOTO_2} alt="Sharp" width={120} height={80} cornerRadius={0} showBorder />
+							<Image src={PHOTO_2} alt="Sharp" width={120 * s} height={80 * s} cornerRadius={0} showBorder />
 							<Text text="Sharp (0)" variant="label-small" />
 						</div>
 					</div>
@@ -78,11 +81,11 @@ export function ImageShowcase({ tokens }: { tokens: any }) {
 					/>
 					<div style={{ display: "flex", alignItems: "flex-start", gap: toRem(tokens.spacing.md), marginTop: toRem(tokens.spacing.sm) }}>
 						<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
-							<Image src={PHOTO_1} alt="Adaptive capped" width={200} height={140} showBorder />
+							<Image src={PHOTO_1} alt="Adaptive capped" width={200 * s} height={140 * s} showBorder />
 							<Text text="Adaptive (с cap)" variant="label-small" emphasis="muted" />
 						</div>
 						<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
-							<Image src={PHOTO_1} alt="Explicit no cap" width={200} height={140} cornerRadius={70} showBorder />
+							<Image src={PHOTO_1} alt="Explicit no cap" width={200 * s} height={140 * s} cornerRadius={70 * s} showBorder />
 							<Text text="Explicit 70dp (без cap)" variant="label-small" emphasis="muted" />
 						</div>
 					</div>
@@ -92,9 +95,9 @@ export function ImageShowcase({ tokens }: { tokens: any }) {
 				<div>
 					<SubSectionTitle tokens={tokens}>Subtle border (showBorder)</SubSectionTitle>
 					<div style={{ display: "flex", alignItems: "flex-start", gap: toRem(tokens.spacing.md) }}>
-						<Image src={PHOTO_SQ} alt="With border" width={80} height={80} cornerRadius={8} showBorder />
-						<Image src={PHOTO_SQ} alt="Circle border" width={80} height={80} cornerRadius={40} showBorder />
-						<Image src={PHOTO_2} alt="No border" width={120} height={80} cornerRadius={12} />
+						<Image src={PHOTO_SQ} alt="With border" width={80 * s} height={80 * s} showBorder />
+						<Image src={PHOTO_SQ} alt="Circle border" width={80 * s} height={80 * s} cornerRadius={40 * s} showBorder />
+						<Image src={PHOTO_2} alt="No border" width={120 * s} height={80 * s} />
 					</div>
 				</div>
 
@@ -107,8 +110,8 @@ export function ImageShowcase({ tokens }: { tokens: any }) {
 								<Image
 									src={PHOTO_1}
 									alt={fit}
-									width={80}
-									height={80}
+									width={80 * s}
+									height={80 * s}
 									objectFit={fit}
 									showBorder
 								/>
@@ -146,25 +149,25 @@ export function ImageShowcase({ tokens }: { tokens: any }) {
 						<Image
 							src={`${PHOTO_LARGE_1}?v=${reloadKey}`}
 							alt="Large landscape"
-							width={200}
-							height={140}
-							cornerRadius={12}
+							width={200 * s}
+							height={140 * s}
+							cornerRadius={12 * s}
 							showBorder
 						/>
 						<Image
 							src={`${PHOTO_LARGE_2}?v=${reloadKey}`}
 							alt="Large square"
-							width={140}
-							height={140}
-							cornerRadius={70}
+							width={140 * s}
+							height={140 * s}
+							cornerRadius={70 * s}
 							showBorder
 						/>
 						<Image
 							src={`${PHOTO_LARGE_3}?v=${reloadKey}`}
 							alt="Large rect"
-							width={180}
-							height={120}
-							cornerRadius={8}
+							width={180 * s}
+							height={120 * s}
+							cornerRadius={8 * s}
 							showBorder
 						/>
 					</div>
@@ -178,9 +181,8 @@ export function ImageShowcase({ tokens }: { tokens: any }) {
 							src="https://invalid.url/broken.jpg"
 							alt="Fallback demo"
 							fallback={PHOTO_SQ}
-							width={100}
-							height={100}
-							cornerRadius={8}
+							width={100 * s}
+							height={100 * s}
 							showBorder
 						/>
 					</div>
