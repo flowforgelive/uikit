@@ -45,6 +45,7 @@ export default async function RootLayout({
 	return (
 		<html lang="ru" suppressHydrationWarning>
 			<head>
+				<link rel="preconnect" href="https://picsum.photos" />
 				<UIKitThemeScript />
 			</head>
 			<body className={inter.className}>

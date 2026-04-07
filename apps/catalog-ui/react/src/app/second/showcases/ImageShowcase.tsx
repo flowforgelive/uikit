@@ -40,10 +40,10 @@ export function ImageShowcase({ tokens, globalSize }: { tokens: any; globalSize:
 						emphasis="muted"
 					/>
 					<div style={{ display: "flex", alignItems: "flex-start", gap: toRem(tokens.spacing.md), marginTop: toRem(tokens.spacing.sm) }}>
-						<Image src={PHOTO_SQ} alt="Square adaptive" width={80 * s} height={80 * s} showBorder />
-						<Image src={PHOTO_1} alt="Landscape adaptive" width={120 * s} height={80 * s} showBorder />
-						<Image src={PHOTO_2} alt="Wide adaptive" width={200 * s} height={140 * s} showBorder />
-						<Image src={PHOTO_SQ} alt="Large adaptive" width={120 * s} height={120 * s} showBorder />
+						<Image src={PHOTO_SQ} alt="Square adaptive" width={80 * s} height={80 * s} showBorder loading="lazy" />
+						<Image src={PHOTO_1} alt="Landscape adaptive" width={120 * s} height={80 * s} showBorder loading="lazy" />
+						<Image src={PHOTO_2} alt="Wide adaptive" width={200 * s} height={140 * s} showBorder loading="lazy" />
+						<Image src={PHOTO_SQ} alt="Large adaptive" width={120 * s} height={120 * s} showBorder loading="lazy" />
 					</div>
 				</div>
 
@@ -57,15 +57,15 @@ export function ImageShowcase({ tokens, globalSize }: { tokens: any; globalSize:
 					/>
 					<div style={{ display: "flex", alignItems: "flex-start", gap: toRem(tokens.spacing.md), marginTop: toRem(tokens.spacing.sm) }}>
 						<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
-							<Image src={PHOTO_SQ} alt="Circle avatar" width={80 * s} height={80 * s} cornerRadius={40 * s} showBorder />
+							<Image src={PHOTO_SQ} alt="Circle avatar" width={80 * s} height={80 * s} cornerRadius={40 * s} showBorder loading="lazy" />
 							<Text text="Circle (avatar)" variant="label-small" />
 						</div>
 						<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
-							<Image src={PHOTO_1} alt="Pill banner" width={160 * s} height={60 * s} cornerRadius={30 * s} showBorder />
+							<Image src={PHOTO_1} alt="Pill banner" width={160 * s} height={60 * s} cornerRadius={30 * s} showBorder loading="lazy" />
 							<Text text="Pill (banner)" variant="label-small" />
 						</div>
 						<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
-							<Image src={PHOTO_2} alt="Sharp" width={120 * s} height={80 * s} cornerRadius={0} showBorder />
+							<Image src={PHOTO_2} alt="Sharp" width={120 * s} height={80 * s} cornerRadius={0} showBorder loading="lazy" />
 							<Text text="Sharp (0)" variant="label-small" />
 						</div>
 					</div>
@@ -81,11 +81,11 @@ export function ImageShowcase({ tokens, globalSize }: { tokens: any; globalSize:
 					/>
 					<div style={{ display: "flex", alignItems: "flex-start", gap: toRem(tokens.spacing.md), marginTop: toRem(tokens.spacing.sm) }}>
 						<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
-							<Image src={PHOTO_1} alt="Adaptive capped" width={200 * s} height={140 * s} showBorder />
+							<Image src={PHOTO_1} alt="Adaptive capped" width={200 * s} height={140 * s} showBorder loading="lazy" />
 							<Text text="Adaptive (с cap)" variant="label-small" emphasis="muted" />
 						</div>
 						<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
-							<Image src={PHOTO_1} alt="Explicit no cap" width={200 * s} height={140 * s} cornerRadius={70 * s} showBorder />
+							<Image src={PHOTO_1} alt="Explicit no cap" width={200 * s} height={140 * s} cornerRadius={70 * s} showBorder loading="lazy" />
 							<Text text="Explicit 70dp (без cap)" variant="label-small" emphasis="muted" />
 						</div>
 					</div>
@@ -95,9 +95,9 @@ export function ImageShowcase({ tokens, globalSize }: { tokens: any; globalSize:
 				<div>
 					<SubSectionTitle tokens={tokens}>Subtle border (showBorder)</SubSectionTitle>
 					<div style={{ display: "flex", alignItems: "flex-start", gap: toRem(tokens.spacing.md) }}>
-						<Image src={PHOTO_SQ} alt="With border" width={80 * s} height={80 * s} showBorder />
-						<Image src={PHOTO_SQ} alt="Circle border" width={80 * s} height={80 * s} cornerRadius={40 * s} showBorder />
-						<Image src={PHOTO_2} alt="No border" width={120 * s} height={80 * s} />
+						<Image src={PHOTO_SQ} alt="With border" width={80 * s} height={80 * s} showBorder loading="lazy" />
+						<Image src={PHOTO_SQ} alt="Circle border" width={80 * s} height={80 * s} cornerRadius={40 * s} showBorder loading="lazy" />
+						<Image src={PHOTO_2} alt="No border" width={120 * s} height={80 * s} loading="lazy" />
 					</div>
 				</div>
 
@@ -113,8 +113,7 @@ export function ImageShowcase({ tokens, globalSize }: { tokens: any; globalSize:
 									width={80 * s}
 									height={80 * s}
 									objectFit={fit}
-									showBorder
-								/>
+									showBorder										loading="lazy"								/>
 								<Text text={fit} variant="label-small" />
 							</div>
 						))}
@@ -178,12 +177,13 @@ export function ImageShowcase({ tokens, globalSize }: { tokens: any; globalSize:
 					<SubSectionTitle tokens={tokens}>Fallback при ошибке загрузки</SubSectionTitle>
 					<div style={{ display: "flex", alignItems: "flex-start", gap: toRem(tokens.spacing.md) }}>
 						<Image
-							src="https://invalid.url/broken.jpg"
+							src="/nonexistent-image.jpg"
 							alt="Fallback demo"
 							fallback={PHOTO_SQ}
 							width={100 * s}
 							height={100 * s}
 							showBorder
+							loading="lazy"
 						/>
 					</div>
 				</div>
