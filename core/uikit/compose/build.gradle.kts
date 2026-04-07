@@ -14,5 +14,8 @@ kotlin {
 			implementation(compose.foundation)
 			implementation(compose.runtime)
 		}
+		jvmMain.dependencies {
+			implementation(compose.desktop.common)
+		}
 	}
 }

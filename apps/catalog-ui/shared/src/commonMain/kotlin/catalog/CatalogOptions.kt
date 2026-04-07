@@ -70,4 +70,14 @@ object CatalogOptions {
 		"full" -> 1.0
 		else -> 0.2
 	}
+
+	fun maxContainerRadius(id: String): Double = when (id) {
+		"none" -> 0.0
+		"sm" -> 8.0
+		"md" -> 16.0
+		"lg" -> 24.0
+		"xl" -> 32.0
+		"full" -> 48.0
+		else -> 24.0
+	}
 }

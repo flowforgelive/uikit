@@ -1,4 +1,3 @@
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.foundation.Canvas
 import androidx.compose.ui.geometry.Offset
@@ -18,6 +16,7 @@ import com.uikit.compose.components.composites.button.Button
 import com.uikit.compose.components.composites.chip.Chip
 import com.uikit.compose.components.composites.segmentedcontrol.SegmentedControl
 import com.uikit.compose.components.primitives.text.TextBlock
+import com.uikit.compose.theme.parseColor
 import com.uikit.components.primitives.text.TextBlockVariant
 import com.uikit.foundation.ColorIntent
 import com.uikit.foundation.ComponentSize
@@ -34,7 +33,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 internal fun HeightAlignmentShowcase(tokens: DesignTokens, globalSize: ComponentSize) {
 	val selectedSize = globalSize
 	val btnSize = buttonSizeFromComponentSize(selectedSize)
-	val lineColor = Color(0xFFC0C0C0)
+	val lineColor = parseColor(tokens.color.outlineVariant)
 
 	ShowcaseSection("Проверка выравнивания высот (Height Alignment)", tokens) {
 		Column(

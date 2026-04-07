@@ -1,0 +1,23 @@
+.horizontal,
+.vertical {
+	border: none;
+	margin: 0;
+	flex-shrink: 0;
+}
+
+.horizontal {
+	width: auto;
+	height: var(--div-thickness, 1px);
+	background-color: var(--div-color);
+	margin-inline-start: var(--div-inset-start, 0);
+	margin-inline-end: var(--div-inset-end, 0);
+}
+
+.vertical {
+	width: var(--div-thickness, 1px);
+	height: auto;
+	align-self: stretch;
+	background-color: var(--div-color);
+	margin-block-start: var(--div-inset-start, 0);
+	margin-block-end: var(--div-inset-end, 0);
+}

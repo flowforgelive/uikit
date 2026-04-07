@@ -1,6 +1,7 @@
 package com.uikit.compose.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -38,6 +39,7 @@ fun UIKitTheme(
 		LocalUIKitLayoutDirection provides layoutDirection,
 		LocalLayoutDirection provides layoutDirection.toCompose(),
 		LocalFontFamily provides fontFamily,
+		LocalContentColor provides parseColor(tokens.color.textPrimary),
 	) {
 		KeyboardNavigationHandler {
 			content()
@@ -45,10 +47,6 @@ fun UIKitTheme(
 	}
 }
 
-/**
- * UIKitTheme с поддержкой ThemeProvider.
- * Автоматически резолвит System → конкретную тему через isSystemInDarkTheme().
- */
 @Composable
 fun UIKitTheme(
 	themeProvider: ThemeProvider = DefaultThemeProvider,
@@ -75,6 +73,7 @@ fun UIKitTheme(
 		LocalUIKitLayoutDirection provides layoutDirection,
 		LocalLayoutDirection provides layoutDirection.toCompose(),
 		LocalFontFamily provides fontFamily,
+		LocalContentColor provides parseColor(tokens.color.textPrimary),
 	) {
 		KeyboardNavigationHandler {
 			content()

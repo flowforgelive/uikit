@@ -12,7 +12,7 @@ import {
 import { ThemeSwitcher } from "../components/theme-switcher/ThemeSwitcher";
 import { DirSwitcher } from "../components/dir-switcher/DirSwitcher";
 import { CatalogPage } from "../components/catalog/CatalogPage";
-import { SIZE_OPTIONS, RADIUS_OPTIONS, RADIUS_FRACTION_MAP, PANEL_VARIANT_OPTIONS, PANEL_SIDE_OPTIONS } from "../components/catalog/CatalogConstants";
+import { SIZE_OPTIONS, RADIUS_OPTIONS, RADIUS_FRACTION_MAP, MAX_CONTAINER_RADIUS_MAP, PANEL_VARIANT_OPTIONS, PANEL_SIDE_OPTIONS } from "../components/catalog/CatalogConstants";
 import { TextShowcase } from "./showcases/TextShowcase";
 import { ButtonShowcase } from "./showcases/ButtonShowcase";
 
@@ -21,6 +21,10 @@ const ChipShowcase = dynamic(() => import("./showcases/ChipShowcase").then(m => 
 const SurfaceShowcase = dynamic(() => import("./showcases/SurfaceShowcase").then(m => ({ default: m.SurfaceShowcase })), { ssr: false });
 const SegmentedControlShowcase = dynamic(() => import("./showcases/SegmentedControlShowcase").then(m => ({ default: m.SegmentedControlShowcase })), { ssr: false });
 const HeightAlignmentShowcase = dynamic(() => import("./showcases/HeightAlignmentShowcase").then(m => ({ default: m.HeightAlignmentShowcase })), { ssr: false });
+const IconShowcase = dynamic(() => import("./showcases/IconShowcase").then(m => ({ default: m.IconShowcase })), { ssr: false });
+const DividerShowcase = dynamic(() => import("./showcases/DividerShowcase").then(m => ({ default: m.DividerShowcase })), { ssr: false });
+const ImageShowcase = dynamic(() => import("./showcases/ImageShowcase").then(m => ({ default: m.ImageShowcase })), { ssr: false });
+const SkeletonShowcase = dynamic(() => import("./showcases/SkeletonShowcase").then(m => ({ default: m.SkeletonShowcase })), { ssr: false });
 
 export default function ComponentsPage() {
 	const { tokens: baseTokens } = useUIKitTheme();
@@ -31,7 +35,9 @@ export default function ComponentsPage() {
 
 	const tokens: any = React.useMemo(() => {
 		const fraction = RADIUS_FRACTION_MAP[globalRadius];
-		if (fraction === baseTokens.controls.proportions.radiusFraction) return baseTokens;
+		const maxCR = MAX_CONTAINER_RADIUS_MAP[globalRadius];
+		if (fraction === baseTokens.controls.proportions.radiusFraction &&
+			maxCR === baseTokens.controls.proportions.maxContainerRadius) return baseTokens;
 		return {
 			...baseTokens,
 			controls: {
@@ -39,6 +45,7 @@ export default function ComponentsPage() {
 				proportions: {
 					...baseTokens.controls.proportions,
 					radiusFraction: fraction,
+					maxContainerRadius: maxCR,
 				},
 			},
 		};
@@ -81,13 +88,19 @@ export default function ComponentsPage() {
 			}
 		>
 			<DesignTokensProvider tokens={tokens}>
+				<HeightAlignmentShowcase tokens={tokens} globalSize={globalSize} />
+				{/* Primitives */}
 				<TextShowcase tokens={tokens} />
+				<IconShowcase tokens={tokens} />
+				<DividerShowcase tokens={tokens} />
+				<ImageShowcase tokens={tokens} />
+				<SkeletonShowcase tokens={tokens} />
+				<SurfaceShowcase tokens={tokens} />
+				{/* Composites */}
 				<ButtonShowcase tokens={tokens} globalSize={globalSize} />
 				<IconButtonShowcase tokens={tokens} globalSize={globalSize} />
 				<ChipShowcase tokens={tokens} globalSize={globalSize} />
-				<SurfaceShowcase tokens={tokens} />
 				<SegmentedControlShowcase tokens={tokens} globalSize={globalSize} />
-				<HeightAlignmentShowcase tokens={tokens} globalSize={globalSize} />
 			</DesignTokensProvider>
 		</CatalogPage>
 	);

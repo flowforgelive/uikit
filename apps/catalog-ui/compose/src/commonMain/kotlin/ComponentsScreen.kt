@@ -35,11 +35,15 @@ internal fun ComponentsScreen(
 
 	val modifiedTokens = remember(tokens, globalRadiusId) {
 		val fraction = RADIUS_FRACTION_MAP[globalRadiusId] ?: 0.2
-		if (fraction == tokens.controls.proportions.radiusFraction) tokens
+		val maxCR = MAX_CONTAINER_RADIUS_MAP[globalRadiusId] ?: 24.0
+		if (fraction == tokens.controls.proportions.radiusFraction &&
+			maxCR == tokens.controls.proportions.maxContainerRadius
+		) tokens
 		else tokens.copy(
 			controls = tokens.controls.copy(
 				proportions = tokens.controls.proportions.copy(
 					radiusFraction = fraction,
+					maxContainerRadius = maxCR,
 				),
 			),
 		)
@@ -118,13 +122,19 @@ internal fun ComponentsScreen(
 		},
 	) {
 		CompositionLocalProvider(LocalDesignTokens provides modifiedTokens) {
+			HeightAlignmentShowcase(modifiedTokens, globalSize)
+			// Primitives
 			TextShowcase(modifiedTokens)
+			IconShowcase(modifiedTokens)
+			DividerShowcase(modifiedTokens)
+			ImageShowcase(modifiedTokens)
+			SkeletonShowcase(modifiedTokens)
+			SurfaceShowcase(modifiedTokens)
+			// Composites
 			ButtonShowcase(modifiedTokens, globalSize)
 			IconButtonShowcase(modifiedTokens, globalSize)
 			ChipShowcase(modifiedTokens, globalSize)
-			SurfaceShowcase(modifiedTokens)
 			SegmentedControlShowcase(modifiedTokens, globalSize)
-			HeightAlignmentShowcase(modifiedTokens, globalSize)
 		}
 	}
 }

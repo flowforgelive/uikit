@@ -8,6 +8,8 @@ internal val RADIUS_OPTIONS = CatalogOptions.radiusOptions.map { it.id to it.lab
 
 internal val RADIUS_FRACTION_MAP = CatalogOptions.radiusOptions.associate { it.id to CatalogOptions.radiusFraction(it.id) }
 
+internal val MAX_CONTAINER_RADIUS_MAP = CatalogOptions.radiusOptions.associate { it.id to CatalogOptions.maxContainerRadius(it.id) }
+
 internal fun sizeFromId(id: String): ComponentSize =
 	ComponentSize.entries.first { it.name == id }
 

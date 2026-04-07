@@ -29,6 +29,9 @@ data class ControlProportions(
 	val dismissButtonRatio: Double = 0.70,
 	/** Dismiss icon (×) size as fraction of dismiss button size. */
 	val dismissIconRatio: Double = 0.50,
+	/** Maximum corner radius for container-like components (Image, Skeleton Rectangle, Panel, Card).
+	 * Pill-eligible controls (Button, Chip) are NOT affected — they use height × radiusFraction without cap. */
+	val maxContainerRadius: Double = 24.0,
 )
 
 @JsExport

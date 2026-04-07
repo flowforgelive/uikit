@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Text, toRem } from "@uikit/react";
+import { Divider, Text, toRem } from "@uikit/react";
 import { CatalogLayoutResolver } from "catalog-shared";
 
 export function Section({
@@ -26,13 +26,9 @@ export function Section({
 				}}
 			>
 				<Text text={title} variant="headline-medium" className="uikit-section-title" />
-				<div
-					style={{
-						flex: 1,
-						height: "1px",
-						background: tokens.color.outlineVariant,
-					}}
-				/>
+				<div style={{ flex: 1 }}>
+					<Divider />
+				</div>
 			</div>
 			{children}
 		</section>

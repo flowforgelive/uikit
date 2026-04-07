@@ -15,8 +15,8 @@ export function HeightAlignmentShowcase({ tokens, globalSize }: { tokens: any; g
 					alignItems: "center",
 					gap: toRem(tokens.spacing.md),
 					flexWrap: "wrap",
-					borderTop: "1px dashed silver",
-					borderBottom: "1px dashed silver",
+					borderTop: `1px dashed ${tokens.color.outlineVariant}`,
+					borderBottom: `1px dashed ${tokens.color.outlineVariant}`,
 					paddingBlock: toRem(tokens.spacing.xs),
 				}}
 			>

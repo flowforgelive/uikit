@@ -6,6 +6,9 @@ export { SegmentedControl } from "./components/composites/segmented-control/Segm
 export { Surface } from "./components/primitives/surface/Surface";
 export { Panel } from "./components/blocks/panel/Panel";
 export { Chip } from "./components/composites/chip/Chip";
+export { Divider } from "./components/primitives/divider/Divider";
+export { Image } from "./components/primitives/image/Image";
+export { Skeleton } from "./components/primitives/skeleton/Skeleton";
 
 // Config-based API (advanced / SDUI)
 export { ButtonView } from "./components/composites/button/ButtonView";
@@ -15,6 +18,9 @@ export { SegmentedControlView } from "./components/composites/segmented-control/
 export { SurfaceView } from "./components/primitives/surface/SurfaceView";
 export { PanelView } from "./components/blocks/panel/PanelView";
 export { ChipView } from "./components/composites/chip/ChipView";
+export { DividerView } from "./components/primitives/divider/DividerView";
+export { ImageView } from "./components/primitives/image/ImageView";
+export { SkeletonView } from "./components/primitives/skeleton/SkeletonView";
 
 // Theme
 export { useDesignTokens, DesignTokensProvider } from "./theme/useDesignTokens";
@@ -61,4 +67,14 @@ export {
 	IconStyleResolver,
 	ChipConfig,
 	ChipStyleResolver,
+	DividerConfig,
+	DividerOrientation,
+	DividerStyleResolver,
+	ImageConfig,
+	ImageFit,
+	ImageLoading,
+	ImageStyleResolver,
+	SkeletonConfig,
+	SkeletonShape,
+	SkeletonStyleResolver,
 } from "uikit-common";
