@@ -13,6 +13,18 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 cd "$PROJECT_ROOT"
 
+echo "==> Building KMP JS libraries..."
+./gradlew :core:uikit:common:jsBrowserProductionLibraryDistribution \
+          :apps:catalog-ui:shared:jsBrowserProductionLibraryDistribution \
+          --console=plain
+
+echo "==> Installing npm dependencies..."
+(cd core/uikit/react && npm install)
+(cd apps/catalog-ui/react && npm install)
+
+echo "==> Building Next.js standalone..."
+(cd apps/catalog-ui/react && npm run build)
+
 echo "==> Building Docker image locally..."
 docker build --platform linux/amd64 -f "$DOCKERFILE" -t "$IMAGE_NAME:latest" .
 
