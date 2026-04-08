@@ -96,23 +96,23 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 						"--sc-height": toRem(style.sizes.height),
 						"--sc-padding-v": toRem(style.sizes.paddingV),
 						"--sc-font-size": toRem(style.sizes.fontSize),
-						"--sc-font-weight": String(style.sizes.fontWeight),
+						"--sc-font-weight": `${style.sizes.fontWeight}`,
 						"--sc-letter-spacing": toEm(style.sizes.letterSpacing, style.sizes.fontSize),
-						"--sc-line-height": String(toLineHeightRatio(style.sizes.lineHeight, style.sizes.fontSize)),
+						"--sc-line-height": `${toLineHeightRatio(style.sizes.lineHeight, style.sizes.fontSize)}`,
 						"--sc-font-variation": tokens.fontVariationSettings,
 						"--sc-padding-h": toRem(style.sizes.paddingH),
 						"--sc-radius": toRem(style.sizes.radius),
 						"--sc-thumb-radius": toRem(style.sizes.thumbRadius),
 						"--sc-track-padding": toRem(style.sizes.trackPadding),
 						"--sc-thumb-offset": `${selectedIndex * 100}%`,
-					"--sc-option-count": String(options.length),
-					"--sc-thumb-index": String(selectedIndex),
+					"--sc-option-count": `${options.length}`,
+					"--sc-thumb-index": `${selectedIndex}`,
 						"--sc-duration": `${tokens.motion.durationNormal}ms`,
 						"--sc-easing": tokens.motion.easingStandard,
 						"--sc-focus-ring": tokens.color.focusRing,
 						"--sc-focus-ring-width": `${tokens.focusRingWidth}px`,
 						"--sc-icon-size": toRem(style.sizes.iconSize),
-						"--sc-icon-gap": toRem(style.sizes.iconGap),					"--sc-hover-content-opacity": String(tokens.state.hoverContentOpacity),						visibility:
+						"--sc-icon-gap": toRem(style.sizes.iconGap),					"--sc-hover-content-opacity": `${tokens.state.hoverContentOpacity}`,						visibility:
 							config.visibility === Visibility.Invisible ? "hidden" : undefined,
 					} as React.CSSProperties
 				}

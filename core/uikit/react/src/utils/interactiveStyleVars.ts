@@ -12,15 +12,15 @@ import type { DesignTokens } from "uikit-common";
 export function buildInteractiveStyleVars(
 	tokens: DesignTokens,
 	prefix: string,
-): Record<string, string | number> {
+): Record<string, string> {
 	return {
 		[`--${prefix}-duration`]: `${tokens.motion.durationFast}ms`,
 		[`--${prefix}-easing`]: tokens.motion.easingStandard,
 		[`--${prefix}-focus-ring`]: tokens.color.focusRing,
 		[`--${prefix}-border-width`]: `${tokens.borderWidth}px`,
 		[`--${prefix}-focus-ring-width`]: `${tokens.focusRingWidth}px`,
-		[`--${prefix}-press-opacity`]: String(tokens.state.pressOpacity),
-		[`--${prefix}-press-brightness`]: String(tokens.state.pressBrightness),
+		[`--${prefix}-press-opacity`]: `${tokens.state.pressOpacity}`,
+		[`--${prefix}-press-brightness`]: `${tokens.state.pressBrightness}`,
 		[`--${prefix}-ripple-spread`]: `${tokens.state.rippleSpread}%`,
 		[`--${prefix}-ripple-fade-duration`]: `${tokens.state.rippleFadeDurationMs}ms`,
 	};
@@ -32,10 +32,10 @@ export function buildInteractiveStyleVars(
 export function buildSpinnerStyleVars(
 	tokens: DesignTokens,
 	prefix: string,
-): Record<string, string | number> {
+): Record<string, string> {
 	return {
 		[`--${prefix}-spinner-duration`]: `${tokens.motion.durationSpinner}ms`,
 		[`--${prefix}-spinner-stroke`]: `${tokens.spinnerStrokeWidth}px`,
-		[`--${prefix}-disabled-opacity`]: String(tokens.state.disabledOpacity),
+		[`--${prefix}-disabled-opacity`]: `${tokens.state.disabledOpacity}`,
 	};
 }

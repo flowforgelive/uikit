@@ -134,6 +134,8 @@ internal fun ComponentsScreen(
 			DividerShowcase(modifiedTokens)
 			ImageShowcase(modifiedTokens, globalSize)
 			SkeletonShowcase(modifiedTokens, globalSize)
+			SpacerShowcase(modifiedTokens)
+			BadgeShowcase(modifiedTokens)
 			SurfaceShowcase(modifiedTokens)
 			// Composites
 			ButtonShowcase(modifiedTokens, globalSize)

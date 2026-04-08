@@ -1,0 +1,15 @@
+.spacer {
+	flex-shrink: 0;
+}
+
+.vertical {
+	height: var(--spacer-size);
+}
+
+.horizontal {
+	width: var(--spacer-size);
+}
+
+.flexible {
+	flex: 1;
+}

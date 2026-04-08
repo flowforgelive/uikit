@@ -9,6 +9,8 @@ export { Chip } from "./components/composites/chip/Chip";
 export { Divider } from "./components/primitives/divider/Divider";
 export { Image } from "./components/primitives/image/Image";
 export { Skeleton } from "./components/primitives/skeleton/Skeleton";
+export { Spacer } from "./components/primitives/spacer/Spacer";
+export { Badge } from "./components/primitives/badge/Badge";
 
 // Config-based API (advanced / SDUI)
 export { ButtonView } from "./components/composites/button/ButtonView";
@@ -21,6 +23,8 @@ export { ChipView } from "./components/composites/chip/ChipView";
 export { DividerView } from "./components/primitives/divider/DividerView";
 export { ImageView } from "./components/primitives/image/ImageView";
 export { SkeletonView } from "./components/primitives/skeleton/SkeletonView";
+export { SpacerView } from "./components/primitives/spacer/SpacerView";
+export { BadgeView } from "./components/primitives/badge/BadgeView";
 
 // Theme
 export { useDesignTokens, DesignTokensProvider } from "./theme/useDesignTokens";
@@ -85,4 +89,10 @@ export {
 	SkeletonConfig,
 	SkeletonShape,
 	SkeletonStyleResolver,
+	SpacerConfig,
+	SpacerAxis,
+	SpacerStyleResolver,
+	BadgeConfig,
+	BadgeVariant,
+	BadgeStyleResolver,
 } from "uikit-common";

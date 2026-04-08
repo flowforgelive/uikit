@@ -77,8 +77,8 @@ export const SurfaceView: React.FC<SurfaceViewProps> = React.memo(
 							"--surface-radius": toRem(style.radius),
 							"--surface-shadow": style.shadow,
 							...buildInteractiveStyleVars(tokens, "surface"),
-							"--surface-press-opacity": String(tokens.state.hoverOpacity),
-							"--surface-press-brightness": String(tokens.state.pressBrightnessSurface),
+							"--surface-press-opacity": `${tokens.state.hoverOpacity}`,
+							"--surface-press-brightness": `${tokens.state.pressBrightnessSurface}`,
 							visibility:
 								config.visibility === Visibility.Invisible ? "hidden" : undefined,
 						} as React.CSSProperties

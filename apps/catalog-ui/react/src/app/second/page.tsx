@@ -27,6 +27,8 @@ const IconShowcase = dynamic(() => import("./showcases/IconShowcase").then(m => 
 const DividerShowcase = dynamic(() => import("./showcases/DividerShowcase").then(m => ({ default: m.DividerShowcase })), { ssr: false });
 const ImageShowcase = dynamic(() => import("./showcases/ImageShowcase").then(m => ({ default: m.ImageShowcase })), { ssr: false });
 const SkeletonShowcase = dynamic(() => import("./showcases/SkeletonShowcase").then(m => ({ default: m.SkeletonShowcase })), { ssr: false });
+const SpacerShowcase = dynamic(() => import("./showcases/SpacerShowcase").then(m => ({ default: m.SpacerShowcase })), { ssr: false });
+const BadgeShowcase = dynamic(() => import("./showcases/BadgeShowcase").then(m => ({ default: m.BadgeShowcase })), { ssr: false });
 
 export default function ComponentsPage() {
 	const { tokens: baseTokens } = useUIKitTheme();
@@ -94,6 +96,8 @@ export default function ComponentsPage() {
 				<DividerShowcase tokens={tokens} />
 				<ImageShowcase tokens={tokens} globalSize={globalSize} />
 				<SkeletonShowcase tokens={tokens} globalSize={globalSize} />
+				<SpacerShowcase tokens={tokens} />
+				<BadgeShowcase tokens={tokens} />
 				<SurfaceShowcase tokens={tokens} />
 				{/* Composites */}
 				<ButtonShowcase tokens={tokens} globalSize={globalSize} />
