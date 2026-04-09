@@ -20,7 +20,7 @@
 	font-weight: var(--btn-font-weight, 500);
 	transition: background var(--btn-duration) var(--btn-easing),
 		box-shadow var(--btn-duration) var(--btn-easing),
-		filter var(--btn-duration) var(--btn-easing);
+		color var(--btn-duration) var(--btn-easing);
 	line-height: var(--btn-line-height);
 	white-space: nowrap;
 }
@@ -82,15 +82,13 @@
 }
 
 .button:active:not(:has([data-interactive]:hover)):not([aria-disabled="true"]) {
-	background: var(--btn-bg-hover);
-	color: var(--btn-text-hover);
-	box-shadow: inset 0 0 0 var(--btn-border-width) var(--btn-border-hover);
-	filter: brightness(var(--btn-press-brightness, 0.88));
+	background: var(--btn-bg-active);
+	color: var(--btn-text-active);
+	box-shadow: inset 0 0 0 var(--btn-border-width) var(--btn-border-active);
 }
 
 .button[aria-disabled="true"] {
 	cursor: not-allowed;
-	opacity: var(--btn-disabled-opacity, 0.6);
 }
 
 .button:focus-visible {

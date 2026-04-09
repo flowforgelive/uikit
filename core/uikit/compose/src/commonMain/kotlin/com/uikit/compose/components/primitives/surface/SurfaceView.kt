@@ -51,7 +51,11 @@ fun SurfaceView(
 	val isFocused by interactionSource.collectIsFocusedAsState()
 	val keyboardMode = LocalKeyboardNavigationMode.current
 
-	val currentBg = if ((isHovered || isPressed) && isHoverable) style.bgHover else style.bg
+	val currentBg = when {
+		isPressed && isHoverable -> style.bgActive
+		isHovered && isHoverable -> style.bgHover
+		else -> style.bg
+	}
 	val showFocusRing = isFocused && keyboardMode.value && isClickable
 	val focusBorder = if (showFocusRing) tokens.color.focusRing else style.border
 	val borderWidth = if (showFocusRing) tokens.focusRingWidth.dp else tokens.borderWidth.dp

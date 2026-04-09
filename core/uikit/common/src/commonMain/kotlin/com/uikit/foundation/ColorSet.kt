@@ -20,8 +20,11 @@ import kotlin.js.JsExport
 data class ColorSet(
 	val bg: String,
 	val bgHover: String,
+	val bgActive: String,
 	val text: String,
 	val textHover: String,
+	val textActive: String,
 	val border: String,
 	val borderHover: String,
+	val borderActive: String,
 )

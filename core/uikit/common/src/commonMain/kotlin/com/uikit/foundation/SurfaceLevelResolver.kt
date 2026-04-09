@@ -22,6 +22,23 @@ object SurfaceLevelResolver {
 	fun resolveColor(level: Int, tokens: DesignTokens): String =
 		resolveColorByIndex(level, tokens)
 
+	/**
+	 * Level-aware hover: bumps to the next surface level in the tonal scale.
+	 * Level 5 (highest) falls back to generic surfaceHover.
+	 */
+	fun resolveHoverColor(level: Int, tokens: DesignTokens): String =
+		resolveColorByIndex((level + 1).coerceAtMost(MAX_LEVEL), tokens)
+
+	/**
+	 * Level-aware active: bumps two levels up in the tonal scale.
+	 * Capped at MAX_LEVEL, then falls back to surfaceActive.
+	 */
+	fun resolveActiveColor(level: Int, tokens: DesignTokens): String {
+		val targetLevel = level + 2
+		return if (targetLevel > MAX_LEVEL) tokens.color.surfaceActive
+		else resolveColorByIndex(targetLevel, tokens)
+	}
+
 	fun resolveSoftColor(level: SurfaceLevel, tokens: DesignTokens): String =
 		when (level) {
 			SurfaceLevel.Level0 -> tokens.color.surface
@@ -31,6 +48,8 @@ object SurfaceLevelResolver {
 			SurfaceLevel.Level4 -> tokens.color.surfaceContainer
 			SurfaceLevel.Level5 -> tokens.color.surfaceContainerHigh
 		}
+
+	private const val MAX_LEVEL = 5
 
 	private fun resolveColorByIndex(level: Int, tokens: DesignTokens): String = when (level) {
 		0 -> tokens.color.surface

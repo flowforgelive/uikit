@@ -20,7 +20,6 @@ export function buildInteractiveStyleVars(
 		[`--${prefix}-border-width`]: `${tokens.borderWidth}px`,
 		[`--${prefix}-focus-ring-width`]: `${tokens.focusRingWidth}px`,
 		[`--${prefix}-press-opacity`]: `${tokens.state.pressOpacity}`,
-		[`--${prefix}-press-brightness`]: `${tokens.state.pressBrightness}`,
 		[`--${prefix}-ripple-spread`]: `${tokens.state.rippleSpread}%`,
 		[`--${prefix}-ripple-fade-duration`]: `${tokens.state.rippleFadeDurationMs}ms`,
 	};
@@ -36,6 +35,5 @@ export function buildSpinnerStyleVars(
 	return {
 		[`--${prefix}-spinner-duration`]: `${tokens.motion.durationSpinner}ms`,
 		[`--${prefix}-spinner-stroke`]: `${tokens.spinnerStrokeWidth}px`,
-		[`--${prefix}-disabled-opacity`]: `${tokens.state.disabledOpacity}`,
 	};
 }

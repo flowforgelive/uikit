@@ -125,7 +125,7 @@ fun ChipView(
 						Spacer(Modifier.width(style.sizes.iconGap.dp))
 						val dismissInteraction = remember { MutableInteractionSource() }
 						val dismissHovered by dismissInteraction.collectIsHoveredAsState()
-						val dismissBg = if (dismissHovered) state.currentText.copy(alpha = 0.12f) else androidx.compose.ui.graphics.Color.Transparent
+						val dismissBg = if (dismissHovered) state.currentText.copy(alpha = tokens.state.pressOpacity.toFloat()) else androidx.compose.ui.graphics.Color.Transparent
 						Box(
 							modifier = Modifier
 								.size(style.sizes.closeButtonSize.dp)

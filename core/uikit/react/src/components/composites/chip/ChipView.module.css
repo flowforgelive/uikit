@@ -21,7 +21,7 @@
 	cursor: pointer;
 	transition: background var(--chip-duration) var(--chip-easing),
 		box-shadow var(--chip-duration) var(--chip-easing),
-		filter var(--chip-duration) var(--chip-easing);
+		color var(--chip-duration) var(--chip-easing);
 	line-height: var(--chip-line-height);
 	white-space: nowrap;
 }
@@ -48,15 +48,13 @@
 }
 
 .chip:active:not(:has([data-interactive]:hover)):not([aria-disabled="true"]) {
-	background: var(--chip-bg-hover);
-	color: var(--chip-text-hover);
-	box-shadow: inset 0 0 0 var(--chip-border-width) var(--chip-border-hover);
-	filter: brightness(var(--chip-press-brightness, 0.88));
+	background: var(--chip-bg-active);
+	color: var(--chip-text-active);
+	box-shadow: inset 0 0 0 var(--chip-border-width) var(--chip-border-active);
 }
 
 .chip[aria-disabled="true"] {
 	cursor: not-allowed;
-	opacity: var(--chip-disabled-opacity, 0.6);
 }
 
 .chip:focus-visible {
@@ -103,8 +101,7 @@
 
 .closeButton:active {
 	opacity: 1;
-	background: color-mix(in srgb, currentColor 12%, transparent);
-	filter: brightness(var(--chip-press-brightness, 0.88));
+	background: color-mix(in srgb, currentColor 16%, transparent);
 }
 
 .closeIcon {

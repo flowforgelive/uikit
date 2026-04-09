@@ -12,6 +12,7 @@ import kotlin.js.JsExport
 data class ResolvedSurfaceStyle(
 	val bg: String,
 	val bgHover: String,
+	val bgActive: String,
 	val border: String,
 	val radius: Double,
 	val shadow: String,
@@ -36,8 +37,12 @@ object SurfaceStyleResolver {
 				else -> SurfaceLevelResolver.resolveColor(config.level, tokens) // Solid, Surface
 			}
 
+		val isInteractive = config.clickable || config.hoverable
+		val levelIndex = config.level.ordinal
 		val bgHover =
-			if (config.clickable || config.hoverable) tokens.color.surfaceHover else bg
+			if (isInteractive) SurfaceLevelResolver.resolveHoverColor(levelIndex, tokens) else bg
+		val bgActive =
+			if (isInteractive) SurfaceLevelResolver.resolveActiveColor(levelIndex, tokens) else bg
 
 		val border =
 			when (config.variant) {
@@ -66,6 +71,7 @@ object SurfaceStyleResolver {
 		return ResolvedSurfaceStyle(
 			bg = bg,
 			bgHover = bgHover,
+			bgActive = bgActive,
 			border = border,
 			radius = radius,
 			shadow = shadow,

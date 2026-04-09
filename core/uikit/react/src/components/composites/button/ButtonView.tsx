@@ -96,10 +96,13 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 					{
 						"--btn-bg": style.colors.bg,
 						"--btn-bg-hover": style.colors.bgHover,
+						"--btn-bg-active": style.colors.bgActive,
 						"--btn-text": style.colors.text,
 						"--btn-text-hover": style.colors.textHover,
+						"--btn-text-active": style.colors.textActive,
 						"--btn-border": style.colors.border,
 						"--btn-border-hover": style.colors.borderHover,
+						"--btn-border-active": style.colors.borderActive,
 						"--btn-height": toRem(style.sizes.height),
 						"--btn-padding-h": toRem(style.sizes.paddingH),
 						"--btn-padding-v": toRem(style.sizes.paddingV),

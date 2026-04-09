@@ -32,10 +32,13 @@ object InteractiveColorResolver {
 		ColorSet(
 			bg = tokens.color.surfaceDisabled,
 			bgHover = tokens.color.surfaceDisabled,
+			bgActive = tokens.color.surfaceDisabled,
 			text = tokens.color.textDisabled,
 			textHover = tokens.color.textDisabled,
+			textActive = tokens.color.textDisabled,
 			border = tokens.color.borderDisabled,
 			borderHover = tokens.color.borderDisabled,
+			borderActive = tokens.color.borderDisabled,
 		)
 
 	private fun solidColors(intent: ColorIntent, tokens: DesignTokens): ColorSet =
@@ -43,28 +46,37 @@ object InteractiveColorResolver {
 			ColorIntent.Primary -> ColorSet(
 				bg = tokens.color.primary,
 				bgHover = tokens.color.primaryHover,
+				bgActive = tokens.color.primaryActive,
 				text = tokens.color.textOnPrimary,
 				textHover = tokens.color.textOnPrimary,
+				textActive = tokens.color.textOnPrimary,
 				border = ColorConstants.TRANSPARENT,
 				borderHover = ColorConstants.TRANSPARENT,
+				borderActive = ColorConstants.TRANSPARENT,
 			)
 
 			ColorIntent.Neutral -> ColorSet(
 				bg = tokens.color.surfaceContainerHighest,
 				bgHover = tokens.color.surfaceHover,
+				bgActive = tokens.color.surfaceActive,
 				text = tokens.color.textPrimary,
 				textHover = tokens.color.textPrimary,
+				textActive = tokens.color.textPrimary,
 				border = ColorConstants.TRANSPARENT,
 				borderHover = ColorConstants.TRANSPARENT,
+				borderActive = ColorConstants.TRANSPARENT,
 			)
 
 			ColorIntent.Danger -> ColorSet(
 				bg = tokens.color.danger,
 				bgHover = tokens.color.dangerHover,
+				bgActive = tokens.color.dangerActive,
 				text = tokens.color.textOnDanger,
 				textHover = tokens.color.textOnDanger,
+				textActive = tokens.color.textOnDanger,
 				border = ColorConstants.TRANSPARENT,
 				borderHover = ColorConstants.TRANSPARENT,
+				borderActive = ColorConstants.TRANSPARENT,
 			)
 		}
 
@@ -75,10 +87,13 @@ object InteractiveColorResolver {
 		return ColorSet(
 			bg = pair.bg,
 			bgHover = pair.bgHover,
+			bgActive = pair.bgActive,
 			text = textColors.first,
 			textHover = textColors.second,
+			textActive = textColors.second,
 			border = ColorConstants.TRANSPARENT,
 			borderHover = ColorConstants.TRANSPARENT,
+			borderActive = ColorConstants.TRANSPARENT,
 		)
 	}
 
@@ -94,28 +109,37 @@ object InteractiveColorResolver {
 			ColorIntent.Primary -> ColorSet(
 				bg = tokens.color.primarySoft,
 				bgHover = tokens.color.primarySoftHover,
+				bgActive = tokens.color.primarySoftActive,
 				text = tokens.color.textPrimary,
 				textHover = tokens.color.textPrimary,
+				textActive = tokens.color.textPrimary,
 				border = tokens.color.primaryBorder,
 				borderHover = tokens.color.primaryBorderHover,
+				borderActive = tokens.color.primaryBorderActive,
 			)
 
 			ColorIntent.Neutral -> ColorSet(
 				bg = tokens.color.neutralSoft,
 				bgHover = tokens.color.neutralSoftHover,
+				bgActive = tokens.color.neutralSoftActive,
 				text = tokens.color.textSecondary,
 				textHover = tokens.color.textPrimary,
+				textActive = tokens.color.textPrimary,
 				border = tokens.color.borderSubtle,
 				borderHover = tokens.color.outline,
+				borderActive = tokens.color.outlineActive,
 			)
 
 			ColorIntent.Danger -> ColorSet(
 				bg = tokens.color.dangerSoft,
 				bgHover = tokens.color.dangerSoftHover,
+				bgActive = tokens.color.dangerSoftActive,
 				text = tokens.color.danger,
 				textHover = tokens.color.danger,
+				textActive = tokens.color.danger,
 				border = tokens.color.danger,
 				borderHover = tokens.color.dangerHover,
+				borderActive = tokens.color.dangerActive,
 			)
 		}
 
@@ -123,29 +147,38 @@ object InteractiveColorResolver {
 		when (intent) {
 			ColorIntent.Primary -> ColorSet(
 				bg = ColorConstants.TRANSPARENT,
-				bgHover = tokens.color.surfaceContainerLow,
-				text = tokens.color.textPrimary,
+				bgHover = tokens.color.surfaceContainerLowest,
+				bgActive = tokens.color.surfaceContainerLow,
+				text = tokens.color.primary,
 				textHover = tokens.color.primary,
+				textActive = tokens.color.primary,
 				border = tokens.color.outline,
 				borderHover = tokens.color.primary,
+				borderActive = tokens.color.primary,
 			)
 
 			ColorIntent.Neutral -> ColorSet(
 				bg = ColorConstants.TRANSPARENT,
 				bgHover = tokens.color.surfaceContainerLowest,
+				bgActive = tokens.color.surfaceContainerLow,
 				text = tokens.color.textSecondary,
 				textHover = tokens.color.textPrimary,
+				textActive = tokens.color.textPrimary,
 				border = tokens.color.outlineVariant,
 				borderHover = tokens.color.outline,
+				borderActive = tokens.color.outlineActive,
 			)
 
 			ColorIntent.Danger -> ColorSet(
 				bg = ColorConstants.TRANSPARENT,
 				bgHover = tokens.color.dangerSoft,
+				bgActive = tokens.color.dangerSoftHover,
 				text = tokens.color.danger,
-				textHover = tokens.color.dangerHover,
+				textHover = tokens.color.danger,
+				textActive = tokens.color.danger,
 				border = tokens.color.danger,
 				borderHover = tokens.color.dangerHover,
+				borderActive = tokens.color.dangerActive,
 			)
 		}
 
@@ -154,28 +187,37 @@ object InteractiveColorResolver {
 			ColorIntent.Primary -> ColorSet(
 				bg = ColorConstants.TRANSPARENT,
 				bgHover = tokens.color.surfaceContainerLow,
-				text = tokens.color.textPrimary,
-				textHover = tokens.color.textPrimary,
+				bgActive = tokens.color.surfaceContainer,
+				text = tokens.color.primary,
+				textHover = tokens.color.primary,
+				textActive = tokens.color.primary,
 				border = ColorConstants.TRANSPARENT,
 				borderHover = ColorConstants.TRANSPARENT,
+				borderActive = ColorConstants.TRANSPARENT,
 			)
 
 			ColorIntent.Neutral -> ColorSet(
 				bg = ColorConstants.TRANSPARENT,
 				bgHover = tokens.color.surfaceContainerLow,
+				bgActive = tokens.color.surfaceContainer,
 				text = tokens.color.textSecondary,
 				textHover = tokens.color.textPrimary,
+				textActive = tokens.color.textPrimary,
 				border = ColorConstants.TRANSPARENT,
 				borderHover = ColorConstants.TRANSPARENT,
+				borderActive = ColorConstants.TRANSPARENT,
 			)
 
 			ColorIntent.Danger -> ColorSet(
 				bg = ColorConstants.TRANSPARENT,
 				bgHover = tokens.color.dangerSoft,
+				bgActive = tokens.color.dangerSoftHover,
 				text = tokens.color.danger,
 				textHover = tokens.color.danger,
+				textActive = tokens.color.danger,
 				border = ColorConstants.TRANSPARENT,
 				borderHover = ColorConstants.TRANSPARENT,
+				borderActive = ColorConstants.TRANSPARENT,
 			)
 		}
 }

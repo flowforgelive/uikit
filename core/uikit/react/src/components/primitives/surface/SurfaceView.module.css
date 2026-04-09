@@ -36,7 +36,7 @@ button.surface {
 }
 
 .clickable:active::after {
-	opacity: var(--surface-press-opacity, 0.08);
+	opacity: var(--surface-press-opacity, 0.12);
 	transition: opacity 0s;
 }
 
@@ -50,8 +50,7 @@ button.surface {
 }
 
 .clickable:active {
-	background: var(--surface-bg-hover);
-	filter: brightness(var(--surface-press-brightness, 0.92));
+	background: var(--surface-bg-active);
 }
 
 .hoverable:hover {

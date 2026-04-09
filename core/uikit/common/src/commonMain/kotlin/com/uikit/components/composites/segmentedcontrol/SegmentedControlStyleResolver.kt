@@ -182,13 +182,19 @@ object SegmentedControlStyleResolver {
 	 * In light schemes surface is brighter than neutralSoft; in dark schemes it's darker.
 	 */
 	private fun isDarkScheme(tokens: DesignTokens): Boolean =
-		hexBrightness(tokens.color.surface) < hexBrightness(tokens.color.neutralSoft)
+		colorBrightness(tokens.color.surface) < colorBrightness(tokens.color.neutralSoft)
 
-	private fun hexBrightness(hex: String): Int {
-		val h = hex.removePrefix("#")
-		if (h.length < 6) return 0
-		return h.substring(0, 2).toInt(16) +
+	private fun colorBrightness(color: String): Double {
+		if (color.startsWith("oklch(")) {
+			val inner = color.removePrefix("oklch(").removeSuffix(")")
+			val parts = inner.trim().split(" ")
+			val lStr = parts.firstOrNull() ?: return 0.0
+			return lStr.removeSuffix("%").toDoubleOrNull() ?: 0.0
+		}
+		val h = color.removePrefix("#")
+		if (h.length < 6) return 0.0
+		return (h.substring(0, 2).toInt(16) +
 			h.substring(2, 4).toInt(16) +
-			h.substring(4, 6).toInt(16)
+			h.substring(4, 6).toInt(16)).toDouble()
 	}
 }

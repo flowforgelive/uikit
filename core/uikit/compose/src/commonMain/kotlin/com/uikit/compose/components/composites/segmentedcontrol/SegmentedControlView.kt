@@ -185,7 +185,7 @@ fun SegmentedControlView(
 								interactionSource = optionInteractionSource,
 								indication = null,
 							) { onSelectionChange(option.id) }
-							.then(if (isOptionHovered && !isActive) Modifier.alpha(tokens.state.hoverContentOpacity.toFloat()) else Modifier)
+							.then(if (isOptionHovered) Modifier.alpha(tokens.state.hoverContentOpacity.toFloat()) else Modifier)
 							.padding(horizontal = style.sizes.paddingH.dp, vertical = style.sizes.paddingV.dp),
 					contentAlignment = Alignment.Center,
 				) {

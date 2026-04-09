@@ -12,4 +12,5 @@ import kotlin.js.JsExport
 data class ColorPair(
 	val bg: String,
 	val bgHover: String,
+	val bgActive: String,
 )

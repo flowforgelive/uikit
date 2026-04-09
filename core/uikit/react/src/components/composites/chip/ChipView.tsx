@@ -69,10 +69,13 @@ export const ChipView: React.FC<ChipViewProps> = React.memo(
 					{
 						"--chip-bg": style.colors.bg,
 						"--chip-bg-hover": style.colors.bgHover,
+						"--chip-bg-active": style.colors.bgActive,
 						"--chip-text": style.colors.text,
 						"--chip-text-hover": style.colors.textHover,
+						"--chip-text-active": style.colors.textActive,
 						"--chip-border": style.colors.border,
 						"--chip-border-hover": style.colors.borderHover,
+						"--chip-border-active": style.colors.borderActive,
 						"--chip-height": toRem(style.sizes.height),
 						"--chip-padding-start": toRem(style.sizes.paddingStart),
 						"--chip-padding-end": toRem(style.sizes.paddingEnd),

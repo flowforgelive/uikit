@@ -7,6 +7,7 @@ import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -16,7 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.disabled
@@ -32,6 +32,7 @@ data class InteractiveVisualState(
 	val interactionSource: MutableInteractionSource,
 	val childHoverState: MutableState<Boolean>,
 	val active: Boolean,
+	val pressed: Boolean,
 	val focused: Boolean,
 	val currentBg: Color,
 	val currentBorder: Color,
@@ -52,6 +53,7 @@ fun rememberInteractiveState(
 ): InteractiveVisualState {
 	val interactionSource = remember { MutableInteractionSource() }
 	val isHovered by interactionSource.collectIsHoveredAsState()
+	val isPressed by interactionSource.collectIsPressedAsState()
 	val isFocused by interactionSource.collectIsFocusedAsState()
 	val keyboardMode = LocalKeyboardNavigationMode.current
 
@@ -63,22 +65,37 @@ fun rememberInteractiveState(
 	val childHoverState = remember { mutableStateOf(false) }
 
 	val active = isHovered && !childHoverState.value && isInteractive
+	val pressed = isPressed && isInteractive
 	val focused = isFocused && keyboardMode.value
 
-	val currentBg = parseColor(if (active) colors.bgHover else colors.bg)
+	val currentBg = parseColor(
+		when {
+			pressed -> colors.bgActive
+			active -> colors.bgHover
+			else -> colors.bg
+		},
+	)
 	val currentBorder = parseColor(
 		when {
 			focused -> tokens.color.focusRing
+			pressed -> colors.borderActive
 			active -> colors.borderHover
 			else -> colors.border
 		},
 	)
-	val currentText = parseColor(if (active) colors.textHover else colors.text)
+	val currentText = parseColor(
+		when {
+			pressed -> colors.textActive
+			active -> colors.textHover
+			else -> colors.text
+		},
+	)
 
 	return InteractiveVisualState(
 		interactionSource = interactionSource,
 		childHoverState = childHoverState,
 		active = active,
+		pressed = pressed,
 		focused = focused,
 		currentBg = currentBg,
 		currentBorder = currentBorder,
@@ -117,7 +134,6 @@ fun Modifier.interactiveModifier(
 		if (!isInteractive) {
 			Modifier
 				.semantics { disabled() }
-				.alpha(tokens.state.disabledOpacity.toFloat())
 		} else {
 			Modifier
 		},
