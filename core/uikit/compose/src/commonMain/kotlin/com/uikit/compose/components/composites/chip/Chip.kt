@@ -10,7 +10,7 @@ import com.uikit.foundation.VisualVariant
 @Composable
 fun Chip(
 	text: String,
-	onClick: () -> Unit = {},
+	onClick: (() -> Unit)? = null,
 	onDismiss: (() -> Unit)? = null,
 	variant: VisualVariant = VisualVariant.Soft,
 	intent: ColorIntent = ColorIntent.Neutral,

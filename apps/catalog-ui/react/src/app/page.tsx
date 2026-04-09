@@ -46,9 +46,14 @@ export default function FirstPage() {
 				onClick={() => router.push("/foundation")}
 			/>
 			<Button
-				text="Components"
+				text="Primitives"
 				variant="soft"
-				onClick={() => router.push("/second")}
+				onClick={() => router.push("/primitives")}
+			/>
+			<Button
+				text="Composites"
+				variant="outline"
+				onClick={() => router.push("/composites")}
 			/>
 		</main>
 	);

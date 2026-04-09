@@ -38,6 +38,18 @@ private val ICON_POSITION_OPTIONS = listOf(
 	"StartEnd" to "Start+End",
 )
 
+private val STATE_OPTIONS = listOf(
+	"active" to "Active",
+	"disabled" to "Disabled",
+	"loading" to "Loading",
+)
+
+private val INTENT_OPTIONS = listOf(
+	"Primary" to "Primary",
+	"Neutral" to "Neutral",
+	"Danger" to "Danger",
+)
+
 private fun iconPositionFromId(id: String): IconPosition = when (id) {
 	"Start" -> IconPosition.Start
 	"End" -> IconPosition.End
@@ -46,102 +58,114 @@ private fun iconPositionFromId(id: String): IconPosition = when (id) {
 	else -> IconPosition.None
 }
 
+private fun intentFromId(id: String): ColorIntent = when (id) {
+	"Neutral" -> ColorIntent.Neutral
+	"Danger" -> ColorIntent.Danger
+	else -> ColorIntent.Primary
+}
+
 @Composable
 internal fun ButtonShowcase(tokens: DesignTokens, globalSize: ComponentSize) {
 	var selectedPositionId by remember { mutableStateOf("None") }
+	var selectedStateId by remember { mutableStateOf("active") }
+	var selectedIntentId by remember { mutableStateOf("Primary") }
 	val selectedSize = buttonSizeFromComponentSize(globalSize)
 	val selectedPosition = iconPositionFromId(selectedPositionId)
+	val selectedIntent = intentFromId(selectedIntentId)
 	val isStartEnd = selectedPositionId == "StartEnd"
 	val hasIcons = selectedPositionId != "None"
+	val isDisabled = selectedStateId == "disabled"
+	val isLoading = selectedStateId == "loading"
 
 	ShowcaseSection("Кнопка (Button)", tokens) {
 		Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xl.dp)) {
-			Row(
-				verticalAlignment = Alignment.CenterVertically,
-				horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
-			) {
-				TextBlock(
-					text = "Позиция иконки:",
-					variant = TextBlockVariant.LabelMedium,
-				)
-				SegmentedControl(
-					options = ICON_POSITION_OPTIONS,
-					selectedId = selectedPositionId,
-					onSelectionChange = { selectedPositionId = it },
-					modifier = Modifier.weight(1f),
-				)
+			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
+				Row(
+					verticalAlignment = Alignment.CenterVertically,
+					horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
+				) {
+					TextBlock(text = "Состояние:", variant = TextBlockVariant.LabelMedium)
+					SegmentedControl(
+						options = STATE_OPTIONS,
+						selectedId = selectedStateId,
+						onSelectionChange = { selectedStateId = it },
+						modifier = Modifier.weight(1f),
+					)
+				}
+				Row(
+					verticalAlignment = Alignment.CenterVertically,
+					horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
+				) {
+					TextBlock(text = "Intent:", variant = TextBlockVariant.LabelMedium)
+					SegmentedControl(
+						options = INTENT_OPTIONS,
+						selectedId = selectedIntentId,
+						onSelectionChange = { selectedIntentId = it },
+						modifier = Modifier.weight(1f),
+					)
+				}
+				Row(
+					verticalAlignment = Alignment.CenterVertically,
+					horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
+				) {
+					TextBlock(text = "Позиция иконки:", variant = TextBlockVariant.LabelMedium)
+					SegmentedControl(
+						options = ICON_POSITION_OPTIONS,
+						selectedId = selectedPositionId,
+						onSelectionChange = { selectedPositionId = it },
+						modifier = Modifier.weight(1f),
+					)
+				}
 			}
 
 			VisualVariant.entries.forEach { variant ->
 				Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp)) {
 					SubSectionTitle(text = variant.name, tokens = tokens)
-					ColorIntent.entries.forEach { intent ->
-						Column {
-							TextBlock(
-								text = "${intent.name}:",
-								variant = TextBlockVariant.LabelMedium,
-							)
-							Row(
-									horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
-									verticalAlignment = Alignment.CenterVertically,
-									modifier = Modifier.horizontalScroll(rememberScrollState()),
-								) {
-								if (hasIcons) {
-									if (isStartEnd) {
-										Button(
-											text = "Start+End",
-											variant = variant,
-											intent = intent,
-											size = selectedSize,
-											iconPosition = IconPosition.Start,
-											iconStart = { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) },
-											iconEnd = { Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null) },
-										)
-									} else {
-										Button(
-											text = "Кнопка",
-											variant = variant,
-											intent = intent,
-											size = selectedSize,
-											iconPosition = selectedPosition,
-											iconStart = if (selectedPosition != IconPosition.End) ({ Icon(Icons.Filled.Search, contentDescription = null) }) else null,
-											iconEnd = if (selectedPosition == IconPosition.End) ({ Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) }) else null,
-										)
-									}
-									Button(
-										text = "Disabled",
-										variant = variant,
-										intent = intent,
-										size = selectedSize,
-										iconPosition = if (isStartEnd) IconPosition.Start else selectedPosition,
-										iconStart = { Icon(Icons.Filled.Star, contentDescription = null) },
-										disabled = true,
-									)
-									Button(
-										text = "Loading",
-										variant = variant,
-										intent = intent,
-										size = selectedSize,
-										iconPosition = selectedPosition,
-										iconStart = { Icon(Icons.Filled.Check, contentDescription = null) },
-										loading = true,
-									)
-								} else {
-									Button(
-										text = "Кнопка",
-										variant = variant,
-										intent = intent,
-										size = selectedSize,
-									)
-									Button(text = "Disabled", variant = variant, intent = intent, size = selectedSize, disabled = true)
-									Button(text = "Loading", variant = variant, intent = intent, size = selectedSize, loading = true)
-								}
-								}
+					Row(
+						horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
+						verticalAlignment = Alignment.CenterVertically,
+						modifier = Modifier.horizontalScroll(rememberScrollState()),
+					) {
+						if (hasIcons) {
+							if (isStartEnd) {
+								Button(
+									text = "Start+End",
+									variant = variant,
+									intent = selectedIntent,
+									size = selectedSize,
+									iconPosition = IconPosition.Start,
+									iconStart = { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) },
+									iconEnd = { Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null) },
+									disabled = isDisabled,
+									loading = isLoading,
+								)
+							} else {
+								Button(
+									text = "Кнопка",
+									variant = variant,
+									intent = selectedIntent,
+									size = selectedSize,
+									iconPosition = selectedPosition,
+									iconStart = if (selectedPosition != IconPosition.End) ({ Icon(Icons.Filled.Search, contentDescription = null) }) else null,
+									iconEnd = if (selectedPosition == IconPosition.End) ({ Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) }) else null,
+									disabled = isDisabled,
+									loading = isLoading,
+								)
 							}
+						} else {
+							Button(
+								text = "Кнопка",
+								variant = variant,
+								intent = selectedIntent,
+								size = selectedSize,
+								disabled = isDisabled,
+								loading = isLoading,
+							)
 						}
 					}
 				}
 			}
 		}
 	}
+}
 

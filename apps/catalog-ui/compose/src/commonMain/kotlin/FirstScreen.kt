@@ -45,7 +45,8 @@ internal fun FirstScreen(
 		) {
 			TextBlock(text = "UIKit Catalog", variant = TextBlockVariant.HeadlineLarge)
 			Button(text = "Foundation Tokens", onClick = { onNavigate("/foundation") })
-			Button(text = "Components", variant = VisualVariant.Soft, onClick = { onNavigate("/components") })
+			Button(text = "Primitives", variant = VisualVariant.Soft, onClick = { onNavigate("/primitives") })
+			Button(text = "Composites", variant = VisualVariant.Outline, onClick = { onNavigate("/composites") })
 		}
 	}
 }

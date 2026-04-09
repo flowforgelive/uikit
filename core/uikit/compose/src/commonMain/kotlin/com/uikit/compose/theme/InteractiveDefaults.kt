@@ -114,6 +114,7 @@ fun Modifier.interactiveModifier(
 	shape: RoundedCornerShape,
 	tokens: DesignTokens,
 	isInteractive: Boolean,
+	clickable: Boolean = true,
 	onClick: () -> Unit,
 ): Modifier = this
 	.clip(shape)
@@ -123,15 +124,22 @@ fun Modifier.interactiveModifier(
 		color = state.currentBorder,
 		shape = shape,
 	)
-	.hoverable(state.interactionSource)
-	.clickable(
-		interactionSource = state.interactionSource,
-		indication = if (isInteractive) ripple() else null,
-		enabled = true,
-		role = androidx.compose.ui.semantics.Role.Button,
-	) { onClick() }
 	.then(
-		if (!isInteractive) {
+		if (clickable) {
+			Modifier
+				.hoverable(state.interactionSource)
+				.clickable(
+					interactionSource = state.interactionSource,
+					indication = if (isInteractive) ripple() else null,
+					enabled = true,
+					role = androidx.compose.ui.semantics.Role.Button,
+				) { onClick() }
+		} else {
+			Modifier
+		},
+	)
+	.then(
+		if (!isInteractive && clickable) {
 			Modifier
 				.semantics { disabled() }
 		} else {

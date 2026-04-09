@@ -31,7 +31,8 @@ export const ChipView: React.FC<ChipViewProps> = React.memo(
 			tokensProp,
 		);
 
-		const handleClick = useInteractiveHandler(config.isInteractive, config.actionRoute, onClick, onAction);
+		const isClickable = config.isInteractive && !!(onClick || onAction || config.actionRoute);
+		const handleClick = useInteractiveHandler(isClickable, config.actionRoute, onClick, onAction);
 
 		const handleDismiss = useCallback(
 			(e: React.MouseEvent | React.KeyboardEvent) => {
@@ -55,14 +56,18 @@ export const ChipView: React.FC<ChipViewProps> = React.memo(
 
 		if (config.visibility === Visibility.Gone) return null;
 
+		const isStatic = !isClickable && !config.disabled && !config.loading;
+		const Tag = isStatic ? "span" : "button";
+
 		return (
-			<button
-				onClick={handleClick}
-				aria-disabled={!config.isInteractive ? "true" : undefined}
+			<Tag
+				onClick={isClickable ? handleClick : undefined}
+				aria-disabled={!config.isInteractive && !isStatic ? "true" : undefined}
 				aria-pressed={config.selected || undefined}
 				aria-label={config.loading ? config.text : undefined}
 				aria-busy={config.loading || undefined}
-				data-interactive={config.isInteractive || undefined}
+				data-interactive={isClickable || undefined}
+				data-static={isStatic || undefined}
 				data-testid={config.testTag ?? config.id}
 				className={`${css.chip} ${className ?? ""}`}
 				style={
@@ -130,7 +135,7 @@ export const ChipView: React.FC<ChipViewProps> = React.memo(
 						)}
 					</>
 				)}
-			</button>
+			</Tag>
 		);
 	},
 );

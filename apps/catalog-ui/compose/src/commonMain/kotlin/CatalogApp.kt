@@ -81,7 +81,16 @@ fun CatalogApp(
 					onBack = { onNavigate("/first") },
 				)
 
-				"components" -> ComponentsScreen(
+				"primitives" -> PrimitivesScreen(
+					tokens = tokens,
+					currentMode = currentMode,
+					currentDir = currentDir,
+					onDirChange = { currentDir = it },
+					onThemeChange = onThemeChange,
+					onBack = { onNavigate("/first") },
+				)
+
+				"composites" -> CompositesScreen(
 					tokens = tokens,
 					currentMode = currentMode,
 					currentDir = currentDir,

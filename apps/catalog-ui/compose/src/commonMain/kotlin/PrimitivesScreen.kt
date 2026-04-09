@@ -10,8 +10,6 @@ import androidx.compose.ui.unit.dp
 import com.uikit.compose.components.composites.segmentedcontrol.SegmentedControl
 import com.uikit.compose.components.primitives.text.TextBlock
 import com.uikit.compose.theme.LocalDesignTokens
-import com.uikit.components.blocks.panel.PanelSide
-import com.uikit.components.blocks.panel.PanelVariant
 import com.uikit.components.primitives.text.TextBlockVariant
 import com.uikit.foundation.ComponentSize
 import com.uikit.foundation.LayoutDirection
@@ -21,7 +19,7 @@ import com.uikit.tokens.scaled
 import catalog.CatalogOptions
 
 @Composable
-internal fun ComponentsScreen(
+internal fun PrimitivesScreen(
 	tokens: DesignTokens,
 	currentMode: ThemeMode,
 	currentDir: LayoutDirection,
@@ -31,8 +29,6 @@ internal fun ComponentsScreen(
 ) {
 	var globalSizeId by remember { mutableStateOf(ComponentSize.Md.name) }
 	var globalRadiusId by remember { mutableStateOf("md") }
-	var panelVariantId by remember { mutableStateOf("inset") }
-	var panelSideId by remember { mutableStateOf("left") }
 	val globalSize = sizeFromId(globalSizeId)
 
 	val modifiedTokens = remember(tokens, globalRadiusId, globalSizeId) {
@@ -54,32 +50,17 @@ internal fun ComponentsScreen(
 		t.scaled(CatalogOptions.scaleFactor(globalSizeId))
 	}
 
-	val panelVariant = when (panelVariantId) {
-		"inset" -> PanelVariant.Inset
-		else -> PanelVariant.Pinned
-	}
-	val panelSide = when (panelSideId) {
-		"right" -> PanelSide.Right
-		"top" -> PanelSide.Top
-		"bottom" -> PanelSide.Bottom
-		else -> PanelSide.Left
-	}
-
 	CatalogPage(
-		title = "Компоненты (Components)",
-		subtitle = "Кнопки, иконки, поверхности, текст, контролы",
+		title = "Примитивы (Primitives)",
+		subtitle = "Text, Icon, Divider, Image, Skeleton, Spacer, Badge, Surface",
 		tokens = modifiedTokens,
 		onBack = onBack,
-		panelVariant = panelVariant,
-		panelSide = panelSide,
 		panelTokens = modifiedTokens,
 		panelContent = {
-			// Direction
 			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
 				TextBlock(text = "Направление", variant = TextBlockVariant.LabelSmall)
 				DirSwitcherControl(currentDir, onDirChange)
 			}
-			// Size
 			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
 				TextBlock(text = "Размер", variant = TextBlockVariant.LabelSmall)
 				SegmentedControl(
@@ -89,7 +70,6 @@ internal fun ComponentsScreen(
 					size = ComponentSize.Sm,
 				)
 			}
-			// Radius
 			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
 				TextBlock(text = "Скругление", variant = TextBlockVariant.LabelSmall)
 				SegmentedControl(
@@ -99,36 +79,13 @@ internal fun ComponentsScreen(
 					size = ComponentSize.Sm,
 				)
 			}
-			// Theme
 			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
 				TextBlock(text = "Тема", variant = TextBlockVariant.LabelSmall)
 				ThemeSwitcherControl(currentMode, onThemeChange)
 			}
-			// Panel variant
-			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
-				TextBlock(text = "Панель: вариант", variant = TextBlockVariant.LabelSmall)
-				SegmentedControl(
-					options = PANEL_VARIANT_OPTIONS,
-					selectedId = panelVariantId,
-					onSelectionChange = { panelVariantId = it },
-					size = ComponentSize.Sm,
-				)
-			}
-			// Panel side
-			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
-				TextBlock(text = "Панель: сторона", variant = TextBlockVariant.LabelSmall)
-				SegmentedControl(
-					options = PANEL_SIDE_OPTIONS,
-					selectedId = panelSideId,
-					onSelectionChange = { panelSideId = it },
-					size = ComponentSize.Sm,
-				)
-			}
 		},
 	) {
 		CompositionLocalProvider(LocalDesignTokens provides modifiedTokens) {
-			HeightAlignmentShowcase(modifiedTokens, globalSize)
-			// Primitives
 			TextShowcase(modifiedTokens)
 			IconShowcase(modifiedTokens, globalSize)
 			DividerShowcase(modifiedTokens)
@@ -137,11 +94,6 @@ internal fun ComponentsScreen(
 			SpacerShowcase(modifiedTokens)
 			BadgeShowcase(modifiedTokens)
 			SurfaceShowcase(modifiedTokens)
-			// Composites
-			ButtonShowcase(modifiedTokens, globalSize)
-			IconButtonShowcase(modifiedTokens, globalSize)
-			ChipShowcase(modifiedTokens, globalSize)
-			SegmentedControlShowcase(modifiedTokens, globalSize)
 		}
 	}
 }

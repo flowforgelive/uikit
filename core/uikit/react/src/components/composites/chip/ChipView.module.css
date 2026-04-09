@@ -57,6 +57,20 @@
 	cursor: not-allowed;
 }
 
+.chip[data-static] {
+	cursor: default;
+}
+
+.chip[data-static]:hover {
+	background: var(--chip-bg);
+	color: var(--chip-text);
+	box-shadow: inset 0 0 0 var(--chip-border-width, 1px) var(--chip-border);
+}
+
+.chip[data-static]::after {
+	display: none;
+}
+
 .chip:focus-visible {
 	outline: none;
 	box-shadow: inset 0 0 0 var(--chip-focus-ring-width, 2px) var(--chip-focus-ring);

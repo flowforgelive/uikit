@@ -65,7 +65,8 @@ fun ChipView(
 	}
 	val shape = RoundedCornerShape(style.radius.dp)
 
-	val state = rememberInteractiveState(style.colors, tokens, config.isInteractive)
+	val isClickable = (onClick != null || config.actionRoute != null) && config.isInteractive
+	val state = rememberInteractiveState(style.colors, tokens, isClickable)
 
 	Box(
 		contentAlignment = Alignment.Center,
@@ -76,9 +77,10 @@ fun ChipView(
 					state = state,
 					shape = shape,
 					tokens = tokens,
-					isInteractive = config.isInteractive,
+					isInteractive = isClickable,
+					clickable = isClickable || !config.isInteractive,
 				) {
-					if (config.isInteractive) {
+					if (isClickable) {
 						onClick?.invoke()
 						config.actionRoute?.let(onAction)
 					}
