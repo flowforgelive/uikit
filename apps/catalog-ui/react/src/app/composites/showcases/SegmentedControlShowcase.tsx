@@ -47,13 +47,16 @@ export function SegmentedControlShowcase({ tokens, globalSize }: { tokens: any; 
 						<Text text="Варианты (Variants)" variant="body-small" emphasis="muted" />
 					</div>
 					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.sm) }}>
-						{(["surface", "soft", "outline", "solid", "ghost"] as const).map((v) => (
-							<div key={v} style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md) }}>
+						{(["surface", "soft", "outline", "solid", "ghost", "glass"] as const).map((v) => (
+							<div key={v} style={{
+								display: "flex",
+								alignItems: "center",
+								gap: toRem(tokens.spacing.md),
+							}}>
 								<div style={{ minWidth: "4rem" }}>
 									<Text text={v} variant="label-medium" />
 								</div>
-								<div style={{ flex: 1 }}>
-									<SegmentedControl
+								<div style={{ flex: 1 }}><SegmentedControl
 										options={[
 											{ id: "a", label: "First" },
 											{ id: "b", label: "Second" },
@@ -101,3 +104,4 @@ export function SegmentedControlShowcase({ tokens, globalSize }: { tokens: any; 
 		</Section>
 	);
 }
+

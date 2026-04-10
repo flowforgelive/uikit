@@ -24,7 +24,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 
-private val CHIP_VARIANTS = listOf(VisualVariant.Soft, VisualVariant.Outline, VisualVariant.Ghost)
+private val CHIP_VARIANTS = listOf(VisualVariant.Soft, VisualVariant.Outline, VisualVariant.Ghost, VisualVariant.Glass)
 
 private val CHIP_MODE_OPTIONS = listOf(
 	"static" to "Static",

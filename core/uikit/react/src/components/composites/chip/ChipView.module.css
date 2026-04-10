@@ -138,3 +138,40 @@
 		transform: rotate(360deg);
 	}
 }
+
+/* Glass variant: backdrop-filter blur with semi-transparent tint */
+.chip[data-glass] {
+	background: color-mix(in oklch, var(--chip-bg) var(--chip-glass-opacity), transparent);
+	box-shadow: inset 0 0 0 var(--chip-border-width, 1px)
+		color-mix(in oklch, var(--chip-border) var(--chip-glass-border-opacity), transparent),
+		var(--chip-glass-shadow, none);
+	backdrop-filter: blur(var(--chip-glass-blur)) saturate(var(--chip-glass-saturate));
+	-webkit-backdrop-filter: blur(var(--chip-glass-blur)) saturate(var(--chip-glass-saturate));
+}
+
+.chip[data-glass]:hover:not(:has([data-interactive]:hover)):not([aria-disabled="true"]) {
+	background: color-mix(in oklch, var(--chip-bg-hover) var(--chip-glass-opacity-hover), transparent);
+	box-shadow: inset 0 0 0 var(--chip-border-width, 1px)
+		color-mix(in oklch, var(--chip-border-hover) var(--chip-glass-border-opacity), transparent),
+		var(--chip-glass-shadow, none);
+}
+
+.chip[data-glass]:active:not(:has([data-interactive]:hover)):not([aria-disabled="true"]) {
+	background: color-mix(in oklch, var(--chip-bg-active) var(--chip-glass-opacity-active), transparent);
+	box-shadow: inset 0 0 0 var(--chip-border-width, 1px)
+		color-mix(in oklch, var(--chip-border-active) var(--chip-glass-border-opacity), transparent),
+		var(--chip-glass-shadow, none);
+}
+
+.chip[data-glass]:focus-visible {
+	box-shadow: inset 0 0 0 var(--chip-focus-ring-width, 2px) var(--chip-focus-ring);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+	.chip[data-glass] {
+		backdrop-filter: none;
+		-webkit-backdrop-filter: none;
+		background: var(--chip-bg);
+		box-shadow: inset 0 0 0 var(--chip-border-width, 1px) var(--chip-border);
+	}
+}

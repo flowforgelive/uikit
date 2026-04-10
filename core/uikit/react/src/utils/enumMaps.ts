@@ -15,6 +15,7 @@ export const VARIANT_MAP = {
 	surface: VisualVariant.Surface,
 	outline: VisualVariant.Outline,
 	ghost: VisualVariant.Ghost,
+	glass: VisualVariant.Glass,
 } as const;
 
 export const INTENT_MAP = {

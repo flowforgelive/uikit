@@ -75,7 +75,7 @@ internal fun SegmentedControlShowcase(tokens: DesignTokens, globalSize: Componen
 				)
 				Spacer(Modifier.height(tokens.spacing.xs.dp))
 				Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.sm.dp)) {
-					listOf(VisualVariant.Surface, VisualVariant.Soft, VisualVariant.Outline, VisualVariant.Solid, VisualVariant.Ghost).forEach { variant ->
+					listOf(VisualVariant.Surface, VisualVariant.Soft, VisualVariant.Outline, VisualVariant.Solid, VisualVariant.Ghost, VisualVariant.Glass).forEach { variant ->
 						Row(
 							verticalAlignment = Alignment.CenterVertically,
 							horizontalArrangement = Arrangement.spacedBy(tokens.spacing.md.dp),
@@ -90,7 +90,9 @@ internal fun SegmentedControlShowcase(tokens: DesignTokens, globalSize: Componen
 								selectedId = selected,
 								onSelectionChange = { selected = it },
 								variant = variant,
-								size = selectedSize,							modifier = Modifier.weight(1f),							)
+								size = selectedSize,
+								modifier = Modifier.weight(1f),
+							)
 						}
 					}
 				}

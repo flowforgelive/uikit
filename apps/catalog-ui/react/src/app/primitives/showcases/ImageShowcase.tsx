@@ -191,3 +191,4 @@ export function ImageShowcase({ tokens, globalSize }: { tokens: any; globalSize:
 		</Section>
 	);
 }
+

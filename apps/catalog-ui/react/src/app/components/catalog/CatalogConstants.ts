@@ -14,3 +14,9 @@ export const SCALE_FACTOR_MAP: Record<string, number> = Object.fromEntries(
 );
 export const PANEL_VARIANT_OPTIONS = CatalogOptions.getInstance().panelVariantOptions.map((o: any) => ({ id: o.id, label: o.label }));
 export const PANEL_SIDE_OPTIONS = CatalogOptions.getInstance().panelSideOptions.map((o: any) => ({ id: o.id, label: o.label }));
+
+export const BG_OPTIONS = [
+	{ id: "dots", label: "Точки" },
+	{ id: "image", label: "Фото" },
+	{ id: "solid", label: "Сплошной" },
+];

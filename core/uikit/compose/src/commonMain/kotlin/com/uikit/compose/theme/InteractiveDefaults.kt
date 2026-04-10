@@ -50,6 +50,8 @@ fun rememberInteractiveState(
 	colors: ColorSet,
 	tokens: DesignTokens,
 	isInteractive: Boolean,
+	glassAlpha: Float = 1f,
+	glassBorderAlpha: Float = 1f,
 ): InteractiveVisualState {
 	val interactionSource = remember { MutableInteractionSource() }
 	val isHovered by interactionSource.collectIsHoveredAsState()
@@ -74,7 +76,7 @@ fun rememberInteractiveState(
 			active -> colors.bgHover
 			else -> colors.bg
 		},
-	)
+	).let { if (glassAlpha < 1f) it.copy(alpha = it.alpha * glassAlpha) else it }
 	val currentBorder = parseColor(
 		when {
 			focused -> tokens.color.focusRing
@@ -82,7 +84,7 @@ fun rememberInteractiveState(
 			active -> colors.borderHover
 			else -> colors.border
 		},
-	)
+	).let { if (glassBorderAlpha < 1f && !focused) it.copy(alpha = glassBorderAlpha) else it }
 	val currentText = parseColor(
 		when {
 			pressed -> colors.textActive

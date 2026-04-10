@@ -1,10 +1,12 @@
 package com.uikit.components.primitives.text
 
+import com.uikit.foundation.SurfaceContext
 import com.uikit.foundation.TextEmphasis
 import com.uikit.tokens.DesignTokens
 import com.uikit.tokens.TextStyle
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
+import kotlin.js.JsName
 
 @JsExport
 @Serializable
@@ -58,6 +60,42 @@ object TextBlockStyleResolver {
 			TextEmphasis.Disabled -> tokens.color.textDisabled
 		}
 
+	/**
+	 * Surface-aware emphasis color resolution.
+	 * When surfaceContext provides foreground colors, uses them instead of global text tokens.
+	 * Disabled always uses global tokens (independent of surface).
+	 */
+	private fun resolveSurfaceAwareEmphasisColor(
+		emphasis: TextEmphasis,
+		variant: TextBlockVariant,
+		tokens: DesignTokens,
+		surfaceContext: SurfaceContext,
+	): String {
+		val fg = surfaceContext.foregroundColor
+		if (fg.isEmpty()) return resolveEmphasisColor(emphasis, variant, tokens)
+		val fgSecondary = surfaceContext.foregroundSecondary
+		val fgMuted = surfaceContext.foregroundMuted
+		return when (emphasis) {
+			TextEmphasis.Auto -> resolveSurfaceAwareAutoColor(variant, fg, fgSecondary, fgMuted)
+			TextEmphasis.Primary -> fg
+			TextEmphasis.Secondary -> fgSecondary.ifEmpty { fg }
+			TextEmphasis.Muted -> fgMuted.ifEmpty { fgSecondary.ifEmpty { fg } }
+			TextEmphasis.Disabled -> tokens.color.textDisabled
+		}
+	}
+
+	private fun resolveSurfaceAwareAutoColor(
+		variant: TextBlockVariant,
+		fg: String,
+		fgSecondary: String,
+		fgMuted: String,
+	): String =
+		when (variant) {
+			TextBlockVariant.BodySmall, TextBlockVariant.LabelLarge -> fgSecondary.ifEmpty { fg }
+			TextBlockVariant.LabelMedium, TextBlockVariant.LabelSmall -> fgMuted.ifEmpty { fgSecondary.ifEmpty { fg } }
+			else -> fg
+		}
+
 	private fun resolveTypography(
 		variant: TextBlockVariant,
 		tokens: DesignTokens,
@@ -86,6 +124,21 @@ object TextBlockStyleResolver {
 	): ResolvedTextBlockStyle {
 		val typography = resolveTypography(config.variant, tokens)
 		val color = resolveEmphasisColor(config.emphasis, config.variant, tokens)
+		return fromTextStyle(typography, color)
+	}
+
+	@JsName("resolveWithSurface")
+	fun resolve(
+		config: TextBlockConfig,
+		tokens: DesignTokens,
+		surfaceContext: SurfaceContext?,
+	): ResolvedTextBlockStyle {
+		val typography = resolveTypography(config.variant, tokens)
+		val color = if (surfaceContext != null) {
+			resolveSurfaceAwareEmphasisColor(config.emphasis, config.variant, tokens, surfaceContext)
+		} else {
+			resolveEmphasisColor(config.emphasis, config.variant, tokens)
+		}
 		return fromTextStyle(typography, color)
 	}
 }

@@ -9,7 +9,7 @@ interface ChipProps {
 	text: string;
 	onClick?: () => void;
 	onDismiss?: () => void;
-	variant?: "solid" | "soft" | "outline" | "ghost";
+	variant?: "solid" | "soft" | "outline" | "ghost" | "glass";
 	intent?: keyof typeof INTENT_MAP;
 	size?: keyof typeof SIZE_MAP;
 	leadingIcon?: React.ReactNode;

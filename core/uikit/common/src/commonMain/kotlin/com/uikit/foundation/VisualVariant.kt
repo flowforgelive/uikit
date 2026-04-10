@@ -15,4 +15,5 @@ enum class VisualVariant {
 	Surface,
 	Outline,
 	Ghost,
+	Glass,
 }

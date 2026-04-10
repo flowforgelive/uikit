@@ -110,3 +110,40 @@
 		transform: rotate(360deg);
 	}
 }
+
+/* Glass variant: backdrop-filter blur with semi-transparent tint */
+.button[data-glass] {
+	background: color-mix(in oklch, var(--btn-bg) var(--btn-glass-opacity), transparent);
+	box-shadow: inset 0 0 0 var(--btn-border-width, 1px)
+		color-mix(in oklch, var(--btn-border) var(--btn-glass-border-opacity), transparent),
+		var(--btn-glass-shadow, none);
+	backdrop-filter: blur(var(--btn-glass-blur)) saturate(var(--btn-glass-saturate));
+	-webkit-backdrop-filter: blur(var(--btn-glass-blur)) saturate(var(--btn-glass-saturate));
+}
+
+.button[data-glass]:hover:not(:has([data-interactive]:hover)):not([aria-disabled="true"]) {
+	background: color-mix(in oklch, var(--btn-bg-hover) var(--btn-glass-opacity-hover), transparent);
+	box-shadow: inset 0 0 0 var(--btn-border-width, 1px)
+		color-mix(in oklch, var(--btn-border-hover) var(--btn-glass-border-opacity), transparent),
+		var(--btn-glass-shadow, none);
+}
+
+.button[data-glass]:active:not(:has([data-interactive]:hover)):not([aria-disabled="true"]) {
+	background: color-mix(in oklch, var(--btn-bg-active) var(--btn-glass-opacity-active), transparent);
+	box-shadow: inset 0 0 0 var(--btn-border-width, 1px)
+		color-mix(in oklch, var(--btn-border-active) var(--btn-glass-border-opacity), transparent),
+		var(--btn-glass-shadow, none);
+}
+
+.button[data-glass]:focus-visible {
+	box-shadow: inset 0 0 0 var(--btn-focus-ring-width, 2px) var(--btn-focus-ring);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+	.button[data-glass] {
+		backdrop-filter: none;
+		-webkit-backdrop-filter: none;
+		background: var(--btn-bg);
+		box-shadow: inset 0 0 0 var(--btn-border-width, 1px) var(--btn-border);
+	}
+}

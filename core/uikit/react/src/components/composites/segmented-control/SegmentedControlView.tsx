@@ -7,6 +7,7 @@ import {
 	SegmentedControlStyleResolver,
 	Visibility,
 	IconPosition,
+	VisualVariant,
 	type SegmentedControlConfig,
 	type SegmentedControlOption,
 	type DesignTokens,
@@ -75,6 +76,7 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 		if (config.visibility === Visibility.Gone) return null;
 		if (!options || options.length === 0) return null;
 
+		const isGlass = config.variant === VisualVariant.Glass;
 		const hasIcons = renderIcon && config.iconPosition !== IconPosition.None;
 		const isVertical = config.iconPosition === IconPosition.Top || config.iconPosition === IconPosition.Bottom;
 		const isReversed = config.iconPosition === IconPosition.End || config.iconPosition === IconPosition.Bottom;
@@ -82,6 +84,7 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 		return (
 			<div
 				data-testid={config.testTag ?? config.id}
+				data-glass={isGlass || undefined}
 				role="radiogroup"
 				aria-label={config.id || "Segmented control"}
 				className={`${css.track} ${className ?? ""}`}
@@ -112,7 +115,15 @@ export const SegmentedControlView: React.FC<SegmentedControlViewProps> =
 						"--sc-focus-ring": tokens.color.focusRing,
 						"--sc-focus-ring-width": `${tokens.focusRingWidth}px`,
 						"--sc-icon-size": toRem(style.sizes.iconSize),
-						"--sc-icon-gap": toRem(style.sizes.iconGap),					"--sc-hover-content-opacity": `${tokens.state.hoverContentOpacity}`,						visibility:
+						"--sc-icon-gap": toRem(style.sizes.iconGap),					"--sc-hover-content-opacity": `${tokens.state.hoverContentOpacity}`,
+						...(isGlass ? {
+							"--sc-glass-blur": toRem(tokens.glass.blurRadius),
+							"--sc-glass-saturate": `${tokens.glass.saturate}`,
+							"--sc-glass-opacity": `${tokens.glass.bgOpacity * 100}%`,
+							"--sc-glass-border-opacity": `${tokens.glass.borderOpacity * 100}%`,
+							"--sc-glass-shadow": tokens.glass.glassShadow,
+						} : {}),
+						visibility:
 							config.visibility === Visibility.Invisible ? "hidden" : undefined,
 					} as React.CSSProperties
 				}

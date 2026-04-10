@@ -8,6 +8,7 @@ import { toRem, toEm, toLineHeightRatio } from "../../../utils/units";
 import {
 	ChipStyleResolver,
 	Visibility,
+	VisualVariant,
 	type ChipConfig,
 	type DesignTokens,
 } from "uikit-common";
@@ -56,6 +57,7 @@ export const ChipView: React.FC<ChipViewProps> = React.memo(
 
 		if (config.visibility === Visibility.Gone) return null;
 
+		const isGlass = config.variant === VisualVariant.Glass;
 		const isStatic = !isClickable && !config.disabled && !config.loading;
 		const Tag = isStatic ? "span" : "button";
 
@@ -68,6 +70,7 @@ export const ChipView: React.FC<ChipViewProps> = React.memo(
 				aria-busy={config.loading || undefined}
 				data-interactive={isClickable || undefined}
 				data-static={isStatic || undefined}
+				data-glass={isGlass || undefined}
 				data-testid={config.testTag ?? config.id}
 				className={`${css.chip} ${className ?? ""}`}
 				style={
@@ -97,6 +100,15 @@ export const ChipView: React.FC<ChipViewProps> = React.memo(
 						...buildInteractiveStyleVars(tokens, "chip"),
 						...buildSpinnerStyleVars(tokens, "chip"),
 						"--chip-hover-content-opacity": `${tokens.state.hoverContentOpacity}`,
+						...(isGlass ? {
+							"--chip-glass-blur": toRem(tokens.glass.blurRadius),
+							"--chip-glass-saturate": `${tokens.glass.saturate}`,
+							"--chip-glass-opacity": `${tokens.glass.bgOpacity * 100}%`,
+							"--chip-glass-opacity-hover": `${tokens.glass.bgOpacity * tokens.glass.hoverOpacityMultiplier * 100}%`,
+							"--chip-glass-opacity-active": `${tokens.glass.bgOpacity * tokens.glass.activeOpacityMultiplier * 100}%`,
+							"--chip-glass-border-opacity": `${tokens.glass.borderOpacity * 100}%`,
+							"--chip-glass-shadow": tokens.glass.glassShadow,
+						} : {}),
 						visibility:
 							config.visibility === Visibility.Invisible ? "hidden" : undefined,
 					} as React.CSSProperties

@@ -2,6 +2,7 @@
 
 import React, { useMemo } from "react";
 import { toRem, toEm, toLineHeightRatio, buildFontStack } from "../../../utils/units";
+import { useSurfaceContext } from "../../../theme/SurfaceContext";
 import {
 	TextBlockStyleResolver,
 	TextBlockVariant,
@@ -20,9 +21,15 @@ export const TextBlockView: React.FC<TextBlockViewProps> = React.memo(
 	({ config, tokens, className }) => {
 		if (config.visibility === Visibility.Gone) return null;
 
+		const surfaceContext = useSurfaceContext();
 		const style = useMemo(
-			() => TextBlockStyleResolver.getInstance().resolve(config, tokens),
-			[config, tokens],
+			() =>
+				TextBlockStyleResolver.getInstance().resolveWithSurface(
+					config,
+					tokens,
+					surfaceContext.foregroundColor ? surfaceContext : null,
+				),
+			[config, tokens, surfaceContext],
 		);
 
 		const variant = config.variant;

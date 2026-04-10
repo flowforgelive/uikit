@@ -11,6 +11,8 @@ import com.uikit.compose.components.composites.segmentedcontrol.SegmentedControl
 import com.uikit.compose.components.primitives.text.TextBlock
 import com.uikit.compose.theme.LocalDesignTokens
 import com.uikit.components.primitives.text.TextBlockVariant
+import com.uikit.components.blocks.panel.PanelSide
+import com.uikit.components.blocks.panel.PanelVariant
 import com.uikit.foundation.ComponentSize
 import com.uikit.foundation.LayoutDirection
 import com.uikit.foundation.ThemeMode
@@ -23,12 +25,16 @@ internal fun CompositesScreen(
 	tokens: DesignTokens,
 	currentMode: ThemeMode,
 	currentDir: LayoutDirection,
+	currentBg: BackgroundMode = BackgroundMode.Dots,
 	onDirChange: (LayoutDirection) -> Unit,
 	onThemeChange: (String) -> Unit,
+	onBgChange: (BackgroundMode) -> Unit = {},
 	onBack: () -> Unit,
 ) {
 	var globalSizeId by remember { mutableStateOf(ComponentSize.Md.name) }
 	var globalRadiusId by remember { mutableStateOf("md") }
+	var panelVariant by remember { mutableStateOf(PanelVariant.Inset) }
+	var panelSide by remember { mutableStateOf(PanelSide.Left) }
 	val globalSize = sizeFromId(globalSizeId)
 
 	val modifiedTokens = remember(tokens, globalRadiusId, globalSizeId) {
@@ -55,6 +61,8 @@ internal fun CompositesScreen(
 		subtitle = "Button, IconButton, Chip, SegmentedControl",
 		tokens = modifiedTokens,
 		onBack = onBack,
+		panelVariant = panelVariant,
+		panelSide = panelSide,
 		panelTokens = modifiedTokens,
 		panelContent = {
 			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
@@ -82,6 +90,28 @@ internal fun CompositesScreen(
 			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
 				TextBlock(text = "Тема", variant = TextBlockVariant.LabelSmall)
 				ThemeSwitcherControl(currentMode, onThemeChange)
+			}
+			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
+				TextBlock(text = "Панель: вариант", variant = TextBlockVariant.LabelSmall)
+				SegmentedControl(
+					options = CatalogOptions.panelVariantOptions.map { it.id to it.label },
+					selectedId = if (panelVariant == PanelVariant.Pinned) "pinned" else "inset",
+					onSelectionChange = { panelVariant = if (it == "pinned") PanelVariant.Pinned else PanelVariant.Inset },
+					size = ComponentSize.Sm,
+				)
+			}
+			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
+				TextBlock(text = "Панель: сторона", variant = TextBlockVariant.LabelSmall)
+				SegmentedControl(
+					options = CatalogOptions.panelSideOptions.map { it.id to it.label },
+					selectedId = panelSide.name.lowercase(),
+					onSelectionChange = { id -> panelSide = PanelSide.entries.first { it.name.lowercase() == id } },
+					size = ComponentSize.Sm,
+				)
+			}
+			Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.xs.dp)) {
+				TextBlock(text = "Фон", variant = TextBlockVariant.LabelSmall)
+				BgSwitcherControl(currentBg, onBgChange)
 			}
 		},
 	) {

@@ -17,6 +17,9 @@ data class ResolvedSurfaceStyle(
 	val radius: Double,
 	val shadow: String,
 	val elevationDp: Double,
+	val foregroundColor: String,
+	val foregroundSecondary: String,
+	val foregroundMuted: String,
 )
 
 /**
@@ -32,7 +35,7 @@ object SurfaceStyleResolver {
 	): ResolvedSurfaceStyle {
 		val bg =
 			when (config.variant) {
-				VisualVariant.Ghost, VisualVariant.Outline -> ColorConstants.TRANSPARENT
+				VisualVariant.Ghost, VisualVariant.Outline, VisualVariant.Glass -> ColorConstants.TRANSPARENT
 				VisualVariant.Soft -> SurfaceLevelResolver.resolveSoftColor(config.level, tokens)
 				else -> SurfaceLevelResolver.resolveColor(config.level, tokens) // Solid, Surface
 			}
@@ -46,7 +49,8 @@ object SurfaceStyleResolver {
 
 		val border =
 			when (config.variant) {
-				VisualVariant.Outline -> tokens.color.outlineVariant
+				VisualVariant.Outline -> tokens.color.outline
+				VisualVariant.Glass -> tokens.color.outlineVariant
 				VisualVariant.Surface -> tokens.color.borderSubtle
 				else -> ColorConstants.TRANSPARENT
 			}
@@ -76,6 +80,9 @@ object SurfaceStyleResolver {
 			radius = radius,
 			shadow = shadow,
 			elevationDp = if (config.elevated) tokens.shadows.elevationDp else 0.0,
+			foregroundColor = tokens.color.onSurface,
+			foregroundSecondary = tokens.color.onSurfaceVariant,
+			foregroundMuted = tokens.color.onSurfaceMuted,
 		)
 	}
 

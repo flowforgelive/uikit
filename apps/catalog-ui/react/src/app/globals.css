@@ -27,6 +27,20 @@ html[data-theme="dark"] {
 	color-scheme: dark;
 }
 
+/* Dot grid background — subtle dot pattern, adapts to theme via currentColor */
+.dot-grid {
+	background-image: radial-gradient(circle, color-mix(in oklch, currentColor 15%, transparent) 1.5px, transparent 1.5px);
+	background-size: 20px 20px;
+}
+
+/* Photo background for glass showcase */
+.bg-image {
+	background-image: url("https://picsum.photos/id/1015/1920/1080");
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
+}
+
 @media (prefers-reduced-motion: reduce) {
 	html {
 		scroll-behavior: auto;

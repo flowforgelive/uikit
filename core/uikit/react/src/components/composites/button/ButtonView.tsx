@@ -9,6 +9,7 @@ import {
 	ButtonStyleResolver,
 	Visibility,
 	IconPosition,
+	VisualVariant,
 	type ButtonConfig,
 	type DesignTokens,
 } from "uikit-common";
@@ -35,6 +36,8 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 		const handleClick = useInteractiveHandler(config.isInteractive, config.actionRoute, onClick, onAction);
 
 		if (config.visibility === Visibility.Gone) return null;
+
+		const isGlass = config.variant === VisualVariant.Glass;
 
 		const isVertical =
 			config.iconPosition === IconPosition.Top ||
@@ -90,6 +93,7 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 				aria-label={config.ariaLabel ?? (config.loading ? (config.text || undefined) : undefined)}
 				aria-busy={config.loading || undefined}
 				data-interactive={config.isInteractive || undefined}
+				data-glass={isGlass || undefined}
 				data-testid={config.testTag ?? config.id}
 				className={`${css.button} ${config.isIconOnly ? css.iconOnly : ""} ${className ?? ""}`}
 				style={
@@ -116,6 +120,15 @@ export const ButtonView: React.FC<ButtonViewProps> = React.memo(
 						"--btn-font-variation": tokens.fontVariationSettings,
 						...buildInteractiveStyleVars(tokens, "btn"),
 						...buildSpinnerStyleVars(tokens, "btn"),
+						...(isGlass ? {
+							"--btn-glass-blur": toRem(tokens.glass.blurRadius),
+							"--btn-glass-saturate": `${tokens.glass.saturate}`,
+							"--btn-glass-opacity": `${tokens.glass.bgOpacity * 100}%`,
+							"--btn-glass-opacity-hover": `${tokens.glass.bgOpacity * tokens.glass.hoverOpacityMultiplier * 100}%`,
+							"--btn-glass-opacity-active": `${tokens.glass.bgOpacity * tokens.glass.activeOpacityMultiplier * 100}%`,
+							"--btn-glass-border-opacity": `${tokens.glass.borderOpacity * 100}%`,
+							"--btn-glass-shadow": tokens.glass.glassShadow,
+						} : {}),
 						visibility:
 							config.visibility === Visibility.Invisible ? "hidden" : undefined,
 					} as React.CSSProperties

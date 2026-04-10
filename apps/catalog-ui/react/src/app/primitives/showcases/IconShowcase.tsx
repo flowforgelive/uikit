@@ -33,3 +33,4 @@ export function IconShowcase({ tokens, globalSize }: { tokens: any; globalSize: 
 		</Section>
 	);
 }
+

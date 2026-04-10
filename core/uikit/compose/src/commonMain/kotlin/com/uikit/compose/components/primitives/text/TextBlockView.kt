@@ -13,6 +13,7 @@ import com.uikit.components.primitives.text.TextBlockConfig
 import com.uikit.components.primitives.text.TextBlockStyleResolver
 import com.uikit.compose.theme.LocalDesignTokens
 import com.uikit.compose.theme.LocalFontFamily
+import com.uikit.compose.theme.LocalSurfaceContext
 import com.uikit.compose.theme.parseColor
 import com.uikit.foundation.Visibility
 
@@ -25,7 +26,10 @@ fun TextBlockView(
 
 	val tokens = LocalDesignTokens.current
 	val fontFamily = LocalFontFamily.current
-	val style = remember(config, tokens) { TextBlockStyleResolver.resolve(config, tokens) }
+	val surfaceContext = LocalSurfaceContext.current
+	val style = remember(config, tokens, surfaceContext) {
+		TextBlockStyleResolver.resolve(config, tokens, surfaceContext)
+	}
 
 	BasicText(
 		text = config.text,

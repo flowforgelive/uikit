@@ -26,5 +26,14 @@ kotlin {
 compose.desktop {
 	application {
 		mainClass = "MainKt"
+
+		nativeDistributions {
+			packageName = "UIKit Catalog"
+			packageVersion = "1.0.0"
+
+			macOS {
+				bundleID = "com.uikit.catalog"
+			}
+		}
 	}
 }

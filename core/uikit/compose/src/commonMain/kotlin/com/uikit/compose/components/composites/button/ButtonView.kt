@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.uikit.components.composites.button.ButtonConfig
@@ -28,9 +29,14 @@ import com.uikit.compose.theme.LocalSurfaceContext
 import com.uikit.compose.theme.StyledText
 import com.uikit.compose.theme.IconSlot
 import com.uikit.compose.theme.IconTextLayout
+import com.uikit.compose.theme.LocalHazeState
+import com.uikit.compose.theme.parseColor
 import com.uikit.compose.theme.interactiveModifier
 import com.uikit.compose.theme.rememberInteractiveState
+import dev.chrisbanes.haze.HazeTint
+import dev.chrisbanes.haze.hazeEffect
 import com.uikit.foundation.IconPosition
+import com.uikit.foundation.VisualVariant
 import com.uikit.foundation.Visibility
 
 @Composable
@@ -52,7 +58,12 @@ fun ButtonView(
 	}
 	val shape = RoundedCornerShape(style.radius.dp)
 
-	val state = rememberInteractiveState(style.colors, tokens, config.isInteractive)
+	val isGlass = config.variant == VisualVariant.Glass
+	val hazeState = if (isGlass) LocalHazeState.current else null
+	val useHaze = isGlass && hazeState != null
+	val glassAlpha = if (isGlass && !useHaze) tokens.glass.bgOpacity.toFloat() else if (useHaze) 0f else 1f
+	val glassBorderAlpha = if (isGlass) tokens.glass.borderOpacity.toFloat() else 1f
+	val state = rememberInteractiveState(style.colors, tokens, config.isInteractive, glassAlpha, glassBorderAlpha)
 
 	val sizeModifier = if (config.isIconOnly) {
 		Modifier.size(style.sizes.height.dp)
@@ -65,6 +76,20 @@ fun ButtonView(
 		modifier =
 			modifier
 				.then(sizeModifier)
+				.then(
+					if (useHaze) {
+						// clip BEFORE hazeEffect so blur is confined to the rounded shape,
+						// not the full rectangular bounds (which creates a rectangular "shadow" artefact)
+						val glassTint = parseColor(style.colors.bg).copy(alpha = tokens.glass.bgOpacity.toFloat())
+						Modifier
+							.clip(shape)
+							.hazeEffect(state = hazeState!!) {
+								blurRadius = tokens.glass.blurRadius.dp
+								noiseFactor = 0f
+								tints = listOf(HazeTint(glassTint))
+							}
+					} else Modifier,
+				)
 				.interactiveModifier(
 					state = state,
 					shape = shape,

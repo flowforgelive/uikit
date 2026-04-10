@@ -6,7 +6,7 @@ import { Section } from "../../components/catalog/Section";
 import { SubSectionTitle } from "../../components/catalog/SubSectionTitle";
 import { starIcon, ICON_BUTTON_SAMPLES } from "../../components/icons";
 
-const BUTTON_VARIANTS = ["solid", "soft", "surface", "outline", "ghost"] as const;
+const BUTTON_VARIANTS = ["solid", "soft", "surface", "outline", "ghost", "glass"] as const;
 
 const STATE_OPTIONS = [
 	{ id: "active", label: "Active" },
@@ -62,3 +62,4 @@ export function IconButtonShowcase({ tokens, globalSize }: { tokens: any; global
 		</Section>
 	);
 }
+

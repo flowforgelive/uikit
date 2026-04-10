@@ -13,7 +13,7 @@ import {
 	chevronRightIcon,
 } from "../../components/icons";
 
-const BUTTON_VARIANTS = ["solid", "soft", "surface", "outline", "ghost"] as const;
+const BUTTON_VARIANTS = ["solid", "soft", "surface", "outline", "ghost", "glass"] as const;
 
 const STATE_OPTIONS = [
 	{ id: "active", label: "Active" },
@@ -66,7 +66,12 @@ export function ButtonShowcase({ tokens, globalSize }: { tokens: any; globalSize
 			{BUTTON_VARIANTS.map((variant) => (
 				<div key={variant} style={{ marginBlockEnd: toRem(tokens.spacing.xl) }}>
 					<SubSectionTitle tokens={tokens}>{variant}</SubSectionTitle>
-					<div style={{ display: "flex", alignItems: "center", gap: toRem(tokens.spacing.md), overflowX: "auto" }}>
+					<div style={{
+						display: "flex",
+						alignItems: "center",
+						gap: toRem(tokens.spacing.md),
+						overflowX: "auto",
+					}}>
 						{hasIcons ? (
 							isStartEnd ? (
 								<Button
@@ -109,3 +114,4 @@ export function ButtonShowcase({ tokens, globalSize }: { tokens: any; globalSize
 		</Section>
 	);
 }
+

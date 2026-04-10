@@ -11,6 +11,7 @@ export { Image } from "./components/primitives/image/Image";
 export { Skeleton } from "./components/primitives/skeleton/Skeleton";
 export { Spacer } from "./components/primitives/spacer/Spacer";
 export { Badge } from "./components/primitives/badge/Badge";
+export { GlassSurface } from "./components/primitives/glass-surface/GlassSurface";
 
 // Config-based API (advanced / SDUI)
 export { ButtonView } from "./components/composites/button/ButtonView";
@@ -25,6 +26,7 @@ export { ImageView } from "./components/primitives/image/ImageView";
 export { SkeletonView } from "./components/primitives/skeleton/SkeletonView";
 export { SpacerView } from "./components/primitives/spacer/SpacerView";
 export { BadgeView } from "./components/primitives/badge/BadgeView";
+export { GlassSurfaceView } from "./components/primitives/glass-surface/GlassSurfaceView";
 
 // Theme
 export { useDesignTokens, DesignTokensProvider } from "./theme/useDesignTokens";
@@ -95,4 +97,8 @@ export {
 	BadgeConfig,
 	BadgeVariant,
 	BadgeStyleResolver,
+	GlassSurfaceConfig,
+	GlassVariant,
+	GlassSurfaceStyleResolver,
+	GlassTokens,
 } from "uikit-common";

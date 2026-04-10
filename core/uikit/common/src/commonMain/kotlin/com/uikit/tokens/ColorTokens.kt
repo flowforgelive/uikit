@@ -23,6 +23,8 @@ data class ColorTokens(
 	val surfaceHover: String,
 	val surfaceActive: String,
 	val onSurface: String,
+	val onSurfaceVariant: String,
+	val onSurfaceMuted: String,
 	val outline: String,
 	val outlineVariant: String,
 	val outlineActive: String,

@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.testTag
@@ -42,8 +43,13 @@ import com.uikit.compose.theme.LocalDesignTokens
 import com.uikit.compose.theme.LocalFontFamily
 import com.uikit.compose.theme.LocalSurfaceContext
 import com.uikit.compose.theme.StyledText
+import com.uikit.compose.theme.LocalHazeState
+import com.uikit.compose.theme.parseColor
 import com.uikit.compose.theme.interactiveModifier
 import com.uikit.compose.theme.rememberInteractiveState
+import dev.chrisbanes.haze.HazeTint
+import dev.chrisbanes.haze.hazeEffect
+import com.uikit.foundation.VisualVariant
 import com.uikit.foundation.Visibility
 
 @Composable
@@ -66,13 +72,30 @@ fun ChipView(
 	val shape = RoundedCornerShape(style.radius.dp)
 
 	val isClickable = (onClick != null || config.actionRoute != null) && config.isInteractive
-	val state = rememberInteractiveState(style.colors, tokens, isClickable)
+	val isGlass = config.variant == VisualVariant.Glass
+	val hazeState = if (isGlass) LocalHazeState.current else null
+	val useHaze = isGlass && hazeState != null
+	val glassAlpha = if (isGlass && !useHaze) tokens.glass.bgOpacity.toFloat() else if (useHaze) 0f else 1f
+	val glassBorderAlpha = if (isGlass) tokens.glass.borderOpacity.toFloat() else 1f
+	val state = rememberInteractiveState(style.colors, tokens, isClickable, glassAlpha, glassBorderAlpha)
 
 	Box(
 		contentAlignment = Alignment.Center,
 		modifier =
 			modifier
 				.height(style.sizes.height.dp)
+				.then(
+					if (useHaze) {
+						val glassTint = parseColor(style.colors.bg).copy(alpha = tokens.glass.bgOpacity.toFloat())
+						Modifier
+							.clip(shape)
+							.hazeEffect(state = hazeState!!) {
+								blurRadius = tokens.glass.blurRadius.dp
+								noiseFactor = 0f
+								tints = listOf(HazeTint(glassTint))
+							}
+					} else Modifier,
+				)
 				.interactiveModifier(
 					state = state,
 					shape = shape,

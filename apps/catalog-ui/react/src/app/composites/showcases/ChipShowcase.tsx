@@ -6,7 +6,7 @@ import { Section } from "../../components/catalog/Section";
 import { SubSectionTitle } from "../../components/catalog/SubSectionTitle";
 import { starIcon, searchIcon } from "../../components/icons";
 
-const CHIP_VARIANTS = ["soft", "outline", "ghost"] as const;
+const CHIP_VARIANTS = ["soft", "outline", "ghost", "glass"] as const;
 
 const MODE_OPTIONS = [
 	{ id: "static", label: "Static" },
@@ -94,3 +94,4 @@ export function ChipShowcase({ tokens, globalSize }: { tokens: any; globalSize: 
 		</Section>
 	);
 }
+

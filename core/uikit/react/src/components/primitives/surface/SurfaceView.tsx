@@ -9,6 +9,7 @@ import {
 	SurfaceContext,
 	SurfaceStyleResolver,
 	Visibility,
+	VisualVariant,
 	type SurfaceConfig,
 	type DesignTokens,
 } from "uikit-common";
@@ -53,12 +54,28 @@ export const SurfaceView: React.FC<SurfaceViewProps> = React.memo(
 		);
 
 		const surfaceContext = useMemo(
-			() => new SurfaceContext(config.level.ordinal, style.bg, parentSurface.nestingDepth),
-			[config.level, style.bg, parentSurface.nestingDepth],
+			() =>
+				new SurfaceContext(
+					config.level.ordinal,
+					style.bg,
+					parentSurface.nestingDepth,
+					style.foregroundColor,
+					style.foregroundSecondary,
+					style.foregroundMuted,
+				),
+			[
+				config.level,
+				style.bg,
+				parentSurface.nestingDepth,
+				style.foregroundColor,
+				style.foregroundSecondary,
+				style.foregroundMuted,
+			],
 		);
 
 		if (config.visibility === Visibility.Gone) return null;
 
+		const isGlass = config.variant === VisualVariant.Glass;
 		const Tag = config.clickable ? "button" : "div";
 
 		return (
@@ -68,6 +85,7 @@ export const SurfaceView: React.FC<SurfaceViewProps> = React.memo(
 					onClick={config.clickable ? handleClick : undefined}
 					onPointerDown={config.clickable ? handlePointerDown : undefined}
 					data-testid={config.testTag ?? config.id}
+					data-glass={isGlass || undefined}
 					className={`${css.surface} ${config.clickable ? css.clickable : ""} ${config.hoverable ? css.hoverable : ""} ${className ?? ""}`}
 					style={
 						{
@@ -78,6 +96,11 @@ export const SurfaceView: React.FC<SurfaceViewProps> = React.memo(
 							"--surface-radius": toRem(style.radius),
 							"--surface-shadow": style.shadow,
 							...buildInteractiveStyleVars(tokens, "surface"),
+							...(isGlass ? {
+								"--surface-glass-blur": toRem(tokens.glass.surfaceBlurRadius),
+								"--surface-glass-saturate": `${tokens.glass.surfaceSaturate}`,
+								"--surface-glass-border-opacity": `${tokens.glass.surfaceBorderOpacity * 100}%`,
+							} : {}),
 
 							visibility:
 								config.visibility === Visibility.Invisible ? "hidden" : undefined,

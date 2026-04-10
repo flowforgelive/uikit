@@ -12,10 +12,17 @@ interface CatalogPageProps {
 	panelVariant?: "pinned" | "inset";
 	panelSide?: "left" | "right" | "top" | "bottom";
 	panelTokens?: any;
+	bgMode?: "dots" | "gradient" | "image" | "solid";
 	children: React.ReactNode;
 }
 
-export function CatalogPage({ title, subtitle, panelContent, panelVariant = "inset", panelSide = "left", panelTokens, children }: CatalogPageProps) {
+const BG_CLASS_MAP: Record<string, string> = {
+	dots: "dot-grid",
+	image: "bg-image",
+	solid: "",
+};
+
+export function CatalogPage({ title, subtitle, panelContent, panelVariant = "inset", panelSide = "left", panelTokens, bgMode = "dots", children }: CatalogPageProps) {
 	const router = useRouter();
 	const { tokens } = useUIKitTheme();
 	const layout = useMemo(() => CatalogLayoutResolver.getInstance().resolve(tokens), [tokens]);
@@ -36,6 +43,7 @@ export function CatalogPage({ title, subtitle, panelContent, panelVariant = "ins
 
 	return (
 		<div
+			className={BG_CLASS_MAP[bgMode] || ""}
 			style={{
 				display: "flex",
 				flexDirection: isHorizontal ? "column" : "row",

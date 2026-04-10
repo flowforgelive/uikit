@@ -5,7 +5,7 @@ import { Surface, Text, SegmentedControl, toRem } from "@uikit/react";
 import { Section } from "../../components/catalog/Section";
 import { SubSectionTitle } from "../../components/catalog/SubSectionTitle";
 
-const SURFACE_VARIANTS = ["solid", "soft", "surface", "outline", "ghost"] as const;
+const SURFACE_VARIANTS = ["solid", "soft", "surface", "outline", "ghost", "glass"] as const;
 const SURFACE_LEVELS = [0, 1, 2, 3, 4, 5] as const;
 
 const SURFACE_MODES = [
@@ -59,3 +59,4 @@ export function SurfaceShowcase({ tokens }: { tokens: any }) {
 		</Section>
 	);
 }
+

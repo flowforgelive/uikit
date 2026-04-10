@@ -14,7 +14,7 @@ import {
 import { ThemeSwitcher } from "../components/theme-switcher/ThemeSwitcher";
 import { DirSwitcher } from "../components/dir-switcher/DirSwitcher";
 import { CatalogPage } from "../components/catalog/CatalogPage";
-import { SIZE_OPTIONS, RADIUS_OPTIONS, RADIUS_FRACTION_MAP, MAX_CONTAINER_RADIUS_MAP, SCALE_FACTOR_MAP } from "../components/catalog/CatalogConstants";
+import { SIZE_OPTIONS, RADIUS_OPTIONS, RADIUS_FRACTION_MAP, MAX_CONTAINER_RADIUS_MAP, SCALE_FACTOR_MAP, PANEL_VARIANT_OPTIONS, PANEL_SIDE_OPTIONS, BG_OPTIONS } from "../components/catalog/CatalogConstants";
 import { TextShowcase } from "./showcases/TextShowcase";
 
 const IconShowcase = dynamic(() => import("./showcases/IconShowcase").then(m => ({ default: m.IconShowcase })), { ssr: false });
@@ -29,6 +29,9 @@ export default function PrimitivesPage() {
 	const { tokens: baseTokens } = useUIKitTheme();
 	const [globalSize, setGlobalSize] = useState("md");
 	const [globalRadius, setGlobalRadius] = useState("md");
+	const [panelVariant, setPanelVariant] = useState<"pinned" | "inset">("inset");
+	const [panelSide, setPanelSide] = useState<"left" | "right" | "top" | "bottom">("left");
+	const [bgMode, setBgMode] = useState<"dots" | "gradient" | "image" | "solid">("dots");
 
 	const tokens: any = React.useMemo(() => {
 		let t: any = baseTokens;
@@ -49,6 +52,9 @@ export default function PrimitivesPage() {
 		<CatalogPage
 			title="Примитивы (Primitives)"
 			subtitle="Text, Icon, Divider, Image, Skeleton, Spacer, Badge, Surface"
+			bgMode={bgMode}
+			panelVariant={panelVariant}
+			panelSide={panelSide}
 			panelTokens={tokens}
 			panelContent={
 				<>
@@ -67,6 +73,18 @@ export default function PrimitivesPage() {
 					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
 						<Text text="Тема" variant="label-small" emphasis="secondary" />
 						<ThemeSwitcher />
+					</div>
+					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
+						<Text text="Панель: вариант" variant="label-small" emphasis="secondary" />
+						<SegmentedControl options={PANEL_VARIANT_OPTIONS} selectedId={panelVariant} onSelectionChange={(id) => setPanelVariant(id as any)} size="sm" />
+					</div>
+					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
+						<Text text="Панель: сторона" variant="label-small" emphasis="secondary" />
+						<SegmentedControl options={PANEL_SIDE_OPTIONS} selectedId={panelSide} onSelectionChange={(id) => setPanelSide(id as any)} size="sm" />
+					</div>
+					<div style={{ display: "flex", flexDirection: "column", gap: toRem(tokens.spacing.xs) }}>
+						<Text text="Фон" variant="label-small" emphasis="secondary" />
+						<SegmentedControl options={BG_OPTIONS} selectedId={bgMode} onSelectionChange={(id) => setBgMode(id as any)} size="sm" />
 					</div>
 				</>
 			}

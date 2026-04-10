@@ -27,8 +27,12 @@ import com.uikit.compose.theme.LocalDesignTokens
 import com.uikit.compose.theme.LocalKeyboardNavigationMode
 import com.uikit.compose.theme.LocalSurfaceContext
 import com.uikit.compose.theme.parseColor
+import com.uikit.compose.theme.LocalHazeState
 import com.uikit.foundation.SurfaceContext
+import com.uikit.foundation.VisualVariant
 import com.uikit.foundation.Visibility
+import dev.chrisbanes.haze.HazeTint
+import dev.chrisbanes.haze.hazeEffect
 
 @Composable
 fun SurfaceView(
@@ -51,6 +55,9 @@ fun SurfaceView(
 	val isFocused by interactionSource.collectIsFocusedAsState()
 	val keyboardMode = LocalKeyboardNavigationMode.current
 
+	val isGlass = config.variant == VisualVariant.Glass
+	val hazeState = if (isGlass) LocalHazeState.current else null
+
 	val currentBg = when {
 		isPressed && isHoverable -> style.bgActive
 		isHovered && isHoverable -> style.bgHover
@@ -61,25 +68,50 @@ fun SurfaceView(
 	val borderWidth = if (showFocusRing) tokens.focusRingWidth.dp else tokens.borderWidth.dp
 
 	val parentSurfaceContext = LocalSurfaceContext.current
-	val surfaceContext = remember(config.level, style.bg, parentSurfaceContext.nestingDepth) {
-		SurfaceContext(level = config.level.ordinal, backgroundColor = style.bg, nestingDepth = parentSurfaceContext.nestingDepth)
+	val effectiveBg = if (isGlass) tokens.color.surface else style.bg
+	val surfaceContext = remember(config.level, effectiveBg, parentSurfaceContext.nestingDepth) {
+		SurfaceContext(
+			level = config.level.ordinal,
+			backgroundColor = effectiveBg,
+			nestingDepth = parentSurfaceContext.nestingDepth,
+			foregroundColor = style.foregroundColor,
+			foregroundSecondary = style.foregroundSecondary,
+			foregroundMuted = style.foregroundMuted,
+		)
 	}
+
+	val glassBgColor = if (isGlass) {
+		parseColor(tokens.color.surface).copy(alpha = tokens.glass.surfaceBgOpacity.toFloat())
+	} else null
+
+	val glassHazeModifier = if (isGlass && hazeState != null) {
+		val tintColor = glassBgColor ?: parseColor(currentBg)
+		Modifier.hazeEffect(state = hazeState) {
+			blurRadius = tokens.glass.surfaceBlurRadius.dp
+			noiseFactor = 0f
+			tints = listOf(HazeTint(tintColor))
+		}
+	} else {
+		Modifier.background(glassBgColor ?: parseColor(currentBg))
+	}
+
+	val glassBorderColor = if (isGlass) parseColor(tokens.color.onSurface).copy(alpha = tokens.glass.surfaceBorderOpacity.toFloat()) else null
 
 	Box(
 		modifier =
 			modifier
 				.then(
-					if (config.elevated) {
+					if (config.elevated && !isGlass) {
 						Modifier.shadow(style.elevationDp.dp, shape)
 					} else {
 						Modifier
 					},
 				)
 				.clip(shape)
-				.background(parseColor(currentBg))
+				.then(glassHazeModifier)
 				.border(
 					width = borderWidth,
-					color = parseColor(focusBorder),
+					color = glassBorderColor ?: parseColor(focusBorder),
 					shape = shape,
 				)
 				.then(

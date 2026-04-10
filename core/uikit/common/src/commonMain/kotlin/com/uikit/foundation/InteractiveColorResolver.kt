@@ -26,6 +26,7 @@ object InteractiveColorResolver {
 			VisualVariant.Surface -> surfaceColors(intent, tokens)
 			VisualVariant.Outline -> outlineColors(intent, tokens)
 			VisualVariant.Ghost -> ghostColors(intent, tokens)
+			VisualVariant.Glass -> glassColors(intent, tokens)
 		}
 
 	fun resolveDisabled(tokens: DesignTokens): ColorSet =
@@ -220,4 +221,59 @@ object InteractiveColorResolver {
 				borderActive = ColorConstants.TRANSPARENT,
 			)
 		}
+
+	/**
+	 * Glass variant: frosted glass with neutral surface-based background.
+	 * Uses backdrop-filter in React (real blur), alpha fallback in Compose.
+	 * Background is always surface-derived (not intent-colored) — intent only affects text/border.
+	 * Actual opacity is applied in the View layer via GlassTokens.
+	 */
+	private fun glassColors(intent: ColorIntent, tokens: DesignTokens): ColorSet {
+		// Apple liquid glass fill: surface (white in light, near-black in dark) at 45% opacity.
+		// This ensures visibility on any background — light glass on light bg, dark glass on dark bg.
+		val glassBg = tokens.color.surface
+		val glassBgHover = tokens.color.surfaceContainer
+		val glassBgActive = tokens.color.surfaceContainerHigh
+		// Adaptive border: dark in light mode, white in dark mode (Apple liquid glass spec).
+		// Actual opacity (15%) is applied in the View layer via glassBorderAlpha.
+		val glassBorder = tokens.color.onSurface
+
+		return when (intent) {
+			ColorIntent.Primary -> ColorSet(
+				bg = glassBg,
+				bgHover = glassBgHover,
+				bgActive = glassBgActive,
+				text = tokens.color.onSurface,
+				textHover = tokens.color.onSurface,
+				textActive = tokens.color.onSurface,
+				border = glassBorder,
+				borderHover = glassBorder,
+				borderActive = glassBorder,
+			)
+
+			ColorIntent.Neutral -> ColorSet(
+				bg = glassBg,
+				bgHover = glassBgHover,
+				bgActive = glassBgActive,
+				text = tokens.color.onSurfaceVariant,
+				textHover = tokens.color.onSurface,
+				textActive = tokens.color.onSurface,
+				border = glassBorder,
+				borderHover = glassBorder,
+				borderActive = glassBorder,
+			)
+
+			ColorIntent.Danger -> ColorSet(
+				bg = glassBg,
+				bgHover = glassBgHover,
+				bgActive = glassBgActive,
+				text = tokens.color.danger,
+				textHover = tokens.color.danger,
+				textActive = tokens.color.danger,
+				border = glassBorder,
+				borderHover = tokens.color.danger,
+				borderActive = tokens.color.dangerActive,
+			)
+		}
+	}
 }

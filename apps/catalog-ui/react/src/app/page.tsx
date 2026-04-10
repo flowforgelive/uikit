@@ -14,6 +14,7 @@ export default function FirstPage() {
 
 	return (
 		<main
+			className="dot-grid"
 			style={{
 				position: "relative",
 				display: "flex",

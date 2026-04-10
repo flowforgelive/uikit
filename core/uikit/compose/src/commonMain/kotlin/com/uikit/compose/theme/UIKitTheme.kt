@@ -8,6 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalLayoutDirection
+import dev.chrisbanes.haze.HazeState
 import com.uikit.foundation.DefaultSurfaceContext
 import com.uikit.foundation.DefaultThemeProvider
 import com.uikit.foundation.LayoutDirection
@@ -20,6 +21,7 @@ val LocalDesignTokens = staticCompositionLocalOf { DesignTokens.Default }
 val LocalUIKitLayoutDirection = staticCompositionLocalOf { LayoutDirection.Ltr }
 val LocalSurfaceContext = staticCompositionLocalOf { DefaultSurfaceContext }
 val LocalFontFamily = staticCompositionLocalOf<androidx.compose.ui.text.font.FontFamily> { androidx.compose.ui.text.font.FontFamily.Default }
+val LocalHazeState = staticCompositionLocalOf<HazeState?> { null }
 
 private fun LayoutDirection.toCompose(): androidx.compose.ui.unit.LayoutDirection =
 	when (this) {

@@ -108,3 +108,4 @@ export function SkeletonShowcase({ tokens, globalSize }: { tokens: any; globalSi
 		</Section>
 	);
 }
+

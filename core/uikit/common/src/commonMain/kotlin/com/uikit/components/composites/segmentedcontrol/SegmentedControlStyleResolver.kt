@@ -20,6 +20,7 @@ data class SegmentedControlColors(
 	val textActive: String,
 	val textInactive: String,
 	val border: String,
+	val glassTrackTint: String = ColorConstants.TRANSPARENT,
 )
 
 @JsExport
@@ -129,7 +130,10 @@ object SegmentedControlStyleResolver {
 			)
 
 			VisualVariant.Solid -> SegmentedControlColors(
-				trackBg = tokens.color.surfaceContainerHigh,
+				trackBg = if (isDarkScheme(tokens))
+					SurfaceLevelResolver.resolveColor((level + 2).coerceAtMost(5), tokens)
+				else
+					tokens.color.surfaceContainerHigh,
 				thumbBg = thumbBg,
 				textActive = tokens.color.textPrimary,
 				textInactive = tokens.color.textSecondary,
@@ -142,6 +146,22 @@ object SegmentedControlStyleResolver {
 				textActive = tokens.color.textPrimary,
 				textInactive = tokens.color.textSecondary,
 				border = ColorConstants.TRANSPARENT,
+			)
+
+			VisualVariant.Glass -> SegmentedControlColors(
+				trackBg = ColorConstants.TRANSPARENT,
+				// Thumb: light → surface (white); dark → elevated container (level+4), lighter than track.
+				thumbBg = thumbBg,
+				textActive = tokens.color.onSurface,
+				textInactive = tokens.color.onSurfaceVariant,
+				border = tokens.color.onSurface,
+				// Track tint applied at bgOpacity in View.
+				// Light: neutralSoft (light gray) — visible on white background.
+				// Dark: surfaceContainerLowest (level+1) — dark frosted panel, similar to surface.
+				glassTrackTint = if (isDarkScheme(tokens))
+					SurfaceLevelResolver.resolveColor((level + 1).coerceAtMost(5), tokens)
+				else
+					tokens.color.neutralSoft,
 			)
 		}
 	}

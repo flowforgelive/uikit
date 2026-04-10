@@ -13,6 +13,7 @@ kotlin {
 			implementation(compose.material3)
 			implementation(compose.foundation)
 			implementation(compose.runtime)
+			api(libs.haze)
 		}
 		jvmMain.dependencies {
 			implementation(compose.desktop.common)
