@@ -29,6 +29,7 @@ import com.uikit.compose.theme.LocalSurfaceContext
 import com.uikit.compose.theme.parseColor
 import com.uikit.compose.theme.LocalHazeState
 import com.uikit.foundation.SurfaceContext
+import com.uikit.foundation.SurfaceLevelResolver
 import com.uikit.foundation.VisualVariant
 import com.uikit.foundation.Visibility
 import dev.chrisbanes.haze.HazeTint
@@ -81,7 +82,8 @@ fun SurfaceView(
 	}
 
 	val glassBgColor = if (isGlass) {
-		parseColor(tokens.color.surface).copy(alpha = tokens.glass.surfaceBgOpacity.toFloat())
+		parseColor(SurfaceLevelResolver.resolveColor(config.level, tokens))
+			.copy(alpha = tokens.glass.surfaceBgOpacity.toFloat())
 	} else null
 
 	val glassHazeModifier = if (isGlass && hazeState != null) {

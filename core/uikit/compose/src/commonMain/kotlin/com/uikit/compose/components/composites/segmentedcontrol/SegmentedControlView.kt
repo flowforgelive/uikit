@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.CornerRadius
@@ -93,37 +94,22 @@ fun SegmentedControlView(
 
 	val focusRequesters = remember(optionCount) { List(optionCount) { FocusRequester() } }
 
-	// Glass: frosted track + more-opaque frosted thumb ("liquid glass" — Apple pattern).
-	// Track hazeEffect at bgOpacity (45%); thumb drawn at activeOpacityMultiplier (~60%) via drawBehind.
-	// Thumb shows real blur through its 40% transparency (from the track's hazeEffect below).
+	// Glass: frosted track (hazeEffect) + opaque thumb on top (Apple pattern).
+	// The "glass" effect is in the frosted track; the thumb is a solid opaque pill that sits above it.
 	val isGlass = config.variant == VisualVariant.Glass
 	val hazeState = if (isGlass) LocalHazeState.current else null
 	val useHaze = isGlass && hazeState != null
-	val glassTrackAlpha = if (isGlass) tokens.glass.bgOpacity.toFloat() else 1f
-	// Thumb alpha: glass → ~60% (glassProminent-style); non-glass → 1f (fully opaque).
-	val glassThumbAlpha = if (isGlass) (tokens.glass.bgOpacity * tokens.glass.activeOpacityMultiplier).toFloat().coerceAtMost(1f) else 1f
+	val glassTrackAlpha = if (isGlass) style.colors.glassTrackOpacity.toFloat() else 1f
 	val thumbColor = parseColor(style.colors.thumbBg)
+	// Glass: semi-transparent thumb so backdrop blur remains visible through the selected segment.
+	// Non-glass: alpha = 1.0 (from default glassThumbOpacity), fully opaque — no change.
+	val glassThumbColor = thumbColor.copy(alpha = style.colors.glassThumbOpacity.toFloat())
 
-	// Dark scheme detection: needed for adaptive border opacity.
-	val isDarkScheme = remember(tokens) {
-		val s = parseColor(tokens.color.surface)
-		val n = parseColor(tokens.color.neutralSoft)
-		val sBrightness = s.red * 0.299f + s.green * 0.587f + s.blue * 0.114f
-		val nBrightness = n.red * 0.299f + n.green * 0.587f + n.blue * 0.114f
-		sBrightness < nBrightness
-	}
-	// Glass track tint: pre-resolved in StyleResolver (neutralSoft in light, surfaceContainerLowest in dark).
-	// Applied at bgOpacity so the frosted track is visible on any background.
+	// Glass track tint: same color as Surface track, applied at bgOpacity for frosted appearance.
 	val glassTintColor = if (isGlass) parseColor(style.colors.glassTrackTint).copy(alpha = glassTrackAlpha)
 	else Color.Transparent
-	// Thumb tint: thumbColor is already level-aware (surface in light, surfaceContainerHigh in dark).
-	// Apply glassThumbAlpha so the thumb is more opaque than the track (glassProminent pattern).
-	val glassThumbTintColor = thumbColor.copy(alpha = glassThumbAlpha)
-	// Border: in dark mode use highContrastBorderOpacity (50%) for visibility; light → 15%.
-	val glassBorderAlpha = if (isDarkScheme) tokens.glass.highContrastBorderOpacity.toFloat() else tokens.glass.borderOpacity.toFloat()
-	val borderColor = parseColor(style.colors.border).let {
-		if (isGlass) it.copy(alpha = glassBorderAlpha) else it
-	}
+	// Border: borderSubtle for glass, matching Surface.
+	val borderColor = parseColor(style.colors.border)
 
 	val thumbRadiusPx = style.sizes.thumbRadius.toFloat()
 	val layoutDirection = androidx.compose.ui.platform.LocalLayoutDirection.current
@@ -148,8 +134,9 @@ fun SegmentedControlView(
 							tints = listOf(HazeTint(glassTintColor))
 						}
 					} else if (isGlass) {
-						// Fallback: adaptive tint when no hazeSource available.
-						Modifier.background(glassTintColor)
+						// Fallback: no blur available → full opacity (same as Surface variant).
+						// Semi-transparent without blur = invisible on light backgrounds.
+						Modifier.background(parseColor(style.colors.glassTrackTint))
 					} else {
 						Modifier.background(parseColor(style.colors.trackBg))
 					},
@@ -164,11 +151,10 @@ fun SegmentedControlView(
 				.padding(style.sizes.trackPadding.dp)
 				.then(if (config.visibility == Visibility.Invisible) Modifier.alpha(0f) else Modifier)
 				.testTag(config.testTag ?: config.id)
-				// Thumb drawn in draw phase (no recomposition per frame).
-				// Glass thumb uses glassThumbAlpha (~60%) — its transparency reveals the blurred track,
-				// creating the "glassProminent" look (more opaque glass over the frosted track layer).
+				// Non-glass: thumb drawn in draw phase via drawBehind (no recomposition per frame).
+				// Glass: thumb rendered as child composable (above hazeEffect layer) — see inside Box below.
 				.then(
-					if (optionCount > 0) {
+					if (optionCount > 0 && !isGlass) {
 						Modifier.drawBehind {
 							val segmentWidth = size.width / optionCount
 							val thumbX =
@@ -178,7 +164,7 @@ fun SegmentedControlView(
 									animatedFraction * size.width
 								}
 							drawRoundRect(
-								color = if (isGlass) glassThumbTintColor else thumbColor,
+								color = thumbColor,
 								topLeft = Offset(x = thumbX, y = 0f),
 								size = Size(width = segmentWidth, height = size.height),
 								cornerRadius = CornerRadius(thumbRadiusPx * density, thumbRadiusPx * density),
@@ -189,7 +175,31 @@ fun SegmentedControlView(
 					},
 				),
 	) {
-		Row(modifier = Modifier.fillMaxSize()) {
+		// For glass: thumb drawn via drawWithContent on the Row (child of hazeEffect Box).
+		// drawWithContent on a child renders above hazeEffect, preserving the sliding animation.
+		val rowModifier = if (isGlass && optionCount > 0) {
+			Modifier.fillMaxSize().drawWithContent {
+				val segmentWidth = size.width / optionCount
+				val thumbX = if (layoutDirection == LayoutDirection.Rtl) {
+					size.width - animatedFraction * size.width - segmentWidth
+				} else {
+					animatedFraction * size.width
+				}
+				// Use glassThumbColor (semi-transparent) so the backdrop blur is still partially
+				// visible through the selected segment — creating a layered frosted effect.
+				drawRoundRect(
+					color = glassThumbColor,
+					topLeft = Offset(x = thumbX, y = 0f),
+					size = Size(width = segmentWidth, height = size.height),
+					cornerRadius = CornerRadius(thumbRadiusPx * density, thumbRadiusPx * density),
+				)
+				drawContent()
+			}
+		} else {
+			Modifier.fillMaxSize()
+		}
+
+		Row(modifier = rowModifier) {
 			config.options.forEachIndexed { index, option ->
 				val isActive = option.id == config.selectedId
 				val optionInteractionSource = remember { MutableInteractionSource() }
